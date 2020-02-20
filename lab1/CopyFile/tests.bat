@@ -36,6 +36,10 @@ REM запустили без аргументов
 %MyProgram% && goto err
 echo Test 5 passed
 
+REM аргументов больше 3
+%MyProgram% nonEmpty.txt "%TEMP%\output.txt" empty.txt && goto err
+echo Test 6 passed
+
 REM тесты прошли успегно
 echo All tests passed successfuly
 exit/B 0
