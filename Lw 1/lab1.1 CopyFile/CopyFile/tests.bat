@@ -4,7 +4,7 @@ REM чтобы текст команд не выводился в консоль указываем @
 REM путь к тестируемой программе передаётся через 1-й аргумент командной строки
 SET MyProgram="%~1"
 
-REM затитимся, если test.bat запустили без аргументов
+REM защитимся, если test.bat запустили без аргументов
 if %MyProgram%=="" (
 	echo Please specify path to program 
 	exit /B 1
@@ -44,7 +44,7 @@ REM тесты прошли успегно
 echo All tests passed successfuly
 exit/B 0
 
-REM сюда попадаем в случае ошибки
+REM тесты не прошли
 :err
 echo Test failed
 exit /B 1

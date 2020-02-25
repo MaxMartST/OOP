@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
 	{
 		return 1;
 	}
-	/*12*/
 
 	std::ifstream input;
 	input.open(args->inputFileName);
