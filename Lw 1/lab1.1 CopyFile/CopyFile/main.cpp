@@ -20,29 +20,34 @@ std::optional<Args> ParsArgs(int argc, char *argv[])
 	return args;
 }
 
-int main(int argc, char *argv[])
+void CopyStreams(std::ifstream& input, std::ofstream& output)
 {
-	auto args = ParsArgs(argc, argv);
-
-	if (!args)
+	char ch;
+	while (input.get(ch))
 	{
-		return 1;
+		if (!output.put(ch))
+		{
+			break;
+		}
 	}
+}
 
+bool CopyFile(std::string inputFileName, std::string outputFileName)
+{
 	std::ifstream input;
-	input.open(args->inputFileName);
+	input.open(inputFileName);
 	if (!input.is_open())
 	{
-		std::cout << "Fale to open '" << args->inputFileName << "' for reading" << std::endl;
-		return 1;
+		std::cout << "Fale to open '" << inputFileName << "' for reading" << std::endl;
+		return false;
 	}
 
 	std::ofstream output;
-	output.open(args->outputFileName);
+	output.open(outputFileName);
 	if (!output.is_open())
 	{
-		std::cout << "Fale to open '" << args->outputFileName << "' for writing" << std::endl;
-		return 1;
+		std::cout << "Fale to open '" << outputFileName << "' for writing" << std::endl;
+		return false;
 	}
 
 	CopyStreams(input, output);
@@ -55,20 +60,23 @@ int main(int argc, char *argv[])
 	if (!output.flush())
 	{
 		std::cout << "Failed to write data to output file" << std::endl;
-		return 1;
+		return false;
 	}
-
-	return 0;
+	return true;
 }
 
-void CopyStreams(std::ifstream &input, std::ofstream &output)
+int main(int argc, char *argv[])
 {
-	char ch;
-	while (input.get(ch))
+	auto args = ParsArgs(argc, argv);
+
+	if (!args)
 	{
-		if (!output.put(ch))
-		{
-			break;
-		}
+		return 1;
 	}
+	if (!CopyFile(args->inputFileName, args->outputFileName))
+	{
+		return 1;
+	}
+	
+	return 0;
 }
