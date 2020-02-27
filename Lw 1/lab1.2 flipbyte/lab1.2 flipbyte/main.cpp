@@ -3,22 +3,11 @@
 #include <optional>
 #include <string>
 
-struct Args
+struct Content
 {
-	std::string inputArg;
+	std::string inputString;
+	int number;
 };
-
-std::optional<Args> ParsArgs(int argc, char* argv[])
-{
-	if (argc != 2)
-	{
-		std::cout << "Use one argument - a positive integer " << std::endl;
-		return std::nullopt;
-	}
-	Args args;
-	args.inputArg = argv[1];
-	return args;
-}
 
 void CheckRange(int number)
 {
@@ -28,35 +17,42 @@ void CheckRange(int number)
 	}
 }
 
-bool CheckArgument(std::string arg)
+std::optional<Content> CheckArgument(int argc, char* argv[])
 {
-	int temp;
+	if (argc != 2)
+	{
+		std::cout << "Use one argument - a positive integer " << std::endl;
+		return std::nullopt;
+	}
+	Content content;
+	content.inputString = argv[1];
+
 	try
 	{
-		temp = stoi(arg);
-		CheckRange(temp);
-		return true;
+		content.number = stoi(content.inputString);
+		CheckRange(content.number);
+		return content;
 	}
 	catch (const std::invalid_argument& e)
 	{
-		std::cout << "Error: " << e.what() << ". Argument must be a number"<< std::endl;
-		return false;
+		std::cout << "Error: " << e.what() << ". Argument must be a number" << std::endl;
+		return std::nullopt;
 	}
 	catch (const std::out_of_range& e)
 	{
 		std::cout << "Error: " << e.what() << std::endl;
-		return false;
+		return std::nullopt;
 	}
 	catch (const std::exception& e)
 	{
 		std::cout << "Error: " << e.what() << std::endl;
-		return false;
+		return std::nullopt;
 	}
 }
 
-int FlipByte(const uint8_t arg)
+int FlipByte(const uint8_t inputNumber)
 {
-	uint8_t number = arg;
+	uint8_t number = inputNumber;
 	uint8_t result = 0;
 
 	for (int i = 0; i < 8; ++i)
@@ -69,18 +65,13 @@ int FlipByte(const uint8_t arg)
 
 int main(int argc, char* argv[])
 {
-	auto args = ParsArgs(argc, argv);
+	auto cont = CheckArgument(argc, argv);
 
-	if (!args)
+	if (!cont)
 	{
 		return 1;
 	}
-	if (!CheckArgument(args->inputArg))
-	{
-		return 1;
-	}
-
-	std::cout << FlipByte(static_cast<uint8_t>(stoi(args->inputArg))) << std::endl;
+	std::cout << FlipByte(static_cast<uint8_t>(cont->number)) << std::endl;
 
 	return 0;
 }
