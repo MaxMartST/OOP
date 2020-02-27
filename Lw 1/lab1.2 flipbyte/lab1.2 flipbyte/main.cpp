@@ -5,8 +5,7 @@
 
 struct Content
 {
-	std::string inputString;
-	int number;
+	int byte;
 };
 
 void CheckRange(int number)
@@ -25,12 +24,12 @@ std::optional<Content> ParsArgs(int argc, char* argv[])
 		return std::nullopt;
 	}
 	Content content;
-	content.inputString = argv[1];//сделать отдельную переменную 
+	std::string inputString = argv[1];
 
 	try
 	{
-		content.number = stoi(content.inputString);
-		CheckRange(content.number);
+		content.byte = stoi(inputString);
+		CheckRange(content.byte);
 		return content;
 	}
 	catch (const std::invalid_argument& e)
@@ -66,7 +65,7 @@ int main(int argc, char* argv[])
 	{
 		return 1;
 	}
-	std::cout << static_cast<int>(FlipByte(static_cast<uint8_t>(args->number))) << std::endl;
+	std::cout << static_cast<int>(FlipByte(static_cast<uint8_t>(args->byte))) << std::endl;
 
 	return 0;
 }
