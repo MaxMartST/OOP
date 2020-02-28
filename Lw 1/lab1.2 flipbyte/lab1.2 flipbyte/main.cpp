@@ -3,34 +3,28 @@
 #include <optional>
 #include <string>
 
-struct Content
-{
-	int byte;
-};
-
-void CheckRange(int number)
+int CheckRange(int number)
 {
 	if (std::numeric_limits<uint8_t>::max() < number || number < std::numeric_limits<uint8_t>::min())
 	{
 		throw std::out_of_range("Invalid number range. Valid range is from 0 to 255");
 	}
+	return number;
 }
 
-std::optional<Content> ParsArgs(int argc, char* argv[])
+std::optional<int> ParsArgs(int argc, char* argv[])
 {
 	if (argc != 2)
 	{
 		std::cout << "Use one argument - a positive integer " << std::endl;
 		return std::nullopt;
 	}
-	Content content;
-	std::string inputString = argv[1];
+	int number;
 
 	try
 	{
-		content.byte = stoi(inputString);
-		CheckRange(content.byte);
-		return content;
+		number = CheckRange(std::stoi(argv[1]));
+		return number;
 	}
 	catch (const std::invalid_argument& e)
 	{
@@ -65,7 +59,7 @@ int main(int argc, char* argv[])
 	{
 		return 1;
 	}
-	std::cout << static_cast<int>(FlipByte(static_cast<uint8_t>(args->byte))) << std::endl;
+	std::cout << static_cast<int>(FlipByte(static_cast<uint8_t>(*args))) << std::endl;
 
 	return 0;
 }
