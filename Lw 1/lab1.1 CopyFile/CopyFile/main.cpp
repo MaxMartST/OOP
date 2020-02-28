@@ -32,7 +32,7 @@ void CopyStreams(std::ifstream& input, std::ofstream& output)
 	}
 }
 
-bool CopyFile(const std::string inputFileName, const std::string outputFileName)
+bool CopyFile(const std::string &inputFileName, const std::string &outputFileName)
 {
 	std::ifstream input;
 	input.open(inputFileName);
