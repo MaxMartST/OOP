@@ -129,7 +129,7 @@ double GetAlgebraicComplement(const double inMatrix[][MATRIX_SIZE], int y, int x
 	return ((minorElements[0] * minorElements[3]) - (minorElements[1] * minorElements[2]));
 }
 
-Matrix* GetTheUnionMatrix(const double inMatrix[][MATRIX_SIZE])
+Matrix* GetAdjugateMatrix(const double inMatrix[][MATRIX_SIZE])
 {
 	static Matrix matrix;
 
@@ -139,7 +139,7 @@ Matrix* GetTheUnionMatrix(const double inMatrix[][MATRIX_SIZE])
 		for (int j = 0; j < MATRIX_SIZE; j++)
 		{
 			matrix[i][j] = mark * GetAlgebraicComplement(inMatrix, i, j);
-			mark *= -1;
+			mark = -mark;
 		}
 	}
 
@@ -154,7 +154,7 @@ std::optional<Matrix*> InvertMatrix(double inMatrix[][MATRIX_SIZE])
 		return std::nullopt;
 	}
 	TransposeMatrix(inMatrix);
-	Matrix* complements = GetTheUnionMatrix(inMatrix);
+	Matrix* complements = GetAdjugateMatrix(inMatrix);
 
 	double number = 1 / determinant;
 	for (int i = 0; i < MATRIX_SIZE; i++)
