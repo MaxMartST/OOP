@@ -1,3 +1,5 @@
+rem "$(ProjectDir)Tests.bat" "$(TargetPath)"
+
 @echo off
 
 SET MyProgram="%~1"
