@@ -1,0 +1,4 @@
+﻿1>------ Build started: Project: lab1.3 invert, Configuration: Debug x64 ------
+1>main.cpp
+1>lab1.3 invert.vcxproj -> C:\IPS\My repos\OOP\Lw 1\lab1.3 invert\x64\Debug\lab1.3 invert.exe
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
