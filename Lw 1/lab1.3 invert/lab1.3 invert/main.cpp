@@ -168,7 +168,6 @@ std::optional<Matrix> InvertMatrix(const Matrix& matrix)
 	{
 		return std::nullopt;
 	}
-
 	double coefficient = 1 / determinant;
 	Matrix transposeMatrix = TransposeMatrix(matrix);
 	Matrix adjugateMatrix = AdjugateMatrix(transposeMatrix);
