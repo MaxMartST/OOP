@@ -98,7 +98,7 @@ double GetDeterminant(const Matrix& matrix)
 		- matrix[2][0] * matrix[1][1] * matrix[0][2] - matrix[0][1] * matrix[1][0] * matrix[2][2] - matrix[0][0] * matrix[1][2] * matrix[2][1];
 }
 
-Matrix GetTransposeMatrix(const Matrix& matrix)
+Matrix TransposeMatrix(const Matrix& matrix)
 {
 
 
@@ -131,7 +131,7 @@ double GetAlgebraicComplement(const Matrix& matrix, int y, int x)
 	}
 	return ((minorElements[0] * minorElements[3]) - (minorElements[1] * minorElements[2]));
 }
-Matrix GetAdjugateMatrix(const Matrix& matrix)
+Matrix AdjugateMatrix(const Matrix& matrix)
 {
 	Matrix newMatrix;
 	double mark = 1;
@@ -148,7 +148,7 @@ Matrix GetAdjugateMatrix(const Matrix& matrix)
 	return newMatrix;
 }
 
-Matrix GetResultMatrix(const double& coefficient, Matrix& matrix)
+Matrix MultiplyMatrixByScalar(const double& coefficient, Matrix& matrix)
 {
 	for (int i = 0; i < MATRIX_SIZE; i++)
 	{
@@ -170,10 +170,10 @@ std::optional<Matrix> InvertMatrix(const Matrix& matrix)
 	}
 
 	double coefficient = 1 / determinant;
-	Matrix transposeMatrix = GetTransposeMatrix(matrix);
-	Matrix adjugateMatrix = GetAdjugateMatrix(transposeMatrix);
+	Matrix transposeMatrix = TransposeMatrix(matrix);
+	Matrix adjugateMatrix = AdjugateMatrix(transposeMatrix);
 
-	return GetResultMatrix(coefficient, adjugateMatrix);
+	return MultiplyMatrixByScalar(coefficient, adjugateMatrix);
 }
 
 void PrintMatrix(const Matrix& matrix)
