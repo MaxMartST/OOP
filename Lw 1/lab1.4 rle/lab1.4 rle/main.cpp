@@ -5,13 +5,13 @@
 #include <optional>
 #include <stdio.h>
 #include <string>
+#include <cstdint>
 #include <vector>
 #include <filesystem>
 
 const std::string COMMAND_PACK = "pack";
 const std::string COMMAND_UNPACK = "unpack";
 const unsigned int NUMBER_ARGS = 4;
-const unsigned int RANGE_LIMIT = 256;
 
 namespace fs = std::filesystem;
 
@@ -24,10 +24,8 @@ struct Args
 
 struct ReadChar
 {
-	bool eof = false;
 	uint8_t count = 0;
-	char ch = 0;
-	uint8_t last = 0;
+	uint8_t ch = 0;
 };
 
 std::optional<Args> ParsArgs(int argc, char* argv[])
@@ -62,79 +60,93 @@ std::optional<Args> ParsArgs(int argc, char* argv[])
 	return args;
 }
 
-void PrintCode(uint8_t& count, const uint8_t& ch, std::ofstream& output)
+/*void PrintCode(uint8_t& count, const uint8_t& ch, std::ofstream& output)
 {
-	output << unsigned(count) << ch;
-}
+	//output << unsigned(count) << ch;
+}*/
 
-void RleEncode(const uintmax_t& fileSize, std::ifstream& input, std::ofstream& output)
+void RleEncode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output)
 {
 	ReadChar readChar;
+	bool eof = false;
+	char ch = 0;
 
 	for (std::uintmax_t i = 0; i < fileSize; ++i)
 	{
 		if (i == fileSize - 1)
 		{
-			readChar.eof = true;
+			eof = true;
 		}
 
-		input.get(readChar.ch);
+		input.get(ch);
 
 		if (readChar.count == 0)
 		{
-			readChar.last = static_cast<uint8_t>(readChar.ch);
+			readChar.ch = static_cast<uint8_t>(ch);
 		}
 
-		if ((readChar.last == static_cast<uint8_t>(readChar.ch)) && (readChar.count < std::numeric_limits<uint8_t>::max()))
+		if ((readChar.ch == static_cast<uint8_t>(ch)) && (readChar.count < std::numeric_limits<uint8_t>::max()))
 		{
 			readChar.count++;
 		}
 		else
 		{
-			PrintCode(readChar.count, readChar.last, output);
-			readChar.last = static_cast<uint8_t>(readChar.ch);
+			//PrintCode(readChar.count, readChar.ch, output);
+			output.write((char*)&readChar, sizeof readChar);
+			readChar.ch = static_cast<uint8_t>(ch);
 			readChar.count = 1;
 		}
 
-		if ((readChar.eof) && (readChar.count > 0))
+		if (eof && (readChar.count > 0))
 		{
-			PrintCode(readChar.count, readChar.last, output);
+			//PrintCode(readChar.count, readChar.ch, output);
+			output.write((char*)&readChar, sizeof readChar);
 		}
 	}
-
-	/*while (input.get(ch))
-	{
-		if (static_cast<uint8_t>(ch) == last)
-		{
-			readChar.count++;
-			while (input.get(ch) && readChar.count < RANGE_LIMIT)
-			{
-				if (static_cast<uint8_t>(ch) == last)
-				{
-					readChar.count++;
-				}
-				else
-				{
-					break;
-				}
-			}
-			PrintCode(readChar.count, readChar.ch, output);
-			last = 0;
-		}
-		if (last != 0 && static_cast<uint8_t>(ch) != last && readChar.count != RANGE_LIMIT)
-		{
-			PrintCode(readChar.count, readChar.ch, output);
-		}
-		readChar.ch = static_cast<uint8_t>(ch);
-		last = static_cast<uint8_t>(ch);
-		readChar.count = 1;
-	}
-	PrintCode(readChar.count, readChar.ch, output);*/
 }
 
-void RleDencode(const uintmax_t& fileSize, std::ifstream& input, std::ofstream& output)
+void RleDencode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output)
 {
-	std::cout << "RleEncode" << std::endl;
+	//std::cout << "RleDencode" << std::endl;
+	//std::cout << "File Size: " << fileSize << std::endl;
+
+	char count;
+	uint8_t last;
+	char ch;
+
+	input.get(count);
+	input.get(ch);
+	//std::cout << ch;
+
+	int num = static_cast<int>(count) - '0';
+
+	for (int i = 0; i < num; i++)
+	{
+
+		std::cout << ch;
+	}
+
+	/*for (std::uintmax_t i = 0; i < fileSize; i++)
+	{
+		input.get(ch);
+		count = static_cast<uint8_t>(ch);
+		if (count == 0)
+		{
+			std::cout << "Invalid situation: zero repetition of a character" << std::endl;
+			break;
+		}
+
+		std::cout << count;
+
+		//input.get(ch);
+		//last = static_cast<uint8_t>(ch);
+		//for (std::uint8_t i = 0; i < count; i++)
+		//{
+		//	//output << unsigned(last);
+		//	std::cout << ch;
+		//}
+	}*/
+
 }
 
 uintmax_t GetFileSize(const std::string& fileName)
@@ -145,19 +157,14 @@ uintmax_t GetFileSize(const std::string& fileName)
 	}
 	catch (fs::filesystem_error& e)
 	{
-		std::cout << e.what() << '\n';
+		std::cout << e.what() << std::endl;
 		return 0;
 	}
 }
 
-bool IsFileSizeEven(const uintmax_t& number)
-{
-	return (number % 2 == 0);
-}
-
 bool BinaryFileCompression(const std::string& com, const std::string& inputFile, const std::string& outputFile)
 {
-	std::ifstream input;
+	std::fstream input;
 	input.open(inputFile, std::ios::binary | std::ios::in);
 	if (!input.is_open())
 	{
@@ -166,7 +173,7 @@ bool BinaryFileCompression(const std::string& com, const std::string& inputFile,
 	}
 
 	std::ofstream output;
-	output.open(outputFile, std::ios::binary);
+	output.open(outputFile, std::ios::binary | std::ios::out | std::ios::trunc);
 	if (!output.is_open())
 	{
 		std::cout << "Fale to open '" << outputFile << "' for writing" << std::endl;
@@ -174,7 +181,7 @@ bool BinaryFileCompression(const std::string& com, const std::string& inputFile,
 	}
 
 	auto fileSize = GetFileSize(inputFile);
-	if (!IsFileSizeEven(fileSize))
+	if (!(fileSize % 2) == 0)
 	{
 		std::cout << "Odd packed file length" << std::endl;
 		return false;
