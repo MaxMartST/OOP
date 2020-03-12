@@ -50,7 +50,7 @@ bool ReadStream(std::ifstream& input, Matrix& matrix)
 
 			if (col != MATRIX_SIZE)
 			{
-				error = !error;
+				error = true;
 				std::cout << "invalid number of matrix columns!" << std::endl;
 				return false;
 			}
