@@ -26,14 +26,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="tests.bat">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="input.txt" />
     <Text Include="output.txt" />
-    <Text Include="decode_test.txt" />
+    <Text Include="input.txt" />
+    <Text Include="test_example_encode.txt" />
+    <Text Include="test_input.txt" />
+    <Text Include="decoding_result.txt" />
+    <Text Include="coding_repetition_overflow.txt" />
+    <Text Include="coding_repetition_example.txt" />
+    <Text Include="empty.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParseArgument.h">
@@ -45,5 +45,10 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tests.bat">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

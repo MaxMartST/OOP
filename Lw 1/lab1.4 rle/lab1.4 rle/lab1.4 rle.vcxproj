@@ -82,9 +82,12 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
+      <Command>"$(ProjectDir)tests.bat" "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>
       </Command>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -98,9 +101,12 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
+      <Command>"$(ProjectDir)tests.bat" "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>
       </Command>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -118,9 +124,12 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
+      <Command>"$(ProjectDir)tests.bat" "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>
       </Command>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -138,9 +147,12 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
+      <Command>"$(ProjectDir)tests.bat" "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>
       </Command>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="LinkerBinaryFile.cpp" />
@@ -151,8 +163,13 @@
     <None Include="tests.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="decode_test.txt" />
+    <Text Include="coding_repetition_example.txt" />
+    <Text Include="coding_repetition_overflow.txt" />
+    <Text Include="decoding_result.txt" />
+    <Text Include="empty.txt" />
     <Text Include="input.txt" />
+    <Text Include="test_input.txt" />
+    <Text Include="test_example_encode.txt" />
     <Text Include="output.txt" />
   </ItemGroup>
   <ItemGroup>

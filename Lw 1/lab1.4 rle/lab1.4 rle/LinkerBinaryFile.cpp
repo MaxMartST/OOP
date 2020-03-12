@@ -1,5 +1,10 @@
-#include "LinkerBinaryFile.h"
 #include "pch.h"
+#include "LinkerBinaryFile.h"
+
+bool FileSizeCheck(const uintmax_t& fileSize)
+{
+	return ((fileSize % 2) == 0) ? true : false;
+}
 
 void RleEncode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output)
 {
@@ -52,21 +57,28 @@ bool CheckTheCountOfRepetitions(const uint8_t& count)
 
 void RleDecode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output)
 {
-	ReadChar readChar;
-
-	for (std::uintmax_t a = 0; a < fileSize / 2; a++)
+	if (FileSizeCheck(fileSize))
 	{
-		input.read((char*)&readChar, sizeof readChar);
+		ReadChar readChar;
 
-		if (!CheckTheCountOfRepetitions(readChar.count))
+		for (std::uintmax_t a = 0; a < fileSize / 2; a++)
 		{
-			break;
-		}
+			input.read((char*)&readChar, sizeof readChar);
 
-		for (std::uint8_t b = 0; b < readChar.count; b++)
-		{
-			output.write((char*)&readChar.ch, sizeof readChar.ch);
+			if (!CheckTheCountOfRepetitions(readChar.count))
+			{
+				break;
+			}
+
+			for (std::uint8_t b = 0; b < readChar.count; b++)
+			{
+				output.write((char*)&readChar.ch, sizeof readChar.ch);
+			}
 		}
+	}
+	else
+	{
+		std::cout << "Odd packed file length" << std::endl;
 	}
 }
 
@@ -95,11 +107,6 @@ void RleBinaryFiles(const uintmax_t& fileSize, const std::string& com, std::fstr
 	}
 }
 
-bool FileSizeCheck(const uintmax_t& fileSize)
-{
-	return (fileSize % 2 == 0) ? true : false;
-}
-
 bool FileLinker(const std::string& com, const std::string& inputFile, const std::string& outputFile)
 {
 	std::fstream input;
@@ -119,11 +126,6 @@ bool FileLinker(const std::string& com, const std::string& inputFile, const std:
 	}
 
 	auto fileSize = GetFileSize(inputFile);
-	if (!FileSizeCheck)
-	{
-		std::cout << "Odd packed file length" << std::endl;
-		return false;
-	}
 
 	RleBinaryFiles(fileSize, com, input, output);
 
