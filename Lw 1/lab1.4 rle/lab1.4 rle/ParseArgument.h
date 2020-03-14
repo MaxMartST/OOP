@@ -1,16 +1,19 @@
 #pragma once
 
-#include <optional>
-#include <iostream>
+#include "pch.h"
 #include <algorithm>
+#include <iostream>
+#include <optional>
 
 const unsigned int NUMBER_ARGS = 4;
 
 struct Args
 {
-	std::string command;
-	std::string inputFile;
-	std::string outputFile;
+	Mode mode;
+	std::string inputFileName;
+	std::string outputFileName;
 };
 
-std::optional<Args> ParsArgs(int argc, char* argv[]);
+std::optional<Mode> GetMode(const std::string& command);
+
+std::optional<Args> ParseArgs(int argc, char* argv[]);

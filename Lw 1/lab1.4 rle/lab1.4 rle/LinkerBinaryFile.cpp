@@ -1,52 +1,96 @@
 #include "pch.h"
 #include "LinkerBinaryFile.h"
+#include "ParseArgument.h"
 
-bool FileSizeCheck(const uintmax_t& fileSize)
+bool CorrectFileReading(std::istream& input)
 {
-	return ((fileSize % 2) == 0) ? true : false;
+	if (input.bad())
+	{
+		std::cout << "Filed to read date from input file" << std::endl;
+		return false;
+	}
+
+	return true;
 }
 
-void RleEncode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output)
+bool FlushStreamBuffer(std::ostream& output)
 {
-	ReadChar readChar;
-	bool eof = false;
+	if (!output.flush())
+	{
+		std::cout << "Failed to write data to output file" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool FlushChunk(RLEChunk& chunk, std::ostream& output)
+{
+	output.write((char*)&chunk, sizeof chunk);
+	chunk.counter = 0;
+
+	return true;
+}
+
+bool PackNextChar(RLEChunk& chunk, char ch, std::ostream& output)
+{
+	if (chunk.counter == 0)
+	{
+		chunk.currentChar = static_cast<uint8_t>(ch);
+	}
+
+	if ((chunk.currentChar == static_cast<uint8_t>(ch)) && (chunk.counter < std::numeric_limits<uint8_t>::max()))
+	{
+		chunk.counter++;
+	}
+	else
+	{
+		return FlushChunk(chunk, output);
+	}
+
+	return false;
+}
+
+bool Pack(std::istream& input, std::ostream& output)
+{
+	RLEChunk chunk;
 	char ch;
 
-	for (std::uintmax_t i = 0; i < fileSize; ++i)
+	while (!input.eof())
 	{
-		if (i == fileSize - 1)
-		{
-			eof = true;
-		}
-
 		input.read((char*)&ch, sizeof ch);
 
-		if (readChar.count == 0)
+		if (PackNextChar(chunk, ch, output))
 		{
-			readChar.ch = static_cast<uint8_t>(ch);
+			chunk.currentChar = static_cast<uint8_t>(ch);
 		}
 
-		if ((readChar.ch == static_cast<uint8_t>(ch)) && (readChar.count < std::numeric_limits<uint8_t>::max()))
+		if (input.eof() && (chunk.counter > 0))
 		{
-			readChar.count++;
-		}
-		else
-		{
-			output.write((char*)&readChar, sizeof readChar);
-			readChar.ch = static_cast<uint8_t>(ch);
-			readChar.count = 1;
-		}
-
-		if (eof && (readChar.count > 0))
-		{
-			output.write((char*)&readChar, sizeof readChar);
+			return FlushChunk(chunk, output);
 		}
 	}
+
+	return (FlushStreamBuffer(output) && CorrectFileReading(input)) ? true : false;
 }
 
-bool CheckTheCountOfRepetitions(const uint8_t& count)
+bool UnpackChunk(const RLEChunk& chunk, std::ostream& output)
 {
-	if (count == 0)
+	for (std::uint8_t i = 0; i < static_cast<uint8_t>(chunk.counter); i++)
+	{
+		if (!output.write((char*)&chunk.currentChar, sizeof chunk.currentChar)) 
+		{
+			std::cout << "Unpacking error" << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool ReadChunk(RLEChunk& chunk)
+{
+	if (chunk.counter == 0)
 	{
 		std::cout << "Zero character repetition" << std::endl;
 		return false;
@@ -55,90 +99,73 @@ bool CheckTheCountOfRepetitions(const uint8_t& count)
 	return true;
 }
 
-void RleDecode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output)
+bool Unpack(std::istream& input, std::ostream& output)
 {
-	if (FileSizeCheck(fileSize))
+	RLEChunk chunk;
+
+	while (input.read((char*)&chunk, sizeof chunk))
 	{
-		ReadChar readChar;
-
-		for (std::uintmax_t a = 0; a < fileSize / 2; a++)
+		if (!ReadChunk(chunk))
 		{
-			input.read((char*)&readChar, sizeof readChar);
+			return false;
+		}
 
-			if (!CheckTheCountOfRepetitions(readChar.count))
-			{
-				break;
-			}
-
-			for (std::uint8_t b = 0; b < readChar.count; b++)
-			{
-				output.write((char*)&readChar.ch, sizeof readChar.ch);
-			}
+		if (!UnpackChunk(chunk, output))
+		{
+			return false;
 		}
 	}
-	else
-	{
-		std::cout << "Odd packed file length" << std::endl;
-	}
+
+	return (FlushStreamBuffer(output) && CorrectFileReading(input)) ? true : false;
 }
 
-uintmax_t GetFileSize(const std::string& fileName)
+bool TransformFile(const std::string& inputFileName, const std::string& outputFileName, const std::function<bool(std::istream&, std::ostream&)> Transformer)
+{
+	std::ifstream input(inputFileName, std::ios::binary | std::ios::in);
+	std::ofstream output(outputFileName, std::ios::binary | std::ios::out | std::ios::trunc);
+
+	if (!input.is_open())
+	{
+		std::cout << "Faile to open '" << inputFileName << "' for reading" << std::endl;
+		return false;
+	}
+
+	if (!output.is_open())
+	{
+		std::cout << "Faile to open '" << outputFileName << "' for writing" << std::endl;
+		return false;
+	}
+
+	return Transformer(input, output);
+}
+
+bool EvenPackedFileLength(const std::string& fileName)
 {
 	try
 	{
-		return fs::file_size(fileName);
+		uintmax_t size = fs::file_size(fileName);
+		if (!((size % 2) == 0))
+		{
+			std::cout << "Odd packed file length" << std::endl;
+			return false;
+		}
+		return true;
 	}
 	catch (fs::filesystem_error& e)
 	{
 		std::cout << e.what() << std::endl;
-		return 0;
+		return false;
 	}
 }
 
-void RleBinaryFiles(const uintmax_t& fileSize, const std::string& com, std::fstream& input, std::ofstream& output)
+bool FileLArchiver(const Args& args)
 {
-	if (com == COMMAND_PACK)
+	switch (args.mode)
 	{
-		RleEncode(fileSize, input, output);
-	}
-	else if (com == COMMAND_UNPACK)
-	{
-		RleDecode(fileSize, input, output);
-	}
-}
-
-bool FileLinker(const std::string& com, const std::string& inputFile, const std::string& outputFile)
-{
-	std::fstream input;
-	input.open(inputFile, std::ios::binary | std::ios::in);
-	if (!input.is_open())
-	{
-		std::cout << "Fale to open '" << inputFile << "' for reading" << std::endl;
-		return false;
-	}
-
-	std::ofstream output;
-	output.open(outputFile, std::ios::binary | std::ios::out | std::ios::trunc);
-	if (!output.is_open())
-	{
-		std::cout << "Fale to open '" << outputFile << "' for writing" << std::endl;
-		return false;
-	}
-
-	auto fileSize = GetFileSize(inputFile);
-
-	RleBinaryFiles(fileSize, com, input, output);
-
-	if (input.bad())
-	{
-		std::cout << "Filed to read date from input file" << std::endl;
-		return false;
-	}
-
-	if (!output.flush())
-	{
-		std::cout << "Failed to write data to output file" << std::endl;
-		return false;
+	case Mode::PACK:
+		return TransformFile(args.inputFileName, args.outputFileName, Pack);
+	case Mode::UNPACK:
+		return EvenPackedFileLength(args.inputFileName) ? TransformFile(args.inputFileName, args.outputFileName, Unpack) : false;
 	}
 
 	return true;

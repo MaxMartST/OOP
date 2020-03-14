@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ParseArgument.h"
 #include <string>
 #include <iostream>
 #include <filesystem>
@@ -7,25 +8,19 @@
 #include <cstdint>
 #include <cstring>
 #include <stdio.h>
+#include <functional>
 
 namespace fs = std::filesystem;
+typedef std::function<bool(std::istream&, std::ostream&)> Transformer;
 
-struct ReadChar
+struct RLEChunk
 {
-	uint8_t count = 0;
-	uint8_t ch = 0;
+	uint8_t counter = 0;
+	uint8_t currentChar = 0;
 };
 
-void RleEncode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output);
+bool Pack(std::istream& input, std::ostream& output);
 
-bool CheckTheCountOfRepetitions(const uint8_t& count);
+bool Unpack(std::istream& input, std::ostream& output);
 
-void RleDecode(const uintmax_t& fileSize, std::fstream& input, std::ofstream& output);
-
-uintmax_t GetFileSize(const std::string& fileName);
-
-void RleBinaryFiles(const uintmax_t& fileSize, const std::string& com, std::fstream& input, std::ofstream& output);
-
-bool FileSizeCheck(const uintmax_t& fileSize);
-
-bool FileLinker(const std::string& com, const std::string& inputFile, const std::string& outputFile);
+bool FileLArchiver(const Args& args);

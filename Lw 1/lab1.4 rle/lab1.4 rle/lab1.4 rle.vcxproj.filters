@@ -26,14 +26,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="output.txt" />
     <Text Include="input.txt" />
-    <Text Include="test_example_encode.txt" />
     <Text Include="test_input.txt" />
     <Text Include="decoding_result.txt" />
     <Text Include="coding_repetition_overflow.txt" />
     <Text Include="coding_repetition_example.txt" />
     <Text Include="empty.txt" />
+    <Text Include="test_example_encode.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParseArgument.h">

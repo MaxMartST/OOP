@@ -3,9 +3,9 @@
 
 int main(int argc, char* argv[])
 {
-	if (auto args = ParsArgs(argc, argv))
+	if (auto args = ParseArgs(argc, argv))
 	{
-		return FileLinker(args->command, args->inputFile, args->outputFile) ? 0 : 1;
+		return FileLinker(*args) ? 0 : 1;
 	}
 	else
 	{
