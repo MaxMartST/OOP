@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "LinkerBinaryFile.h"
+#include "ArchiverBinaryFile.h"
 #include "ParseArgument.h"
 
 bool CorrectFileReading(std::istream& input)
@@ -151,7 +151,7 @@ bool EvenPackedFileLength(const std::string& fileName)
 		}
 		return true;
 	}
-	catch (fs::filesystem_error& e)
+	catch (const fs::filesystem_error& e)
 	{
 		std::cout << e.what() << std::endl;
 		return false;
