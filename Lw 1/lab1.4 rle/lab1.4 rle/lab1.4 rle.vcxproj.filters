@@ -21,7 +21,7 @@
     <ClCompile Include="ParseArgument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LinkerBinaryFile.cpp">
+    <ClCompile Include="ArchiverBinaryFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClInclude Include="ParseArgument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LinkerBinaryFile.h">
+    <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="ArchiverBinaryFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

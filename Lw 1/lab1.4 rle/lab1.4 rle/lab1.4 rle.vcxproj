@@ -157,7 +157,7 @@
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LinkerBinaryFile.cpp" />
+    <ClCompile Include="ArchiverBinaryFile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParseArgument.cpp" />
   </ItemGroup>
@@ -174,7 +174,7 @@
     <Text Include="test_example_encode.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LinkerBinaryFile.h" />
+    <ClInclude Include="ArchiverBinaryFile.h" />
     <ClInclude Include="ParseArgument.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
