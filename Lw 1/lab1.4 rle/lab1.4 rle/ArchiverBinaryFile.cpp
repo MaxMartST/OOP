@@ -26,11 +26,20 @@ bool FlushStreamBuffer(std::ostream& output)
 
 bool FlushChunk(RLEChunk& chunk, std::ostream& output)
 {
-	output.write((char*)&chunk, sizeof chunk);
+	if (!output.write((char*)&chunk, sizeof chunk))
+	{
+		return false;
+	}
 	chunk.counter = 0;
 
 	return true;
 }
+
+/*void FlushChunk(RLEChunk& chunk, std::ostream& output)
+{
+	output.write((char*)&chunk, sizeof chunk);
+	chunk.counter = 0;
+}*/
 
 bool PackNextChar(RLEChunk& chunk, char ch, std::ostream& output)
 {
@@ -56,29 +65,69 @@ bool Pack(std::istream& input, std::ostream& output)
 	RLEChunk chunk;
 	char ch;
 
-	while (!input.eof())
+	/*while (input.get(ch))
+	{
+		if (chunk.counter == 0 || chunk.currentChar == static_cast<uint8_t>(ch))
+		{
+			chunk.currentChar = static_cast<uint8_t>(ch);
+			chunk.counter++;
+		}
+
+		while (chunk.counter < std::numeric_limits<uint8_t>::max() && input.get(ch))
+		{
+			if (chunk.currentChar == static_cast<uint8_t>(ch))
+			{
+				chunk.counter++;
+			}
+			else 
+			{
+				break;
+			}
+		}
+		FlushChunk(chunk, output);
+
+		chunk.currentChar = static_cast<uint8_t>(ch);
+		chunk.counter = 1;
+	}*/
+
+	while (input.get(ch))
+	{
+		if (PackNextChar(chunk, ch, output))
+		{
+			chunk.currentChar = static_cast<uint8_t>(ch);
+			chunk.counter++;
+		}
+	}
+
+	if (input.eof() && (chunk.counter > 0))
+	{
+		return FlushChunk(chunk, output);
+	}
+
+	/*while (!input.eof())
 	{
 		input.read((char*)&ch, sizeof ch);
 
 		if (PackNextChar(chunk, ch, output))
 		{
 			chunk.currentChar = static_cast<uint8_t>(ch);
+			chunk.counter++;
 		}
 
 		if (input.eof() && (chunk.counter > 0))
 		{
 			return FlushChunk(chunk, output);
 		}
-	}
+	}*/
 
-	return (FlushStreamBuffer(output) && CorrectFileReading(input)) ? true : false;
+	return (FlushStreamBuffer(output) && CorrectFileReading(input));
 }
 
 bool UnpackChunk(const RLEChunk& chunk, std::ostream& output)
 {
 	for (std::uint8_t i = 0; i < static_cast<uint8_t>(chunk.counter); i++)
 	{
-		if (!output.write((char*)&chunk.currentChar, sizeof chunk.currentChar)) 
+		if (!output.write((char*)&chunk.currentChar, sizeof chunk.currentChar))
 		{
 			std::cout << "Unpacking error" << std::endl;
 			return false;
@@ -116,7 +165,7 @@ bool Unpack(std::istream& input, std::ostream& output)
 		}
 	}
 
-	return (FlushStreamBuffer(output) && CorrectFileReading(input)) ? true : false;
+	return (FlushStreamBuffer(output) && CorrectFileReading(input));
 }
 
 bool TransformFile(const std::string& inputFileName, const std::string& outputFileName, const std::function<bool(std::istream&, std::ostream&)> Transformer)
@@ -158,7 +207,7 @@ bool EvenPackedFileLength(const std::string& fileName)
 	}
 }
 
-bool FileLArchiver(const Args& args)
+bool FileArchiver(const Args& args)
 {
 	switch (args.mode)
 	{

@@ -23,4 +23,4 @@ bool Pack(std::istream& input, std::ostream& output);
 
 bool Unpack(std::istream& input, std::ostream& output);
 
-bool FileLArchiver(const Args& args);
+bool FileArchiver(const Args& args);
