@@ -50,7 +50,7 @@ bool ReadStream(std::ifstream& input, Matrix& matrix)
 
 			if (col != MATRIX_SIZE)
 			{
-				error = true;
+				//error = true;
 				std::cout << "invalid number of matrix columns!" << std::endl;
 				return false;
 			}
@@ -168,7 +168,7 @@ std::optional<Matrix> InvertMatrix(const Matrix& matrix)
 	{
 		return std::nullopt;
 	}
-	double coefficient = 1 / determinant;
+	double coefficient = 1 / determinant;//inverstDeterminant
 	Matrix transposeMatrix = TransposeMatrix(matrix);
 	Matrix adjugateMatrix = AdjugateMatrix(transposeMatrix);
 
