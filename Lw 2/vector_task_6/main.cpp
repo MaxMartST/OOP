@@ -3,21 +3,23 @@
 
 int main()
 {
-	std::vector<double> vectorNumers;
+	auto vectorNumers = GetVectorFromStream(std::cin);
 
-	if (!ReadingDataFromStreamInVector(std::cin, vectorNumers))
+	if (!vectorNumers)
 	{
 		std::cout << "Error: reading data from a stream to a vector" << std::endl;
 		return 1;
 	}
 
-	if (!MyltiByMaxDivMinAllElemVector(vectorNumers))
+	auto resultVector = ChangeVector(*vectorNumers);
+
+	if (!resultVector)
 	{
 		std::cout << "Error: invalid value min element" << std::endl;
 		return 1;
 	}
 
-	PrintSortVector(vectorNumers);
+	PrintSortVector(std::cout , *vectorNumers);
 
 	return 0;
 }

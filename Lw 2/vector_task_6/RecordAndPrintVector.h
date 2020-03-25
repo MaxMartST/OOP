@@ -12,5 +12,5 @@
 #include <utility>
 #include <functional>
 
-bool ReadingDataFromStreamInVector(std::istream& inputStream, std::vector<double>& vectorNumers);
-void PrintSortVector(std::vector<double>& outVector);
+std::optional<std::vector<double>> GetVectorFromStream(std::istream& inputStream);
+void PrintSortVector(std::ostream& outputStream, const std::vector<double>& resultVector);

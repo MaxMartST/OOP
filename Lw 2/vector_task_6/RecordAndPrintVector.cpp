@@ -1,25 +1,27 @@
 #include "RecordAndPrintVector.h"
 
-bool ReadingDataFromStreamInVector(std::istream& inputStream, std::vector<double>& vectorNumers)
+std::optional<std::vector<double>> GetVectorFromStream(std::istream& inputStream)
 {
-	vectorNumers.clear();
-	copy(std::istream_iterator<double>(inputStream), (std::istream_iterator<double>()), std::back_inserter(vectorNumers));
+	std::vector<double> numers;
+	copy(std::istream_iterator<double>(inputStream), (std::istream_iterator<double>()), std::back_inserter(numers));
 
 	if (!inputStream.eof())
 	{
 		std::cout << "Error writing to vector from stream!" << std::endl;
-		return false;
+		return std::nullopt;
 	}
 
-	return true;
+	return numers;
 }
 
-void PrintSortVector(std::vector<double>& outVector)
+void PrintSortVector(std::ostream& outputStream, const std::vector<double>& resultVector)
 {
-	//std::sort(outVector.begin(), outVector.end());
+	std::vector<double> outVector = resultVector;
+	sort(outVector.begin(), outVector.end());
 
-	for (const double& value : outVector)
+	for (const auto& element : outVector)
 	{
-		std::cout << std::setprecision(3) << std::fixed << value << " ";
+		outputStream << std::fixed << std::setprecision(3) << element << " ";
 	}
+	outputStream << std::endl;
 }

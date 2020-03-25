@@ -9,5 +9,4 @@
 #include <cmath>
 #include <functional> 
 
-bool MyltiByMaxDivMinAllElemVector(std::vector<double>& vectorNumers);
-//std::optional<std::vector<double>> MyltiByMaxDivMinAllElemVector(std::vector<double>& vectorNumers);
+std::optional<std::vector<double>> ChangeVector(const std::vector<double>& numers);
