@@ -147,10 +147,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\vector_task_6\FunctionsOfVector.cpp" />
     <ClCompile Include="..\vector_task_6\RecordAndPrintVector.cpp" />
     <ClCompile Include="unit_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\vector_task_6\FunctionsOfVector.h" />
     <ClInclude Include="..\vector_task_6\RecordAndPrintVector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

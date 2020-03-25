@@ -1,9 +1,16 @@
 #pragma once
+#include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <iterator>
+#include <limits>
 #include <optional>
+#include <sstream>
+#include <string>
 #include <vector>
+#include <algorithm>
+#include <utility>
+#include <functional>
 
-std::optional<std::vector<double>> InitiVector(std::istream& inputStream);
-void PrintVector(const std::vector<double> & outVector);
-int Add(int x, int y);
+bool ReadingDataFromStreamInVector(std::istream& inputStream, std::vector<double>& vectorNumers);
+void PrintSortVector(std::vector<double>& outVector);

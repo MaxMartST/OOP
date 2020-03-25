@@ -21,9 +21,15 @@
     <ClCompile Include="RecordAndPrintVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FunctionsOfVector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RecordAndPrintVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionsOfVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
