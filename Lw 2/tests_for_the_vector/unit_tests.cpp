@@ -5,62 +5,29 @@
 #include "../vector_task_6/FunctionsOfVector.h"
 #include "../vector_task_6/RecordAndPrintVector.h"
 
-TEST_CASE("Unit tests: vector transformation")
+TEST_CASE("Vector conversion check")
 {
 	std::vector<double> numbersVector{ 4, 4.4, 8, 10, -2 };
-	std::stringstream buffer;
 
-	SECTION("We read data from the stream and write to the vector")
-	{
-		std::istringstream str(" 4 4.4 8 10 -2 ");
-		REQUIRE(*(GetVectorFromStream(str)) == numbersVector);
-	}
-
-	SECTION("We read invalid data from the stream and cause an error")
-	{
-		std::istringstream str("0 12 -97 F 7.5");
-		REQUIRE(GetVectorFromStream(str) == std::nullopt);
-	}
-
-	SECTION("An empty string will return an empty vector")
-	{
-		std::istringstream str(" ");
-		numbersVector.clear();
-		REQUIRE(*(GetVectorFromStream(str)) == numbersVector);
-	}
-
-	SECTION("An empty vector will return an empty vector")
+	SECTION("Function does not change empty vector")
 	{
 		numbersVector.clear();
-		REQUIRE(*(ChangeVector(numbersVector)) == numbersVector);
+		ChangeVector(numbersVector);
+		REQUIRE(numbersVector.empty());
 	}
 
-	SECTION("Invalid vector with a minimum element equal to zero")
-	{
-		std::vector<double> invalVector{ 4, 4.4, 8, 10, 0 };
-		REQUIRE(ChangeVector(invalVector) == std::nullopt);
-	}
-
-	SECTION("Get modified vector")
+	SECTION("Multiplies each element of non empty vector by maximum element and divides by minimum element")
 	{
 		std::vector<double> resultVector{ -20, -22, -40, -50, 10 };
-		REQUIRE(*(ChangeVector(numbersVector)) == resultVector);
+		ChangeVector(numbersVector);
+		REQUIRE(numbersVector == resultVector);
 	}
 
-	SECTION("Output modified vector")
+	SECTION("Multiplies each element of non empty vector by maxiumum element if minimum is zero")
 	{
-		std::vector<double> numbers = { 2.5, 3.14, 7, 8, -19, 15 };
-		std::string outStr;
-		PrintSortVector(buffer, numbers);
-		std::getline(buffer, outStr);
-		REQUIRE(outStr == "-19.000 2.500 3.140 7.000 8.000 15.000 ");
-	}
-	SECTION("Output empty vector")
-	{
-		numbersVector.clear();
-		std::string outStr;
-		PrintSortVector(buffer, numbersVector);
-		std::getline(buffer, outStr);
-		REQUIRE(outStr == "");
+		std::vector<double> minZeroVector{ 4, 4.4, 8, 10, 0 };
+		std::vector<double> resultVector{ 40, 44, 80, 100, 0 };
+		ChangeVector(minZeroVector);
+		REQUIRE(minZeroVector == resultVector);
 	}
 }
