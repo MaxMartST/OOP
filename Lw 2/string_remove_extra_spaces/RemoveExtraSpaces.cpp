@@ -30,8 +30,10 @@ void RemoveExtraSpacesFromStream(std::istream& input, std::ostream& output)
 {
 	std::string line;
 	bool isFirstLine = true;
-	while (getline(input, line))
+	while (!input.eof())
 	{
+		getline(input, line);
+
 		if (!isFirstLine)
 		{
 			output << "\n";
