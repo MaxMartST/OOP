@@ -18,18 +18,18 @@
     <ClCompile Include="unit_tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\vector_task_6\RecordAndPrintVector.cpp">
+    <ClCompile Include="..\vector_task_6\FunctionsOfVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\vector_task_6\FunctionsOfVector.cpp">
+    <ClCompile Include="..\vector_task_6\RecordAndPrintVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\vector_task_6\RecordAndPrintVector.h">
+    <ClInclude Include="..\vector_task_6\FunctionsOfVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\vector_task_6\FunctionsOfVector.h">
+    <ClInclude Include="..\vector_task_6\RecordAndPrintVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
