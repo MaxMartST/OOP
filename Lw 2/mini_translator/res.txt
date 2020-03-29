@@ -1,0 +1,5 @@
+cat: кошка, кот
+dog: собака
+good day: хороший день
+home: дом
+language: язык
