@@ -10,5 +10,6 @@
 #include <conio.h>
 
 const std::string CLOSE = "...";
+const std::string SKIP_WORD = " ";
 
 void Interpreter(Dictionary& dictionary);

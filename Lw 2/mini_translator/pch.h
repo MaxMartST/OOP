@@ -9,12 +9,30 @@ const size_t NO = 110;
 
 enum class Status
 {
-	NEW_WORD,
-	OLD_WORD
+	NEW,
+	OLD
+};
+
+struct Word
+{
+	std::string keyWord;
+	Status statusWord = Status::OLD;
+
+	bool operator<(const Word& word1) const
+	{
+		return this->keyWord < word1.keyWord;
+	}
 };
 
 struct Dictionary
 {
-	std::map<std::string, std::vector<std::string>> dictionaryWords;
-	Status statusDictionary = Status::OLD_WORD;
+	Dictionary() = default;
+	Dictionary(std::string& str)
+	{
+		dictionaryFileName = str;
+	}
+
+	std::string dictionaryFileName;
+	std::map<Word, std::vector<std::string>> dictionaryWords;
+	Status statusDictionary = Status::OLD;
 };

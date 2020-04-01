@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
-#include "SaveDictionary.h"
 #include "InitializeDictionary.h"
 #include "Interpreter.h"
+#include "SaveDictionary.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -13,36 +13,40 @@
 #include <utility>
 #include <vector>
 
-std::optional<std::string> ParsingArguments(int argc, char* argv[])
+bool ParseDictionaryFileName(int argc, char* argv[], std::string& fileName)
 {
-	if (argc > 2)
+	if (argc == 2)
 	{
-		std::cout << "Useg: mini_translator <input.txt> OR mini_translator <null>" << std::endl;
-		return std::nullopt;
+		fileName = argv[1];
+		return true;
 	}
 
-	if (argc = 2)
+	if (argc == 1)
 	{
-		return argv[1];
+		return true;
 	}
 
-	return std::nullopt;
+	std::cout << "Количество аргументов превышено" << std::endl;
+	return false;
 }
 
 int main(int argc, char* argv[])
 {
-	//setlocale(LC_ALL, "Russian");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	//если есть файл загрузки словаря, то производим его инициализацию
-	auto args = ParsingArguments(argc, argv);
+	std::string fileName;
 
-	Dictionary dictionary;
-
-	if (args)
+	if (!ParseDictionaryFileName(argc, argv, fileName))
 	{
-		dictionary = GetDictionaryFromInputFile(*args);
+		return 1;
+	}
+
+	Dictionary dictionary(fileName);
+
+	if (!dictionary.dictionaryFileName.empty())
+	{
+		DictionaryInitialization(dictionary);
 	}
 
 	Interpreter(dictionary);

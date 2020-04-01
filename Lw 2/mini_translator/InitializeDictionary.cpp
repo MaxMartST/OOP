@@ -20,16 +20,16 @@ std::vector<std::string> GetTranslationVector(const std::string& str)
 	return wordsVector;
 }
 
-std::pair<std::string, std::vector<std::string>> ParseLine(const std::string& str)
+std::pair<Word, std::vector<std::string>> ParseLine(const std::string& str)
 {
 	std::string keyWord;
 	std::string translationWord;
-	std::pair<std::string, std::vector<std::string>> elemDictionary;
+	std::pair<Word, std::vector<std::string>> elemDictionary;
 
 	auto wordEnd = str.find(TRANSLATE);
 	keyWord = str.substr(0, wordEnd);
 	transform(keyWord.begin(), keyWord.end(), keyWord.begin(), tolower);
-	elemDictionary.first = keyWord;
+	elemDictionary.first.keyWord = keyWord;
 
 	auto translateStart = wordEnd + TRANSLATE.length();
 	translationWord = str.substr(translateStart);
@@ -38,28 +38,25 @@ std::pair<std::string, std::vector<std::string>> ParseLine(const std::string& st
 	return elemDictionary;
 }
 
-Dictionary GetDictionary(std::istream& input)
+void ReadDictionaryFromStream(Dictionary& dictionary, std::istream& input)
 {
-	Dictionary dictionary;
 	std::string str;
-	std::pair<std::string, std::vector<std::string>> dictionaryElem;
+	std::pair<Word, std::vector<std::string>> dictionaryElem;
 
 	while (getline(input, str))
 	{
 		dictionaryElem = ParseLine(str);
 		dictionary.dictionaryWords.emplace(dictionaryElem.first, dictionaryElem.second);
 	}
-
-	return dictionary;
 }
 
-Dictionary GetDictionaryFromInputFile(const std::string& file)
+void DictionaryInitialization(Dictionary& dictionary)
 {
-	std::ifstream input(file);
+	std::ifstream input(dictionary.dictionaryFileName, std::ios::in);
 	if (!input.is_open())
 	{
-		std::cout << "Failed to open file: " << file << std::endl;
+		std::cout << "Failed to open file: " << dictionary.dictionaryFileName << std::endl;
 	}
 
-	return GetDictionary(input);
+	ReadDictionaryFromStream(dictionary, input);
 }

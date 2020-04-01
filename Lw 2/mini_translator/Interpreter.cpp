@@ -1,10 +1,8 @@
-
 #include "Interpreter.h"
 #include "InitializeDictionary.h"
 
 void PrintRussianTranslation(const std::vector<std::string>& translation)
 {
-	std::cout << "Translation: ";
 	for (size_t i = 0; i < translation.size(); i++)
 	{
 		std::cout << translation.at(i);
@@ -18,48 +16,45 @@ void PrintRussianTranslation(const std::vector<std::string>& translation)
 
 void PrintEnglishTranslation(const std::string& translation)
 {
-	std::cout << "Translation: ";
 	std::cout << translation << std::endl;
 }
 
 void AddWordDictionary(const std::string& word, const std::string& translate, Dictionary& dictionary)
 {
-	dictionary.dictionaryWords.emplace(word, GetTranslationVector(translate));
-	dictionary.statusDictionary = Status::NEW_WORD;
-	std::cout << "Word \"" << word << "\" saved as \"" << translate << "\"" << std::endl;
+	Word keyWord;
+	keyWord.keyWord = word;
+	keyWord.statusWord = Status::NEW;
+
+	dictionary.dictionaryWords.emplace(keyWord, GetTranslationVector(translate));
+	dictionary.statusDictionary = Status::NEW;
 }
 
-void NotFoundWord(const std::string& word, Dictionary& dictionary)
+void NotFoundWord(const std::string& word, const std::string& str, Dictionary& dictionary)
 {
-	std::cout << "Failed to find this word: " << word << std::endl;
-	std::cout << "Want to add it to your dictionary? Y/N" << std::endl;
+	std::cout << "Неизвестное слово \"" << str << "\". Введите перевод или пустую строку для отказа." << std::endl;
 
-	int key;
-	do
+	std::string translate;
+	getline(std::cin, translate);
+
+	if (translate == SKIP_WORD)
 	{
-		key = _getch();
-		if (key == YES)
-		{
-			std::string translate;
-			std::cout << "Translate: ";
-			getline(std::cin, translate);
-			AddWordDictionary(word, translate, dictionary);
-			break;
-		}
-		
-		if (key != YES && key != NO)
-		{
-			std::cout << "\nWrong command! Try again" << std::endl;
-		}
-
-	} while (key != NO);
+		std::cout << "\nСлово \"" << str << "\" проигнорировано." << std::endl;
+	}
+	else
+	{
+		AddWordDictionary(word, translate, dictionary);
+		std::cout << "Слово \"" << str << "\" сохранено в словаре как \"" << translate << "\"." << std::endl;
+	}
 }
 
 std::optional<std::vector<std::string>> GetRussianTranslation(const Dictionary& dictionary, const std::string& word)
 {
-	if (auto it = dictionary.dictionaryWords.find(word); it != dictionary.dictionaryWords.end())
+	for (auto value : dictionary.dictionaryWords)
 	{
-		return it->second;
+		if (value.first.keyWord == word)
+		{
+			return value.second;
+		}
 	}
 
 	return std::nullopt;
@@ -67,13 +62,13 @@ std::optional<std::vector<std::string>> GetRussianTranslation(const Dictionary& 
 
 std::optional<std::string> GetEnglishTranslation(const Dictionary& dictionary, const std::string& word)
 {
-	for (auto item : dictionary.dictionaryWords)
+	for (auto value : dictionary.dictionaryWords)
 	{
-		for (auto translation : item.second)
+		for (auto translation : value.second)
 		{
 			if (translation == word)
 			{
-				return item.first;
+				return value.first.keyWord;
 			}
 		}
 	}
@@ -83,12 +78,12 @@ std::optional<std::string> GetEnglishTranslation(const Dictionary& dictionary, c
 
 void Interpreter(Dictionary& dictionary)
 {
-	std::string requestWord;
+	std::string requestWord, str;
 
 	do
 	{
-		std::cout << "Find a translation for a word: ";
-		getline(std::cin, requestWord);
+		getline(std::cin, str);
+		requestWord = str;
 		transform(requestWord.begin(), requestWord.end(), requestWord.begin(), tolower);
 
 		if (auto translation = GetRussianTranslation(dictionary, requestWord))
@@ -105,10 +100,10 @@ void Interpreter(Dictionary& dictionary)
 
 		if (requestWord != CLOSE)
 		{
-			NotFoundWord(requestWord, dictionary);
+			NotFoundWord(requestWord, str, dictionary);
 		}
 
 	} while (requestWord != CLOSE);
 
-	std::cout << "Exit the translator" << std::endl;
+	std::cout << "Выход из переводчика" << std::endl;
 }
