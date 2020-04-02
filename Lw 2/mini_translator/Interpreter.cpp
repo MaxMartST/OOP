@@ -29,21 +29,21 @@ void AddWordDictionary(const std::string& word, const std::string& translate, Di
 	dictionary.statusDictionary = Status::NEW;
 }
 
-void NotFoundWord(const std::string& word, const std::string& str, Dictionary& dictionary)
+void NotFoundWord(const std::string& word, Dictionary& dictionary)
 {
-	std::cout << "Неизвестное слово \"" << str << "\". Введите перевод или пустую строку для отказа." << std::endl;
+	std::cout << "Неизвестное слово \"" << word << "\". Введите перевод или пустую строку для отказа." << std::endl;
 
 	std::string translate;
 	getline(std::cin, translate);
 
 	if (translate == SKIP_WORD)
 	{
-		std::cout << "\nСлово \"" << str << "\" проигнорировано." << std::endl;
+		std::cout << "\nСлово \"" << word << "\" проигнорировано." << std::endl;
 	}
 	else
 	{
 		AddWordDictionary(word, translate, dictionary);
-		std::cout << "Слово \"" << str << "\" сохранено в словаре как \"" << translate << "\"." << std::endl;
+		std::cout << "Слово \"" << word << "\" сохранено в словаре как \"" << translate << "\"." << std::endl;
 	}
 }
 
@@ -83,7 +83,6 @@ void Interpreter(Dictionary& dictionary)
 	do
 	{
 		getline(std::cin, str);
-		requestWord = str;
 		transform(requestWord.begin(), requestWord.end(), requestWord.begin(), tolower);
 
 		if (auto translation = GetRussianTranslation(dictionary, requestWord))
@@ -100,7 +99,7 @@ void Interpreter(Dictionary& dictionary)
 
 		if (requestWord != CLOSE)
 		{
-			NotFoundWord(requestWord, str, dictionary);
+			NotFoundWord(requestWord, dictionary);
 		}
 
 	} while (requestWord != CLOSE);

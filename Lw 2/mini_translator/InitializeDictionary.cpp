@@ -60,3 +60,20 @@ void DictionaryInitialization(Dictionary& dictionary)
 
 	ReadDictionaryFromStream(dictionary, input);
 }
+
+bool ParseDictionaryFileName(int argc, char* argv[], std::string& fileName)
+{
+	if (argc == 2)
+	{
+		fileName = argv[1];
+		return true;
+	}
+
+	if (argc == 1)
+	{
+		return true;
+	}
+
+	std::cout << "Количество аргументов превышено" << std::endl;
+	return false;
+}
