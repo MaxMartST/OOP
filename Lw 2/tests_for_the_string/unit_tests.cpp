@@ -9,17 +9,20 @@ TEST_CASE("Removing extra spaces from lines")
 {
 	SECTION("Does not change the empty string")
 	{
-		std::string str = "";
+		std::string str;
 		REQUIRE(RemoveExtraSpaces("") == str);
 	}
 
 	SECTION("Removes extra spaces in one line")
 	{
-		std::string str = "Hello 3 world!3 5";
-		REQUIRE(RemoveExtraSpaces("  Hello   3   world!3   5     ") == str);
+		std::string resultString = "Hello 3 world!3 5";
+		REQUIRE(RemoveExtraSpaces("  Hello   3   world!3   5     ") == resultString);
 	}
+}
 
-	SECTION("Removes extra spaces in several lines without going to the last line")
+TEST_CASE("Removing extra spaces from the input stream")
+{
+	SECTION("Remove extra spaces without going to the next line")
 	{
 		std::istringstream input("  2Hello   3   world!   3   \n   2 line");
 		std::stringstream output;
@@ -28,8 +31,7 @@ TEST_CASE("Removing extra spaces from lines")
 		REQUIRE(input.eof());
 	}
 
-	
-	SECTION("Removes extra spaces in several lines with the transition on the last line")
+	SECTION("Remove extra spaces when switching to the next line")
 	{
 		std::istringstream input("  2Hello   3   world!   3   \n   2 line \n");
 		std::stringstream output;

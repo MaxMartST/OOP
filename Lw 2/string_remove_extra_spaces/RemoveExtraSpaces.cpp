@@ -7,39 +7,32 @@ std::string RemoveExtraSpaces(std::string const& str)
 		return str;
 	}
 
-	std::string newStr = str;
+	std::istringstream ist(str);
+	std::ostringstream ost;
 
-	newStr.erase(std::unique_copy(newStr.begin(), newStr.end(), newStr.begin(), [](char c1, char c2) { return c1 == ' ' && c2 == ' '; }), newStr.end());
+	std::copy(std::istream_iterator<std::string>(ist), std::istream_iterator<std::string>(), std::ostream_iterator<std::string>(ost, " "));
+	std::string resultStr = ost.str();
 
-	unsigned length = static_cast<unsigned>(newStr.length() - 1);
+	size_t size = resultStr.size();
 
-	if (newStr[length] == ' ')
+	if (size > 1 && resultStr[size - 1] == ' ')
 	{
-		newStr.erase(length, 1);
+		resultStr.erase(size - 1, 1); 
 	}
 
-	if (newStr[0] == ' ')
-	{
-		newStr.erase(0, 1);
-	}
-
-	return newStr;
+	return resultStr;
 }
 
 void RemoveExtraSpacesFromStream(std::istream& input, std::ostream& output)
 {
 	std::string line;
-	bool isFirstLine = true;
-	while (!input.eof())
+	while (getline(input, line))
 	{
-		getline(input, line);
+		output << RemoveExtraSpaces(line);
 
-		if (!isFirstLine)
+		if (!input.eof())
 		{
 			output << "\n";
 		}
-
-		output << RemoveExtraSpaces(line);
-		isFirstLine = false;
 	}
 }
