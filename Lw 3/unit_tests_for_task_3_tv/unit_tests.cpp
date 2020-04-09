@@ -145,7 +145,6 @@ TEST_CASE("The ability to give a name to the channel and search for the channel 
 		REQUIRE(remoteControl.SetCommand());
 		REQUIRE(output.str() == "Channel saved: 2 - sport\n");
 
-		//string nameChannel = "sport";
 		int numberChannel = tv.GetChannelByName("sport");
 
 		REQUIRE(numberChannel == 2);

@@ -1,9 +1,8 @@
 ﻿#pragma once
+#include "pch.h"
 
-#include <boost/bimap.hpp>
-
-typedef boost::bimap<int, std::string> ChannelStructure;
-typedef ChannelStructure::value_type ChannelAndName;
+//typedef boost::bimap<int, std::string> ChannelStructure;
+//typedef ChannelStructure::value_type ChannelAndName;
 
 class CTVSet
 {
@@ -12,6 +11,8 @@ public:
 	bool IsTurnedOn() const;
 	void TurnOn();
 	void TurnOff();
+	//Channels GetListChannels();
+	ChannelStructure GetListChannels();
 	int GetChannel() const;
 	void SelectChannel(int channel);
 	void SelectPreviousChannel();
@@ -21,9 +22,9 @@ public:
 
 private:
 	bool m_isOn = false;
-	int m_channel = 1;			
-	int m_previousChannel = 1;	
-	ChannelStructure m_channelList;	
+	int m_channel = 1;
+	int m_previousChannel = 1;
+	ChannelStructure m_channelList;
 
 	static constexpr int MIN_CHANNEL = 1;
 	static constexpr int MAX_CHANNEL = 99;

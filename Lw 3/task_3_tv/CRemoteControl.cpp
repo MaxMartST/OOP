@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "edit_channel_name.h"
-#include "CErrorMessage.h"
 #include "CRemoteControl.h"
+#include "CErrorMessage.h"
 #include "CTVSet.h"
+#include "edit_channel_name.h"
 
 using namespace std;
 using namespace boost::placeholders;
@@ -15,6 +15,7 @@ CRemoteControl::CRemoteControl(CTVSet& tv, istream& input, ostream& output)
 		  { "TurnOn", [this](istream& strm) { return TurnOn(strm); } },
 		  { "TurnOff", bind(&CRemoteControl::TurnOff, this, _1) },
 		  { "Info", bind(&CRemoteControl::Info, this, _1) },
+		  { "InfoAll", bind(&CRemoteControl::InfoAll, this, _1) },
 		  { "SelectChannel", bind(&CRemoteControl::SelectChannel, this, _1) },
 		  { "PreviousChannel", bind(&CRemoteControl::PreviousChannel, this, _1) },
 		  { "SetChannelName", bind(&CRemoteControl::SetChannelName, this, _1) },
@@ -61,6 +62,20 @@ bool CRemoteControl::Info(istream& args)
 	string info = (m_tv.IsTurnedOn()) ? ("TV is turned on\nChannel is: " + to_string(m_tv.GetChannel()) + "\n") : "TV is turned off\n";
 
 	m_output << info;
+
+	return true;
+}
+
+bool CRemoteControl::InfoAll(istream& args)
+{
+	ChannelStructure channelList = m_tv.GetListChannels();
+
+	auto myList = channelList.left;
+
+	for (auto it = myList.begin(); it != myList.end(); ++it)
+	{
+		m_output << it->first << " - " << it->second << "\n";
+	}
 
 	return true;
 }

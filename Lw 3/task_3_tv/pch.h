@@ -1,22 +1,22 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
-
 #pragma once
 
 #include "targetver.h"
+#include <boost/bimap.hpp>
 
 #include <stdio.h>
 #include <tchar.h>
 
+#include <optional>
 #include <cctype>
-#include <iterator>
 #include <functional>
 #include <iostream>
-#include <stdexcept>
+#include <iterator>
 #include <map>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
-// TODO: reference additional headers your program requires here
+//typedef std::map<int, std::string> Channels;
+
+typedef boost::bimap<int, std::string> ChannelStructure;
+typedef ChannelStructure::value_type ChannelAndName;

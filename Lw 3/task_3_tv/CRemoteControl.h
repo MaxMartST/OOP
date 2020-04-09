@@ -16,6 +16,7 @@ private:
 	bool TurnOn(std::istream& args);
 	bool TurnOff(std::istream& args);
 	bool Info(std::istream& args);
+	bool InfoAll(std::istream& args);
 	bool SelectChannel(std::istream& args);			
 	bool PreviousChannel(std::istream& args);		
 	bool SetChannelName(std::istream& args);		
