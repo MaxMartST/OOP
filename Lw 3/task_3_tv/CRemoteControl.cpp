@@ -122,8 +122,6 @@ bool CRemoteControl::WhatChannelNumber(istream& args)
 {
 	string channelName = *istream_iterator<string>(args);
 
-	m_tv.GetChannelByName(channelName);
-
 	m_output << to_string(m_tv.GetChannelByName(channelName)) + " - " + channelName << endl;
 
 	return true;

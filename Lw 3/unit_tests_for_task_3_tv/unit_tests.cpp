@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 
 #include "../../catch2/catch.hpp"
-#include "../task_3_tv/CRemoteControl.h"
 #include "../task_3_tv/CErrorMessage.h"
+#include "../task_3_tv/CRemoteControl.h"
 #include "../task_3_tv/CTVSet.h"
 #include "../task_3_tv/edit_channel_name.h"
 #include "../task_3_tv/pch.h"
@@ -106,11 +106,9 @@ TEST_CASE("TV channel switching")
 
 		REQUIRE(output.str() == "ERROR: Channel is out of range\n");
 	}
-	
+
 	SECTION("Invalid command")
 	{
-		stringstream output;
-
 		tv.TurnOn();
 		REQUIRE(tv.IsTurnedOn());
 
@@ -130,5 +128,30 @@ TEST_CASE("TV channel switching")
 
 		REQUIRE(tv.GetChannel() == 1);
 		REQUIRE(output.str() == "Channel changed to 1\n");
+	}
+}
+
+TEST_CASE("The ability to give a name to the channel and search for the channel by name and number")
+{
+	CTVSet tv;
+	stringstream input, output;
+	CRemoteControl remoteControl(tv, input, output);
+
+	SECTION("Give channel 2 the name sport and find the channel by number and name")
+	{
+		tv.TurnOn();
+		input << "SetChannelName 2 sport";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(output.str() == "Channel saved: 2 - sport\n");
+
+		//string nameChannel = "sport";
+		int numberChannel = tv.GetChannelByName("sport");
+
+		REQUIRE(numberChannel == 2);
+
+		string nameChannel = tv.GetChannelName(2);
+
+		REQUIRE(nameChannel == "sport");
 	}
 }
