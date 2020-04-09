@@ -4,11 +4,11 @@
 class CTVSet;
 
 // Наследование от boost::noncopyable - явный способ запретить копирование и присваивание экземпляров класса
-class CRemoteControl : boost::noncopyable
+class CCommandTerminal : boost::noncopyable
 {
 public:
-	CRemoteControl(CTVSet& tv, std::istream& input, std::ostream& output);
-	bool HandleCommand();
+	CCommandTerminal(CTVSet& tv, std::istream& input, std::ostream& output);
+	bool SetCommand();
 
 	// Избавляемся от предупреждения компилятора о том, что он не сможет сгенерировать оператор присваивания
 	// CRemoteControl& operator=(const CRemoteControl &) = delete;

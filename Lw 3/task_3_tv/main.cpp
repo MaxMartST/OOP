@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CRemoteControl.h"
+#include "CCommandTerminal.h"
 #include "CTVSet.h"
 
 using namespace std;
@@ -7,12 +7,12 @@ using namespace std;
 int main()
 {
 	CTVSet tv;
-	CRemoteControl remoteControl(tv, cin, cout);
+	CCommandTerminal commandTerminal(tv, cin, cout);
 
 	while (!cin.eof() && !cin.fail())
 	{
 		cout << "> ";
-		if (!remoteControl.HandleCommand())
+		if (!commandTerminal.SetCommand())
 		{
 			cout << "Unknown command!" << endl;
 		}

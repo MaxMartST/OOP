@@ -1,30 +1,30 @@
 #include "pch.h"
 #include "edit_channel_name.h"
 #include "CErrorMessage.h"
-#include "CRemoteControl.h"
+#include "CCommandTerminal.h"
 #include "CTVSet.h"
 
 using namespace std;
 using namespace boost::placeholders;
 
-CRemoteControl::CRemoteControl(CTVSet& tv, istream& input, ostream& output)
+CCommandTerminal::CCommandTerminal(CTVSet& tv, istream& input, ostream& output)
 	: m_tv(tv)
 	, m_input(input)
 	, m_output(output)
 	, m_actionMap({
 		  { "TurnOn", [this](istream& strm) { return TurnOn(strm); } },
-		  { "TurnOff", bind(&CRemoteControl::TurnOff, this, _1) },
-		  { "Info", bind(&CRemoteControl::Info, this, _1) },
-		  { "SelectChannel", bind(&CRemoteControl::SelectChannel, this, _1) },
-		  { "PreviousChannel", bind(&CRemoteControl::PreviousChannel, this, _1) },
-		  { "SetChannelName", bind(&CRemoteControl::SetChannelName, this, _1) },
-		  { "WhatChannelNumber", bind(&CRemoteControl::WhatChannelNumber, this, _1) },
-		  { "WhatChannelName", bind(&CRemoteControl::WhatChannelName, this, _1) },
+		  { "TurnOff", bind(&CCommandTerminal::TurnOff, this, _1) },
+		  { "Info", bind(&CCommandTerminal::Info, this, _1) },
+		  { "SelectChannel", bind(&CCommandTerminal::SelectChannel, this, _1) },
+		  { "PreviousChannel", bind(&CCommandTerminal::PreviousChannel, this, _1) },
+		  { "SetChannelName", bind(&CCommandTerminal::SetChannelName, this, _1) },
+		  { "WhatChannelNumber", bind(&CCommandTerminal::WhatChannelNumber, this, _1) },
+		  { "WhatChannelName", bind(&CCommandTerminal::WhatChannelName, this, _1) },
 	  })
 {
 }
 
-bool CRemoteControl::HandleCommand()
+bool CCommandTerminal::SetCommand()
 {
 	string commandLine;
 	getline(m_input, commandLine);
@@ -42,21 +42,21 @@ bool CRemoteControl::HandleCommand()
 	return false;
 }
 
-bool CRemoteControl::TurnOn(istream&)
+bool CCommandTerminal::TurnOn(istream&)
 {
 	m_tv.TurnOn();
 	m_output << "TV is turned on" << endl;
 	return true;
 }
 
-bool CRemoteControl::TurnOff(istream&)
+bool CCommandTerminal::TurnOff(istream&)
 {
 	m_tv.TurnOff();
 	m_output << "TV is turned off" << endl;
 	return true;
 }
 
-bool CRemoteControl::Info(istream& args)
+bool CCommandTerminal::Info(istream& args)
 {
 	string info = (m_tv.IsTurnedOn()) ? ("TV is turned on\nChannel is: " + to_string(m_tv.GetChannel()) + "\n") : "TV is turned off\n";
 
@@ -65,7 +65,7 @@ bool CRemoteControl::Info(istream& args)
 	return true;
 }
 
-bool CRemoteControl::SelectChannel(istream& args)
+bool CCommandTerminal::SelectChannel(istream& args)
 {
 	int channelNumber = *istream_iterator<int>(args);
 
@@ -82,7 +82,7 @@ bool CRemoteControl::SelectChannel(istream& args)
 	return true;
 }
 
-bool CRemoteControl::PreviousChannel(istream& args)
+bool CCommandTerminal::PreviousChannel(istream& args)
 {
 	try
 	{
@@ -97,7 +97,7 @@ bool CRemoteControl::PreviousChannel(istream& args)
 	return true;
 }
 
-bool CRemoteControl::SetChannelName(istream& args)
+bool CCommandTerminal::SetChannelName(istream& args)
 {
 	int channelNumber = *istream_iterator<int>(args);
 	string channelName;
@@ -118,7 +118,7 @@ bool CRemoteControl::SetChannelName(istream& args)
 	return true;
 }
 
-bool CRemoteControl::WhatChannelNumber(istream& args)
+bool CCommandTerminal::WhatChannelNumber(istream& args)
 {
 	string channelName = *istream_iterator<string>(args);
 
@@ -129,7 +129,7 @@ bool CRemoteControl::WhatChannelNumber(istream& args)
 	return true;
 }
 
-bool CRemoteControl::WhatChannelName(istream& args)
+bool CCommandTerminal::WhatChannelName(istream& args)
 {
 	int channelNumber = *istream_iterator<int>(args);
 
