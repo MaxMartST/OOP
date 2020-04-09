@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 
 #include "../../catch2/catch.hpp"
+#include "../task_3_tv/CRemoteControl.h"
 #include "../task_3_tv/CErrorMessage.h"
-#include "../task_3_tv/CCommandTerminal.h"
 #include "../task_3_tv/CTVSet.h"
 #include "../task_3_tv/edit_channel_name.h"
 #include "../task_3_tv/pch.h"
@@ -14,14 +14,14 @@ TEST_CASE("Check the TV interface when the state is on and off")
 {
 	CTVSet tv;
 	stringstream input, output;
-	CCommandTerminal commandTerminal(tv, input, output);
+	CRemoteControl remoteControl(tv, input, output);
 
 	SECTION("Channel number on first start is 1")
 	{
 		REQUIRE(!tv.IsTurnedOn());
 
 		input << "TurnOn";
-		REQUIRE(commandTerminal.SetCommand());
+		REQUIRE(remoteControl.SetCommand());
 		REQUIRE(tv.IsTurnedOn());
 		REQUIRE(tv.GetChannel() == 1);
 
@@ -31,7 +31,7 @@ TEST_CASE("Check the TV interface when the state is on and off")
 	SECTION("TV status is changing, turned off")
 	{
 		input << "TurnOff";
-		commandTerminal.SetCommand();
+		remoteControl.SetCommand();
 
 		REQUIRE(!tv.IsTurnedOn());
 		REQUIRE(output.str() == "TV is turned off\n");
@@ -42,7 +42,93 @@ TEST_CASE("Check the TV interface when the state is on and off")
 		tv.TurnOn();
 
 		input << "Info";
-		commandTerminal.SetCommand();
+		remoteControl.SetCommand();
 		REQUIRE(output.str() == "TV is turned on\nChannel is: 1\n");
+	}
+
+	SECTION("Find out the channel number when the TV is off")
+	{
+		REQUIRE(!tv.IsTurnedOn());
+
+		input << "Info";
+		remoteControl.SetCommand();
+
+		REQUIRE(output.str() == "TV is turned off\n");
+	}
+}
+
+TEST_CASE("TV channel switching")
+{
+	CTVSet tv;
+	stringstream input, output;
+	CRemoteControl remoteControl(tv, input, output);
+
+	SECTION("Switch to channel number 2, TV on")
+	{
+		tv.TurnOn();
+		REQUIRE(tv.IsTurnedOn());
+
+		input << "SelectChannel 2";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(tv.GetChannel() == 2);
+		REQUIRE(output.str() == "Channel changed to 2\n");
+	}
+
+	SECTION("Switch to channel number 2, TV off")
+	{
+		REQUIRE(!tv.IsTurnedOn());
+
+		input << "SelectChannel 2";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(output.str() == "ERROR: Turned off TV can't switches channel\n");
+	}
+
+	SECTION("Channel number out of range. Channel > MAX_CHANNEL")
+	{
+		tv.TurnOn();
+		REQUIRE(tv.IsTurnedOn());
+
+		input << "SelectChannel 100";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(output.str() == "ERROR: Channel is out of range\n");
+	}
+
+	SECTION("Channel number out of range. Channel < MIN_CHANNEL")
+	{
+		tv.TurnOn();
+		REQUIRE(tv.IsTurnedOn());
+
+		input << "SelectChannel 0";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(output.str() == "ERROR: Channel is out of range\n");
+	}
+	
+	SECTION("Invalid command")
+	{
+		stringstream output;
+
+		tv.TurnOn();
+		REQUIRE(tv.IsTurnedOn());
+
+		input << "Channel";
+		REQUIRE(!remoteControl.SetCommand());
+	}
+
+	SECTION("Select Previous Channel")
+	{
+		tv.TurnOn();
+		REQUIRE(tv.IsTurnedOn());
+
+		tv.SelectChannel(2);
+
+		input << "PreviousChannel";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(tv.GetChannel() == 1);
+		REQUIRE(output.str() == "Channel changed to 1\n");
 	}
 }

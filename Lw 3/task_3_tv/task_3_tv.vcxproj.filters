@@ -30,7 +30,7 @@
     <ClCompile Include="edit_channel_name.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CCommandTerminal.cpp">
+    <ClCompile Include="CRemoteControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClInclude Include="edit_channel_name.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCommandTerminal.h">
+    <ClInclude Include="CRemoteControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -123,7 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CCommandTerminal.cpp" />
+    <ClCompile Include="CRemoteControl.cpp" />
     <ClCompile Include="CTVSet.cpp" />
     <ClCompile Include="CErrorMessage.cpp" />
     <ClCompile Include="edit_channel_name.cpp" />
@@ -131,7 +131,7 @@
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CCommandTerminal.h" />
+    <ClInclude Include="CRemoteControl.h" />
     <ClInclude Include="CTVSet.h" />
     <ClInclude Include="CErrorMessage.h" />
     <ClInclude Include="edit_channel_name.h" />

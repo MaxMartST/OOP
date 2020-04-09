@@ -52,7 +52,7 @@ void CTVSet::SelectPreviousChannel()
 		throw CErrorMessage("ERROR: Turned off TV can't switches channel\n");
 	}
 
-	m_channel = m_previousChannel;
+	swap(m_channel, m_previousChannel);
 }
 
 void CTVSet::SetChannelName(const int channelNumber, const string& channelName)

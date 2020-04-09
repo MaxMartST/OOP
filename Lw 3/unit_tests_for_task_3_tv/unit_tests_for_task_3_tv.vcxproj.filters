@@ -27,7 +27,7 @@
     <ClCompile Include="..\task_3_tv\CErrorMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\task_3_tv\CCommandTerminal.cpp">
+    <ClCompile Include="..\task_3_tv\CRemoteControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClInclude Include="..\task_3_tv\CErrorMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\task_3_tv\CCommandTerminal.h">
+    <ClInclude Include="..\task_3_tv\CRemoteControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
