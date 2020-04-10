@@ -49,9 +49,14 @@ void NotFoundWord(const std::string& word, Dictionary& dictionary)
 
 std::optional<std::vector<std::string>> GetRussianTranslation(const Dictionary& dictionary, const std::string& word)
 {
+	std::string translationWord;
+
 	for (auto value : dictionary.dictionaryWords)
 	{
-		if (value.first.keyWord == word)
+		translationWord = value.first.keyWord;
+		transform(translationWord.begin(), translationWord.end(), translationWord.begin(), tolower);
+
+		if (translationWord == word)
 		{
 			return value.second;
 		}
@@ -62,11 +67,17 @@ std::optional<std::vector<std::string>> GetRussianTranslation(const Dictionary& 
 
 std::optional<std::string> GetEnglishTranslation(const Dictionary& dictionary, const std::string& word)
 {
+	//setlocale(LC_ALL, "");
+	std::string translationWord;
+
 	for (auto value : dictionary.dictionaryWords)
 	{
 		for (auto translation : value.second)
 		{
-			if (translation == word)
+			translationWord = translation;
+			transform(translationWord.begin(), translationWord.end(), translationWord.begin(), tolower);
+
+			if (translationWord == word)
 			{
 				return value.first.keyWord;
 			}
@@ -78,11 +89,13 @@ std::optional<std::string> GetEnglishTranslation(const Dictionary& dictionary, c
 
 void Interpreter(Dictionary& dictionary)
 {
-	std::string requestWord, str;
+	setlocale(LC_ALL, "");
+	std::string requestWord, inputString;
 
 	do
 	{
-		getline(std::cin, str);
+		getline(std::cin, inputString);
+		requestWord = inputString;
 		transform(requestWord.begin(), requestWord.end(), requestWord.begin(), tolower);
 
 		if (auto translation = GetRussianTranslation(dictionary, requestWord))

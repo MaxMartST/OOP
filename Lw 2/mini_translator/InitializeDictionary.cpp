@@ -28,7 +28,7 @@ std::pair<Word, std::vector<std::string>> ParseLine(const std::string& str)
 
 	auto wordEnd = str.find(TRANSLATE);
 	keyWord = str.substr(0, wordEnd);
-	transform(keyWord.begin(), keyWord.end(), keyWord.begin(), tolower);
+	//transform(keyWord.begin(), keyWord.end(), keyWord.begin(), tolower);
 	elemDictionary.first.keyWord = keyWord;
 
 	auto translateStart = wordEnd + TRANSLATE.length();

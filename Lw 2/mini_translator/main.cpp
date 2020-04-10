@@ -5,6 +5,7 @@
 
 int main(int argc, char* argv[])
 {
+	setlocale(LC_ALL, "");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
