@@ -1,17 +1,19 @@
 #include "RemoveExtraSpaces.h"
 
-std::string RemoveExtraSpaces(std::string const& str)
+using namespace std;
+
+string RemoveExtraSpaces(string const& str)
 {
 	if (str.empty())
 	{
 		return str;
 	}
 
-	std::istringstream ist(str);
-	std::ostringstream ost;
+	istringstream ist(str);
+	ostringstream ost;
 
-	std::copy(std::istream_iterator<std::string>(ist), std::istream_iterator<std::string>(), std::ostream_iterator<std::string>(ost, " "));
-	std::string resultStr = ost.str();
+	copy(istream_iterator<std::string>(ist), istream_iterator<std::string>(), ostream_iterator<string>(ost, " "));
+	string resultStr = ost.str();
 
 	size_t size = resultStr.size();
 
@@ -23,9 +25,9 @@ std::string RemoveExtraSpaces(std::string const& str)
 	return resultStr;
 }
 
-void RemoveExtraSpacesFromStream(std::istream& input, std::ostream& output)
+void RemoveExtraSpacesFromStream(istream& input, ostream& output)
 {
-	std::string line;
+	string line;
 	while (getline(input, line))
 	{
 		output << RemoveExtraSpaces(line);

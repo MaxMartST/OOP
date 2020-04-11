@@ -1,34 +1,36 @@
 #include "InitializeDictionary.h"
 
-void RemoveSpaces(std::string& str)
+using namespace std;
+
+void RemoveSpaces(string& str)
 {
 	str.erase(0, str.find_first_not_of(" "));
 	str.erase(str.find_last_not_of(" ") + 1);
 }
 
-std::vector<std::string> GetTranslationVector(const std::string& str)
+vector<string> GetTranslationVector(const string& str)
 {
-	std::vector<std::string> wordsVector;
-	std::istringstream inputStr(str);
-	std::string word;
+	vector<string> wordsVector;
+	istringstream inputStr(str);
+	string word;
 
-	while (std::getline(inputStr, word, ','))
+	while (getline(inputStr, word, ','))
 	{
 		RemoveSpaces(word);
 		wordsVector.push_back(word);
 	}
+
 	return wordsVector;
 }
 
-std::pair<Word, std::vector<std::string>> ParseLine(const std::string& str)
+pair<Word, vector<string>> ParseLine(const string& str)
 {
-	std::string keyWord;
-	std::string translationWord;
-	std::pair<Word, std::vector<std::string>> elemDictionary;
+	string keyWord;
+	string translationWord;
+	pair<Word, vector<string>> elemDictionary;
 
 	auto wordEnd = str.find(TRANSLATE);
 	keyWord = str.substr(0, wordEnd);
-	//transform(keyWord.begin(), keyWord.end(), keyWord.begin(), tolower);
 	elemDictionary.first.keyWord = keyWord;
 
 	auto translateStart = wordEnd + TRANSLATE.length();
@@ -38,10 +40,10 @@ std::pair<Word, std::vector<std::string>> ParseLine(const std::string& str)
 	return elemDictionary;
 }
 
-void ReadDictionaryFromStream(Dictionary& dictionary, std::istream& input)
+void ReadDictionaryFromStream(Dictionary& dictionary, istream& input)
 {
-	std::string str;
-	std::pair<Word, std::vector<std::string>> dictionaryElem;
+	string str;
+	pair<Word, vector<string>> dictionaryElem;
 
 	while (getline(input, str))
 	{
@@ -52,28 +54,11 @@ void ReadDictionaryFromStream(Dictionary& dictionary, std::istream& input)
 
 void DictionaryInitialization(Dictionary& dictionary)
 {
-	std::ifstream input(dictionary.dictionaryFileName, std::ios::in);
+	ifstream input(dictionary.dictionaryFileName, ios::in);
 	if (!input.is_open())
 	{
-		std::cout << "Failed to open file: " << dictionary.dictionaryFileName << std::endl;
+		cout << "Failed to open file: " << dictionary.dictionaryFileName << endl;
 	}
 
 	ReadDictionaryFromStream(dictionary, input);
-}
-
-bool ParseDictionaryFileName(int argc, char* argv[], std::string& fileName)
-{
-	if (argc == 2)
-	{
-		fileName = argv[1];
-		return true;
-	}
-
-	if (argc == 1)
-	{
-		return true;
-	}
-
-	std::cout << "Количество аргументов превышено" << std::endl;
-	return false;
 }

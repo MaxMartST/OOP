@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandLineParsing.cpp" />
     <ClCompile Include="InitializeDictionary.cpp" />
     <ClCompile Include="Interpreter.cpp" />
     <ClCompile Include="main.cpp" />
@@ -136,6 +137,8 @@
     <Text Include="dictionary.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandLineParsing.h" />
+    <ClInclude Include="Dictionary.h" />
     <ClInclude Include="InitializeDictionary.h" />
     <ClInclude Include="Interpreter.h" />
     <ClInclude Include="pch.h" />

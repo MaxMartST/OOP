@@ -1,12 +1,6 @@
 #pragma once
 #include "pch.h"
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <iterator>
-#include <optional>
-#include <sstream>
-#include <utility>
+#include "Dictionary.h"
 
 const std::string TRANSLATE = ": ";
 
