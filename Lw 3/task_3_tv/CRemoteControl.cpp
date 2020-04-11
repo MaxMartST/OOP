@@ -68,7 +68,7 @@ bool CRemoteControl::Info(istream& args)
 
 	m_output << info;
 	args.clear();
-	
+
 	return true;
 }
 
@@ -83,7 +83,7 @@ bool CRemoteControl::InfoAll(istream& args)
 		m_output << it->first << " - " << it->second << "\n";
 	}
 	args.clear();
-	
+
 	return true;
 }
 
@@ -103,28 +103,28 @@ bool CRemoteControl::SelectChannel(istream& args)
 		try
 		{
 			m_tv.SelectChannelByName(channelName);
-			m_output << "channel changed to " + to_string(m_tv.GetChannel()) + "\n";
+			m_output << "Channel changed to " + to_string(m_tv.GetChannel()) + "\n";
 		}
 		catch (CErrorMessage e)
 		{
 			m_output << e.GetErrorMessage();
 		}
 		args.clear();
-		
+
 		return true;
 	}
 
 	try
 	{
 		m_tv.SelectChannelByNumber(number);
-		m_output << "channel changed to " + to_string(m_tv.GetChannel()) + "\n";
+		m_output << "Channel changed to " + to_string(m_tv.GetChannel()) + "\n";
 	}
 	catch (CErrorMessage e)
 	{
 		m_output << e.GetErrorMessage();
 	}
 	args.clear();
-	
+
 	return true;
 }
 
@@ -140,7 +140,7 @@ bool CRemoteControl::PreviousChannel(istream& args)
 		m_output << e.GetErrorMessage();
 	}
 	args.clear();
-	
+
 	return true;
 }
 
@@ -173,19 +173,26 @@ bool CRemoteControl::SetChannelName(istream& args)
 		m_output << e.GetErrorMessage();
 	}
 	args.clear();
-	
+
 	return true;
 }
 
 bool CRemoteControl::WhatChannelNumber(istream& args)
 {
-	//string channelName = *istream_iterator<string>(args);
 	string channelName, queryString;
 
 	getline(args, queryString);
 	channelName = RemoveExtraSpacesInLine(queryString);
 
-	m_output << to_string(m_tv.GetChannelByName(channelName)) + " - " + channelName << endl;
+	try
+	{
+		m_output << to_string(m_tv.GetChannelByName(channelName)) + " - " + channelName << endl;
+	}
+	catch (CErrorMessage e)
+	{
+		m_output << e.GetErrorMessage();
+	}
+	
 	args.clear();
 
 	return true;
@@ -204,13 +211,11 @@ bool CRemoteControl::WhatChannelName(istream& args)
 	}
 	catch (const std::invalid_argument&)
 	{
-		m_output << "не вужу номер канала\n";
 		return false;
 	}
 
 	try
 	{
-		m_tv.GetChannelName(channelNumber);
 		m_output << to_string(channelNumber) + " - " + m_tv.GetChannelName(channelNumber) << endl;
 	}
 	catch (CErrorMessage e)

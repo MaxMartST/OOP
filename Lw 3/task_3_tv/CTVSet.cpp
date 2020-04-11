@@ -49,7 +49,7 @@ void CTVSet::SelectChannelByName(const string& name)
 	}
 	else
 	{
-		throw CErrorMessage("ERROR: Channel named \"" + name + "\" not found\n");
+		throw CErrorMessage("ERROR: Channel named [" + name + "] not found\n");
 	}
 }
 
@@ -110,7 +110,7 @@ string CTVSet::GetChannelName(const int channelNumber) const
 	}
 	else
 	{
-		throw CErrorMessage("ERROR: Channel \"" + to_string(channelNumber) + "\" has no name\n");
+		throw CErrorMessage("ERROR: Channel [" + to_string(channelNumber) + "] has no name\n");
 	}
 	
 	return channelName;
@@ -126,6 +126,6 @@ int CTVSet::GetChannelByName(const string& channelName) const
 	}
 	else
 	{
-		throw CErrorMessage("ERROR: Channel named \"" + channelName + "\" not found\n");
+		throw CErrorMessage("ERROR: Channel named [" + channelName + "] not found\n");
 	}
 }

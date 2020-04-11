@@ -139,14 +139,14 @@
     <ClCompile Include="..\task_3_tv\CErrorMessage.cpp" />
     <ClCompile Include="..\task_3_tv\CRemoteControl.cpp" />
     <ClCompile Include="..\task_3_tv\CTVSet.cpp" />
-    <ClCompile Include="..\task_3_tv\edit_channel_name.cpp" />
+    <ClCompile Include="..\task_3_tv\EditChannelName.cpp" />
     <ClCompile Include="unit_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\task_3_tv\CErrorMessage.h" />
     <ClInclude Include="..\task_3_tv\CRemoteControl.h" />
     <ClInclude Include="..\task_3_tv\CTVSet.h" />
-    <ClInclude Include="..\task_3_tv\edit_channel_name.h" />
+    <ClInclude Include="..\task_3_tv\EditChannelName.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

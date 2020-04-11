@@ -4,7 +4,7 @@
 #include "../task_3_tv/CErrorMessage.h"
 #include "../task_3_tv/CRemoteControl.h"
 #include "../task_3_tv/CTVSet.h"
-#include "../task_3_tv/edit_channel_name.h"
+#include "../task_3_tv/EditChannelName.h"
 #include "../task_3_tv/pch.h"
 
 using namespace std;
@@ -63,11 +63,15 @@ TEST_CASE("TV channel switching")
 	stringstream input, output;
 	CRemoteControl remoteControl(tv, input, output);
 
+	tv.TurnOn();
+	REQUIRE(tv.IsTurnedOn());
+
+	tv.SetChannelName(2, "my sport");
+	tv.SetChannelName(24, "vesty");
+	tv.SetChannelName(3, "culture");
+
 	SECTION("Switch to channel number 2, TV on")
 	{
-		tv.TurnOn();
-		REQUIRE(tv.IsTurnedOn());
-
 		input << "SelectChannel 2";
 		REQUIRE(remoteControl.SetCommand());
 
@@ -75,8 +79,27 @@ TEST_CASE("TV channel switching")
 		REQUIRE(output.str() == "Channel changed to 2\n");
 	}
 
+	SECTION("Switch to a channel named my sports, TV on")
+	{
+		input << "SelectChannel my sport";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(tv.GetChannel() == 2);
+		REQUIRE(output.str() == "Channel changed to 2\n");
+	}
+
+	SECTION("Switch to a channel with a nonexistent name vesty NET, TV on")
+	{
+		input << "SelectChannel vesty NET";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(tv.GetChannel() == 1);
+		REQUIRE(output.str() == "ERROR: Channel named [vesty NET] not found\n");
+	}
+
 	SECTION("Switch to channel number 2, TV off")
 	{
+		tv.TurnOff();
 		REQUIRE(!tv.IsTurnedOn());
 
 		input << "SelectChannel 2";
@@ -87,9 +110,6 @@ TEST_CASE("TV channel switching")
 
 	SECTION("Channel number out of range. Channel > MAX_CHANNEL")
 	{
-		tv.TurnOn();
-		REQUIRE(tv.IsTurnedOn());
-
 		input << "SelectChannel 100";
 		REQUIRE(remoteControl.SetCommand());
 
@@ -98,9 +118,6 @@ TEST_CASE("TV channel switching")
 
 	SECTION("Channel number out of range. Channel < MIN_CHANNEL")
 	{
-		tv.TurnOn();
-		REQUIRE(tv.IsTurnedOn());
-
 		input << "SelectChannel 0";
 		REQUIRE(remoteControl.SetCommand());
 
@@ -109,19 +126,13 @@ TEST_CASE("TV channel switching")
 
 	SECTION("Invalid command")
 	{
-		tv.TurnOn();
-		REQUIRE(tv.IsTurnedOn());
-
 		input << "Channel";
 		REQUIRE(!remoteControl.SetCommand());
 	}
 
 	SECTION("Select Previous Channel")
 	{
-		tv.TurnOn();
-		REQUIRE(tv.IsTurnedOn());
-
-		tv.SelectChannel(2);
+		tv.SelectChannelByNumber(2);
 
 		input << "PreviousChannel";
 		REQUIRE(remoteControl.SetCommand());
@@ -131,26 +142,78 @@ TEST_CASE("TV channel switching")
 	}
 }
 
-TEST_CASE("The ability to give a name to the channel and search for the channel by name and number")
+TEST_CASE("Ability to give a name, number to a channel and search for it by name and number")
 {
 	CTVSet tv;
 	stringstream input, output;
 	CRemoteControl remoteControl(tv, input, output);
 
-	SECTION("Give channel 2 the name sport and find the channel by number and name")
+	tv.TurnOn();
+	REQUIRE(tv.IsTurnedOn());
+
+	tv.SetChannelName(2, "my sport");
+	tv.SetChannelName(24, "vesty");
+	tv.SetChannelName(3, "culture");
+
+	SECTION("Give channel 27 the name vesty NET and find the channel by number and name")
 	{
-		tv.TurnOn();
-		input << "SetChannelName 2 sport";
+		input << "SetChannelName 27 vesty NET";
 
 		REQUIRE(remoteControl.SetCommand());
-		REQUIRE(output.str() == "Channel saved: 2 - sport\n");
+		REQUIRE(output.str() == "Channel saved: 27 - vesty NET\n");
 
-		int numberChannel = tv.GetChannelByName("sport");
+		int numberChannel = tv.GetChannelByName("vesty NET");
 
-		REQUIRE(numberChannel == 2);
+		REQUIRE(numberChannel == 27);
 
-		string nameChannel = tv.GetChannelName(2);
+		string nameChannel = tv.GetChannelName(27);
 
-		REQUIRE(nameChannel == "sport");
+		REQUIRE(nameChannel == "vesty NET");
+	}
+
+	SECTION("Find channel name at number 24")
+	{
+		input << "WhatChannelName 24";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(tv.GetChannelName(24) == "vesty");
+	}
+
+	SECTION("Find channel name at name space")
+	{
+		input << "WhatChannelNumber my        sport";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(RemoveExtraSpacesInLine(" my        sport") == "my sport");
+		REQUIRE(tv.GetChannelByName("my sport") == 2);
+		REQUIRE(output.str() == "2 - my sport\n");
+	}
+
+	SECTION("Find the name of the unnamed channel at number 9")
+	{
+		input << "WhatChannelName      9";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(RemoveExtraSpacesInLine("      9") == "9");
+		REQUIRE(tv.GetChannel() == 1);
+		REQUIRE(output.str() == "ERROR: Channel [9] has no name\n");
+	}
+
+	SECTION("Find channel name out of range")
+	{
+		input << "WhatChannelName 101";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(tv.GetChannel() == 1);
+		REQUIRE(output.str() == "ERROR: Channel is out of range\n");
+	}
+	
+	SECTION("Find a channel number that does not exist") 
+	{
+		input << "WhatChannelNumber vesty NET";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(tv.GetChannel() == 1);
+		REQUIRE(output.str() == "ERROR: Channel named [vesty NET] not found\n");
 	}
 }

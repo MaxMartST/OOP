@@ -21,13 +21,13 @@
     <ClCompile Include="..\task_3_tv\CTVSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\task_3_tv\edit_channel_name.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\task_3_tv\CErrorMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\task_3_tv\CRemoteControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\task_3_tv\EditChannelName.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +35,13 @@
     <ClInclude Include="..\task_3_tv\CTVSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\task_3_tv\edit_channel_name.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\task_3_tv\CErrorMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\task_3_tv\CRemoteControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\task_3_tv\EditChannelName.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
