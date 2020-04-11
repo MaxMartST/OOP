@@ -126,7 +126,7 @@
     <ClCompile Include="CRemoteControl.cpp" />
     <ClCompile Include="CTVSet.cpp" />
     <ClCompile Include="CErrorMessage.cpp" />
-    <ClCompile Include="edit_channel_name.cpp" />
+    <ClCompile Include="EditChannelName.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
@@ -134,7 +134,7 @@
     <ClInclude Include="CRemoteControl.h" />
     <ClInclude Include="CTVSet.h" />
     <ClInclude Include="CErrorMessage.h" />
-    <ClInclude Include="edit_channel_name.h" />
+    <ClInclude Include="EditChannelName.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

@@ -27,10 +27,10 @@
     <ClCompile Include="CErrorMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="edit_channel_name.cpp">
+    <ClCompile Include="CRemoteControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CRemoteControl.cpp">
+    <ClCompile Include="EditChannelName.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,10 +47,10 @@
     <ClInclude Include="CErrorMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="edit_channel_name.h">
+    <ClInclude Include="CRemoteControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CRemoteControl.h">
+    <ClInclude Include="EditChannelName.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

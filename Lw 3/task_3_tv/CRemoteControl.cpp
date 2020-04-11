@@ -2,7 +2,7 @@
 #include "CRemoteControl.h"
 #include "CErrorMessage.h"
 #include "CTVSet.h"
-#include "edit_channel_name.h"
+#include "EditChannelName.h"
 
 using namespace std;
 using namespace boost::placeholders;
@@ -35,6 +35,7 @@ bool CRemoteControl::SetCommand()
 	strm >> action;
 
 	auto it = m_actionMap.find(action);
+
 	if (it != m_actionMap.end())
 	{
 		return it->second(strm);
@@ -82,12 +83,35 @@ bool CRemoteControl::InfoAll(istream& args)
 
 bool CRemoteControl::SelectChannel(istream& args)
 {
-	int channelNumber = *istream_iterator<int>(args);
+	string channelName;
+	int number;
+	getline(args, channelName);
 
 	try
 	{
-		m_tv.SelectChannel(channelNumber);
-		m_output << "Channel changed to " + to_string(m_tv.GetChannel()) + "\n";
+		number = stoi(channelName);
+	}
+	catch (const std::invalid_argument&)
+	{
+		RemoveExtraSpacesInLine(channelName);
+		try
+		{
+			m_tv.SelectChannelByName(channelName);
+			m_output << "channel changed to " + to_string(m_tv.GetChannel()) + "\n";
+
+		}
+		catch (CErrorMessage e)
+		{
+			m_output << e.GetErrorMessage();
+		}
+
+		return true;
+	}
+
+	try
+	{
+		m_tv.SelectChannelByNumber(number);
+		m_output << "channel changed to " + to_string(m_tv.GetChannel()) + "\n";
 	}
 	catch (CErrorMessage e)
 	{

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "edit_channel_name.h"
+#include "EditChannelName.h"
 
 using namespace std;
 

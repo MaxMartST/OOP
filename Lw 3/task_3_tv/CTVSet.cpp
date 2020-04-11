@@ -1,6 +1,6 @@
+#include "pch.h"
 #include "CTVSet.h"
 #include "CErrorMessage.h"
-#include "pch.h"
 
 using namespace std;
 
@@ -33,7 +33,34 @@ int CTVSet::GetChannel() const
 	return m_isOn ? m_channel : 0;
 }
 
-void CTVSet::SelectChannel(const int channel)
+void CTVSet::SelectChannelByName(const string& name)
+{
+	if (!m_isOn)
+	{
+		throw CErrorMessage("ERROR: Turned off TV can't switches channel\n");
+	}
+
+	//проверить, есть ли канал с именем name
+	//если нет, выкинуть исключение: ƒанный канал не найден
+
+	//auto it = m_channelList.right;
+
+	//ChannelStructure::const_iterator iter = m_channelList.begin();
+
+	ChannelStructure::right_const_iterator rightIter = m_channelList.right.find(name);
+
+	if (rightIter != m_channelList.right.end())
+	{
+		m_previousChannel = m_channel;
+		m_channel = m_channelList.right.at(name);
+	}
+	else
+	{
+		throw CErrorMessage("ERROR: Channel named \"" + name + "\" not found\n");
+	}
+}
+
+void CTVSet::SelectChannelByNumber(const int& channel)
 {
 	if (!m_isOn)
 	{
