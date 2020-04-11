@@ -1,4 +1,4 @@
 #pragma once
 #include <boost/algorithm/string.hpp>
 
-void RemoveExtraSpacesInLine(std::string& channelName);
+std::string RemoveExtraSpacesInLine(std::string channelName);

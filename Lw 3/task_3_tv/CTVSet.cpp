@@ -40,13 +40,6 @@ void CTVSet::SelectChannelByName(const string& name)
 		throw CErrorMessage("ERROR: Turned off TV can't switches channel\n");
 	}
 
-	//проверить, есть ли канал с именем name
-	//если нет, выкинуть исключение: ƒанный канал не найден
-
-	//auto it = m_channelList.right;
-
-	//ChannelStructure::const_iterator iter = m_channelList.begin();
-
 	ChannelStructure::right_const_iterator rightIter = m_channelList.right.find(name);
 
 	if (rightIter != m_channelList.right.end())
@@ -103,10 +96,36 @@ void CTVSet::SetChannelName(const int channelNumber, const string& channelName)
 
 string CTVSet::GetChannelName(const int channelNumber) const
 {
-	return m_channelList.left.at(channelNumber);
+	ChannelStructure::left_const_iterator leftIter = m_channelList.left.find(channelNumber);
+	string channelName;
+
+	if (channelNumber < MIN_CHANNEL || channelNumber > MAX_CHANNEL)
+	{
+		throw CErrorMessage("ERROR: Channel is out of range\n");
+	}
+
+	if (leftIter != m_channelList.left.end())
+	{
+		channelName = m_channelList.left.at(channelNumber);
+	}
+	else
+	{
+		throw CErrorMessage("ERROR: Channel \"" + to_string(channelNumber) + "\" has no name\n");
+	}
+	
+	return channelName;
 }
 
 int CTVSet::GetChannelByName(const string& channelName) const
 {
-	return m_channelList.right.at(channelName);
+	ChannelStructure::right_const_iterator rightIter = m_channelList.right.find(channelName);
+
+	if (rightIter != m_channelList.right.end())
+	{
+		return m_channelList.right.at(channelName);
+	}
+	else
+	{
+		throw CErrorMessage("ERROR: Channel named \"" + channelName + "\" not found\n");
+	}
 }

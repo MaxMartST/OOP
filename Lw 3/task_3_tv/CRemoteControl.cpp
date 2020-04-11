@@ -44,17 +44,21 @@ bool CRemoteControl::SetCommand()
 	return false;
 }
 
-bool CRemoteControl::TurnOn(istream&)
+bool CRemoteControl::TurnOn(istream& args)
 {
 	m_tv.TurnOn();
 	m_output << "TV is turned on" << endl;
+	args.clear();
+
 	return true;
 }
 
-bool CRemoteControl::TurnOff(istream&)
+bool CRemoteControl::TurnOff(istream& args)
 {
 	m_tv.TurnOff();
 	m_output << "TV is turned off" << endl;
+	args.clear();
+
 	return true;
 }
 
@@ -63,7 +67,8 @@ bool CRemoteControl::Info(istream& args)
 	string info = (m_tv.IsTurnedOn()) ? ("TV is turned on\nChannel is: " + to_string(m_tv.GetChannel()) + "\n") : "TV is turned off\n";
 
 	m_output << info;
-
+	args.clear();
+	
 	return true;
 }
 
@@ -77,34 +82,35 @@ bool CRemoteControl::InfoAll(istream& args)
 	{
 		m_output << it->first << " - " << it->second << "\n";
 	}
-
+	args.clear();
+	
 	return true;
 }
 
 bool CRemoteControl::SelectChannel(istream& args)
 {
-	string channelName;
+	string queryString, channelName;
 	int number;
-	getline(args, channelName);
+	getline(args, queryString);
 
 	try
 	{
-		number = stoi(channelName);
+		number = stoi(queryString);
 	}
 	catch (const std::invalid_argument&)
 	{
-		RemoveExtraSpacesInLine(channelName);
+		channelName = RemoveExtraSpacesInLine(queryString);
 		try
 		{
 			m_tv.SelectChannelByName(channelName);
 			m_output << "channel changed to " + to_string(m_tv.GetChannel()) + "\n";
-
 		}
 		catch (CErrorMessage e)
 		{
 			m_output << e.GetErrorMessage();
 		}
-
+		args.clear();
+		
 		return true;
 	}
 
@@ -117,7 +123,8 @@ bool CRemoteControl::SelectChannel(istream& args)
 	{
 		m_output << e.GetErrorMessage();
 	}
-
+	args.clear();
+	
 	return true;
 }
 
@@ -132,17 +139,29 @@ bool CRemoteControl::PreviousChannel(istream& args)
 	{
 		m_output << e.GetErrorMessage();
 	}
-
+	args.clear();
+	
 	return true;
 }
 
 bool CRemoteControl::SetChannelName(istream& args)
 {
-	int channelNumber = *istream_iterator<int>(args);
-	string channelName;
+	string channelName, queryString;
+	int channelNumber;
 
-	getline(args, channelName);
-	RemoveExtraSpacesInLine(channelName);
+	args >> queryString;
+
+	try
+	{
+		channelNumber = stoi(queryString);
+	}
+	catch (const std::invalid_argument&)
+	{
+		return false;
+	}
+
+	getline(args, queryString);
+	channelName = RemoveExtraSpacesInLine(queryString);
 
 	try
 	{
@@ -153,26 +172,52 @@ bool CRemoteControl::SetChannelName(istream& args)
 	{
 		m_output << e.GetErrorMessage();
 	}
-
+	args.clear();
+	
 	return true;
 }
 
 bool CRemoteControl::WhatChannelNumber(istream& args)
 {
-	string channelName = *istream_iterator<string>(args);
+	//string channelName = *istream_iterator<string>(args);
+	string channelName, queryString;
+
+	getline(args, queryString);
+	channelName = RemoveExtraSpacesInLine(queryString);
 
 	m_output << to_string(m_tv.GetChannelByName(channelName)) + " - " + channelName << endl;
+	args.clear();
 
 	return true;
 }
 
 bool CRemoteControl::WhatChannelName(istream& args)
 {
-	int channelNumber = *istream_iterator<int>(args);
+	string queryString;
+	int channelNumber;
 
-	m_tv.GetChannelName(channelNumber);
+	args >> queryString;
 
-	m_output << to_string(channelNumber) + " - " + m_tv.GetChannelName(channelNumber) << endl;
+	try
+	{
+		channelNumber = stoi(queryString);
+	}
+	catch (const std::invalid_argument&)
+	{
+		m_output << "не вужу номер канала\n";
+		return false;
+	}
+
+	try
+	{
+		m_tv.GetChannelName(channelNumber);
+		m_output << to_string(channelNumber) + " - " + m_tv.GetChannelName(channelNumber) << endl;
+	}
+	catch (CErrorMessage e)
+	{
+		m_output << e.GetErrorMessage();
+	}
+	args.clear();
 
 	return true;
 }

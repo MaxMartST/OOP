@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void RemoveExtraSpacesInLine(string& stringToTrim)
+string RemoveExtraSpacesInLine(string stringToTrim)
 {
 	boost::trim(stringToTrim);
 	for (string::iterator it = stringToTrim.begin(); it != stringToTrim.end(); it++)
@@ -18,4 +18,6 @@ void RemoveExtraSpacesInLine(string& stringToTrim)
 			it = stringToTrim.erase(begin + 1, it) - 1;
 		}
 	}
+
+	return stringToTrim;
 }
