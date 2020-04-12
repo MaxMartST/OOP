@@ -22,6 +22,7 @@ private:
 	bool SetChannelName(std::istream& args);		
 	bool WhatChannelNumber(std::istream& args);	
 	bool WhatChannelName(std::istream& args);
+	bool DeleteName(std::istream& args);
 
 private:
 	// функция-обработчик команды пользователя.

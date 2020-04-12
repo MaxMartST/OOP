@@ -129,3 +129,17 @@ int CTVSet::GetChannelByName(const string& channelName) const
 		throw CErrorMessage("ERROR: Channel named [" + channelName + "] not found\n");
 	}
 }
+
+void CTVSet::DeleteChannelName(const string& channelName)
+{
+	ChannelStructure::right_const_iterator rightIter = m_channelList.right.find(channelName);
+
+	if (rightIter != m_channelList.right.end())
+	{
+		m_channelList.right.erase(channelName);
+	}
+	else
+	{
+		throw CErrorMessage("ERROR: Channel named [" + channelName + "] not found\n");
+	}
+}

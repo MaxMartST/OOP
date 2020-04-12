@@ -21,6 +21,7 @@ CRemoteControl::CRemoteControl(CTVSet& tv, istream& input, ostream& output)
 		  { "SetChannelName", bind(&CRemoteControl::SetChannelName, this, _1) },
 		  { "WhatChannelNumber", bind(&CRemoteControl::WhatChannelNumber, this, _1) },
 		  { "WhatChannelName", bind(&CRemoteControl::WhatChannelName, this, _1) },
+		  { "DeleteChannelName", bind(&CRemoteControl::DeleteName, this, _1) },
 	  })
 {
 }
@@ -192,7 +193,7 @@ bool CRemoteControl::WhatChannelNumber(istream& args)
 	{
 		m_output << e.GetErrorMessage();
 	}
-	
+
 	args.clear();
 
 	return true;
@@ -217,6 +218,26 @@ bool CRemoteControl::WhatChannelName(istream& args)
 	try
 	{
 		m_output << to_string(channelNumber) + " - " + m_tv.GetChannelName(channelNumber) << endl;
+	}
+	catch (CErrorMessage e)
+	{
+		m_output << e.GetErrorMessage();
+	}
+	args.clear();
+
+	return true;
+}
+
+bool CRemoteControl::DeleteName(std::istream& args)
+{
+	string channelName, queryString;
+
+	getline(args, queryString);
+	channelName = RemoveExtraSpacesInLine(queryString);
+
+	try
+	{
+		m_tv.DeleteChannelName(channelName);
 	}
 	catch (CErrorMessage e)
 	{

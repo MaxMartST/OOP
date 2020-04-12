@@ -16,6 +16,7 @@ public:
 	void SetChannelName(const int channelNumber, const std::string& channelName);
 	std::string GetChannelName(const int channel) const;
 	int GetChannelByName(const std::string& channel) const;
+	void DeleteChannelName(const std::string& channelName);
 
 private:
 	bool m_isOn = false;

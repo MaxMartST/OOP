@@ -207,13 +207,56 @@ TEST_CASE("Ability to give a name, number to a channel and search for it by name
 		REQUIRE(tv.GetChannel() == 1);
 		REQUIRE(output.str() == "ERROR: Channel is out of range\n");
 	}
-	
-	SECTION("Find a channel number that does not exist") 
+
+	SECTION("Find a channel number that does not exist")
 	{
 		input << "WhatChannelNumber vesty NET";
 
 		REQUIRE(remoteControl.SetCommand());
 		REQUIRE(tv.GetChannel() == 1);
+		REQUIRE(output.str() == "ERROR: Channel named [vesty NET] not found\n");
+	}
+}
+
+TEST_CASE("Delete channel name")
+{
+	CTVSet tv;
+	stringstream input, output;
+	CRemoteControl remoteControl(tv, input, output);
+
+	tv.TurnOn();
+	REQUIRE(tv.IsTurnedOn());
+
+	tv.SetChannelName(2, "my sport");
+	tv.SetChannelName(24, "vesty");
+	tv.SetChannelName(3, "culture");
+
+	SECTION("Delete channel name vesty")
+	{
+		input << "DeleteChannelName       vesty";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(RemoveExtraSpacesInLine(" vesty") == "vesty");
+
+		ChannelStructure channelList = tv.GetListChannels();
+
+		auto myList = channelList.left;
+
+		for (auto it = myList.begin(); it != myList.end(); ++it)
+		{
+			output << it->first << " - " << it->second << "\n";
+		}
+
+		REQUIRE(output.str() == "2 - my sport\n3 - culture\n");
+	}
+
+	SECTION("Delete channel name vesty NET . Channel with this name does not exist")
+	{
+		input << "DeleteChannelName vesty NET ";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(RemoveExtraSpacesInLine(" vesty NET ") == "vesty NET");
+
 		REQUIRE(output.str() == "ERROR: Channel named [vesty NET] not found\n");
 	}
 }
