@@ -57,6 +57,56 @@ TEST_CASE("Check the TV interface when the state is on and off")
 	}
 }
 
+TEST_CASE("Get channel information or complete channel information with associated names, sorted in ascending order of channel number")
+{
+	CTVSet tv;
+	stringstream input, output;
+	CRemoteControl remoteControl(tv, input, output);
+
+	tv.TurnOn();
+	REQUIRE(tv.IsTurnedOn());
+
+	tv.SetChannelName(2, "my sport");
+	tv.SetChannelName(24, "vesty");
+	tv.SetChannelName(3, "culture");
+
+	SECTION("Find out which channel is on")
+	{
+		input << "Info";
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(tv.GetChannel() == 1);
+
+		REQUIRE(output.str() == "TV is turned on\nChannel is: 1\n");
+	}
+
+	SECTION("A list of channels associated with the names was displayed")
+	{
+		input << "Info     Full     ";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(RemoveExtraSpacesInLine("     Full     ") == "Full");
+		REQUIRE(tv.GetChannel() == 1);
+
+		REQUIRE(output.str() == "2 - my sport\n3 - culture\n24 - vesty\n");
+	}
+
+	SECTION("Invalid command")
+	{
+		input << "Info Fulllll";
+		REQUIRE(!remoteControl.SetCommand());
+	}
+
+	SECTION("Turned off TV when requested: Info Full")
+	{
+		tv.TurnOff();
+
+		input << "Info Full";
+		REQUIRE(remoteControl.SetCommand());
+
+		REQUIRE(output.str() == "TV is turned off\n");
+	}
+}
+
 TEST_CASE("TV channel switching")
 {
 	CTVSet tv;
@@ -142,7 +192,7 @@ TEST_CASE("TV channel switching")
 	}
 }
 
-TEST_CASE("Ability to give a name, number to a channel and search for it by name and number")
+TEST_CASE("Ability to give a name, number to a channel")
 {
 	CTVSet tv;
 	stringstream input, output;
@@ -170,6 +220,38 @@ TEST_CASE("Ability to give a name, number to a channel and search for it by name
 
 		REQUIRE(nameChannel == "vesty NET");
 	}
+
+	SECTION("Channel name not specified")
+	{
+		input << "SetChannelName 24";
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(output.str() == "ERROR: Channel name not specified\n");
+	}
+
+	SECTION("Channel name consists of spaces only")
+	{
+		input << "SetChannelName 24   ";
+
+		REQUIRE(RemoveExtraSpacesInLine("   ").empty());
+
+		REQUIRE(remoteControl.SetCommand());
+		REQUIRE(output.str() == "ERROR: Channel name not specified\n");
+	}
+}
+
+TEST_CASE("Search channel by number or by name")
+{
+	CTVSet tv;
+	stringstream input, output;
+	CRemoteControl remoteControl(tv, input, output);
+
+	tv.TurnOn();
+	REQUIRE(tv.IsTurnedOn());
+
+	tv.SetChannelName(2, "my sport");
+	tv.SetChannelName(24, "vesty");
+	tv.SetChannelName(3, "culture");
 
 	SECTION("Find channel name at number 24")
 	{

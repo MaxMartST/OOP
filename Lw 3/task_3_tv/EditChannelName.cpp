@@ -5,6 +5,11 @@ using namespace std;
 
 string RemoveExtraSpacesInLine(string stringToTrim)
 {
+	if (stringToTrim.empty())
+	{
+		return stringToTrim;
+	}
+
 	boost::trim(stringToTrim);
 	for (string::iterator it = stringToTrim.begin(); it != stringToTrim.end(); it++)
 	{

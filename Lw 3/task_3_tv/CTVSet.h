@@ -10,8 +10,8 @@ public:
 	void TurnOff();
 	ChannelStructure GetListChannels();
 	int GetChannel() const;
-	void SelectChannelByName(const std::string &name);
-	void SelectChannelByNumber(const int &channel);
+	void SelectChannelByName(const std::string& name);
+	void SelectChannelByNumber(const int& channel);
 	void SelectPreviousChannel();
 	void SetChannelName(const int channelNumber, const std::string& channelName);
 	std::string GetChannelName(const int channel) const;

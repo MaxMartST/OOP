@@ -15,7 +15,6 @@ CRemoteControl::CRemoteControl(CTVSet& tv, istream& input, ostream& output)
 		  { "TurnOn", [this](istream& strm) { return TurnOn(strm); } },
 		  { "TurnOff", bind(&CRemoteControl::TurnOff, this, _1) },
 		  { "Info", bind(&CRemoteControl::Info, this, _1) },
-		  { "InfoAll", bind(&CRemoteControl::InfoAll, this, _1) },
 		  { "SelectChannel", bind(&CRemoteControl::SelectChannel, this, _1) },
 		  { "PreviousChannel", bind(&CRemoteControl::PreviousChannel, this, _1) },
 		  { "SetChannelName", bind(&CRemoteControl::SetChannelName, this, _1) },
@@ -65,27 +64,43 @@ bool CRemoteControl::TurnOff(istream& args)
 
 bool CRemoteControl::Info(istream& args)
 {
-	string info = (m_tv.IsTurnedOn()) ? ("TV is turned on\nChannel is: " + to_string(m_tv.GetChannel()) + "\n") : "TV is turned off\n";
+	string modification;
 
-	m_output << info;
-	args.clear();
+	getline(args, modification);
+	modification = RemoveExtraSpacesInLine(modification);
 
-	return true;
-}
-
-bool CRemoteControl::InfoAll(istream& args)
-{
-	ChannelStructure channelList = m_tv.GetListChannels();
-
-	auto myList = channelList.left;
-
-	for (auto it = myList.begin(); it != myList.end(); ++it)
+	if (modification.empty())
 	{
-		m_output << it->first << " - " << it->second << "\n";
+		string info = (m_tv.IsTurnedOn()) ? ("TV is turned on\nChannel is: " + to_string(m_tv.GetChannel()) + "\n") : "TV is turned off\n";
+		m_output << info;
+	
+		return true;
 	}
-	args.clear();
 
-	return true;
+	if (modification == MOD && m_tv.IsTurnedOn())
+	{
+		string resultInfo;
+
+		ChannelStructure channelList = m_tv.GetListChannels();
+		auto myList = channelList.left;
+
+		for (auto it = myList.begin(); it != myList.end(); ++it)
+		{
+			resultInfo += to_string(it->first) + " - " + it->second + "\n";
+		}
+
+		m_output << resultInfo;
+
+		return true;
+	}
+
+	if (!m_tv.IsTurnedOn())
+	{
+		m_output << "TV is turned off\n";
+		return true;
+	}
+
+	return false;
 }
 
 bool CRemoteControl::SelectChannel(istream& args)
@@ -101,6 +116,7 @@ bool CRemoteControl::SelectChannel(istream& args)
 	catch (const std::invalid_argument&)
 	{
 		channelName = RemoveExtraSpacesInLine(queryString);
+
 		try
 		{
 			m_tv.SelectChannelByName(channelName);
@@ -147,22 +163,22 @@ bool CRemoteControl::PreviousChannel(istream& args)
 
 bool CRemoteControl::SetChannelName(istream& args)
 {
-	string channelName, queryString;
+	string channelName, number;
 	int channelNumber;
 
-	args >> queryString;
+	args >> number;
+
+	getline(args, channelName);
+	channelName = RemoveExtraSpacesInLine(channelName);
 
 	try
 	{
-		channelNumber = stoi(queryString);
+		channelNumber = stoi(number);
 	}
 	catch (const std::invalid_argument&)
 	{
 		return false;
 	}
-
-	getline(args, queryString);
-	channelName = RemoveExtraSpacesInLine(queryString);
 
 	try
 	{

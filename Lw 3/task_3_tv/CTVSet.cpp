@@ -91,6 +91,11 @@ void CTVSet::SetChannelName(const int channelNumber, const string& channelName)
 		throw CErrorMessage("ERROR: Channel is out of range\n");
 	}
 
+	if (channelName.empty())
+	{
+		throw CErrorMessage("ERROR: Channel name not specified\n");
+	}
+
 	m_channelList.insert(ChannelAndName(channelNumber, channelName));
 }
 
@@ -112,7 +117,7 @@ string CTVSet::GetChannelName(const int channelNumber) const
 	{
 		throw CErrorMessage("ERROR: Channel [" + to_string(channelNumber) + "] has no name\n");
 	}
-	
+
 	return channelName;
 }
 
