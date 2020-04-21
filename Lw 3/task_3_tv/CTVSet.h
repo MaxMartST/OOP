@@ -1,5 +1,9 @@
 ﻿#pragma once
-#include "pch.h"
+#include <string>
+
+
+typedef boost::bimap<int, std::string> ChannelStructure;
+typedef ChannelStructure::value_type ChannelAndName;
 
 class CTVSet
 {

@@ -15,7 +15,5 @@
 #include <stdexcept>
 #include <string>
 
-//typedef std::map<int, std::string> Channels;
-
 typedef boost::bimap<int, std::string> ChannelStructure;
 typedef ChannelStructure::value_type ChannelAndName;

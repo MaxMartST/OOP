@@ -1,6 +1,10 @@
 #pragma once
 #include <boost/noncopyable.hpp>
 
+#include <iostream>
+#include <string>
+#include <map>
+
 class CTVSet;
 
 class CRemoteControl : boost::noncopyable
