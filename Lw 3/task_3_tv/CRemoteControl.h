@@ -3,7 +3,6 @@
 
 class CTVSet;
 
-// Наследование от boost::noncopyable - явный способ запретить копирование и присваивание экземпляров класса
 class CRemoteControl : boost::noncopyable
 {
 public:

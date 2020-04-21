@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#include <optional>
 #include <cctype>
 #include <functional>
 #include <iostream>

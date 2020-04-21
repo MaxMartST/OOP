@@ -182,7 +182,8 @@ TEST_CASE("TV channel switching")
 
 	SECTION("Select Previous Channel")
 	{
-		tv.SelectChannelByNumber(2);
+		int number = 2;
+		tv.SelectChannelByNumber(number);
 
 		input << "PreviousChannel";
 		REQUIRE(remoteControl.SetCommand());
@@ -277,8 +278,9 @@ TEST_CASE("Search channel by number or by name")
 
 		REQUIRE(remoteControl.SetCommand());
 		REQUIRE(RemoveExtraSpacesInLine("      9") == "9");
+		REQUIRE(tv.GetChannelName(9) == "");
 		REQUIRE(tv.GetChannel() == 1);
-		REQUIRE(output.str() == "ERROR: Channel [9] has no name\n");
+		REQUIRE(output.str() == "\n");
 	}
 
 	SECTION("Find channel name out of range")
@@ -296,7 +298,7 @@ TEST_CASE("Search channel by number or by name")
 
 		REQUIRE(remoteControl.SetCommand());
 		REQUIRE(tv.GetChannel() == 1);
-		REQUIRE(output.str() == "ERROR: Channel named [vesty NET] not found\n");
+		REQUIRE(output.str() == "0\n");
 	}
 }
 

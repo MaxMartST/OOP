@@ -4,10 +4,6 @@
 
 using namespace std;
 
-CTVSet::CTVSet()
-{
-}
-
 bool CTVSet::IsTurnedOn() const
 {
 	return m_isOn;
@@ -23,7 +19,7 @@ void CTVSet::TurnOff()
 	m_isOn = false;
 }
 
-ChannelStructure CTVSet::GetListChannels()
+ChannelStructure CTVSet::GetListChannels() const
 {
 	return m_channelList;
 }
@@ -45,7 +41,7 @@ void CTVSet::SelectChannelByName(const string& name)
 	if (rightIter != m_channelList.right.end())
 	{
 		m_previousChannel = m_channel;
-		m_channel = m_channelList.right.at(name);
+		m_channel = rightIter->second;
 	}
 	else
 	{
@@ -53,7 +49,7 @@ void CTVSet::SelectChannelByName(const string& name)
 	}
 }
 
-void CTVSet::SelectChannelByNumber(const int& channel)
+void CTVSet::SelectChannelByNumber(int& channel)
 {
 	if (!m_isOn)
 	{
@@ -73,13 +69,13 @@ void CTVSet::SelectPreviousChannel()
 {
 	if (!m_isOn)
 	{
-		throw CErrorMessage("ERROR: Turned off TV can't switches channel\n");
+		throw CErrorMessage("ERROR: Turned off TV can't switch channel\n");
 	}
 
 	swap(m_channel, m_previousChannel);
 }
 
-void CTVSet::SetChannelName(const int channelNumber, const string& channelName)
+void CTVSet::SetChannelName(int channelNumber, const string& channelName)
 {
 	if (!m_isOn)
 	{
@@ -99,23 +95,19 @@ void CTVSet::SetChannelName(const int channelNumber, const string& channelName)
 	m_channelList.insert(ChannelAndName(channelNumber, channelName));
 }
 
-string CTVSet::GetChannelName(const int channelNumber) const
+string CTVSet::GetChannelName(int channelNumber) const
 {
-	ChannelStructure::left_const_iterator leftIter = m_channelList.left.find(channelNumber);
-	string channelName;
-
 	if (channelNumber < MIN_CHANNEL || channelNumber > MAX_CHANNEL)
 	{
 		throw CErrorMessage("ERROR: Channel is out of range\n");
 	}
 
+	ChannelStructure::left_const_iterator leftIter = m_channelList.left.find(channelNumber);
+	string channelName;
+
 	if (leftIter != m_channelList.left.end())
 	{
-		channelName = m_channelList.left.at(channelNumber);
-	}
-	else
-	{
-		throw CErrorMessage("ERROR: Channel [" + to_string(channelNumber) + "] has no name\n");
+		channelName = leftIter->second;
 	}
 
 	return channelName;
@@ -124,15 +116,14 @@ string CTVSet::GetChannelName(const int channelNumber) const
 int CTVSet::GetChannelByName(const string& channelName) const
 {
 	ChannelStructure::right_const_iterator rightIter = m_channelList.right.find(channelName);
+	int channelNumber = 0;
 
 	if (rightIter != m_channelList.right.end())
 	{
-		return m_channelList.right.at(channelName);
+		channelNumber = rightIter->second;
 	}
-	else
-	{
-		throw CErrorMessage("ERROR: Channel named [" + channelName + "] not found\n");
-	}
+
+	return channelNumber;
 }
 
 void CTVSet::DeleteChannelName(const string& channelName)
