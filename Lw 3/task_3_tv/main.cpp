@@ -24,5 +24,3 @@ int main()
 	}
 	return 0;
 }
-
-//использую GitHub Desktop
