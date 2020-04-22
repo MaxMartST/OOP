@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "CRemoteControl.h"
 #include "CTVSet.h"
 
@@ -24,3 +24,5 @@ int main()
 	}
 	return 0;
 }
+
+//использую GitHub Desktop
