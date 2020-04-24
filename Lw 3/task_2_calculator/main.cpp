@@ -13,22 +13,13 @@ int main()
 
 	CCalculator calculator;
 	CCalculatorMenu controlСalculator(calculator, cin, cout);
-	Status statusMenu;
 
 	while ((!cin.eof()) && (!cin.fail()))
 	{
 		cout << "> ";
-		statusMenu = controlСalculator.SetCommand();
-		
-		if (Status::ERORR == statusMenu)
+		if (!controlСalculator.SetCommand())
 		{
 			cout << "Unknown command!" << endl;
-		}
-
-		if (Status::EXIT == statusMenu)
-		{
-			cout << "Exit!" << endl;
-			break;
 		}
 	}
 

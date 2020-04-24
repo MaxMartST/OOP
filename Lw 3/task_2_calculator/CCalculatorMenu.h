@@ -4,21 +4,13 @@
 #include <functional>
 #include <sstream>
 
-enum class Status
-{
-	ERORR,
-	EXECUTE,
-	EXIT
-};
-
 class CCalculatorMenu
 {
 public:
 	CCalculatorMenu(CCalculator& calculator, std::istream& input, std::ostream& output);
-	Status SetCommand();
+	bool SetCommand();
 	
 private:
-	void Exit();
 	void SetVar(std::istream& args);
 	void LetVarValue(std::istream& args);
 	void SetFunction(std::istream& args);
@@ -35,8 +27,6 @@ private:
 	std::ostream& m_output;
 
 	CCalculator& m_calculator;
-	Status m_stausMenu;
 
 	const ActionMap m_actionMap;
-	const std::string EXIT_COM = "exit";
 };

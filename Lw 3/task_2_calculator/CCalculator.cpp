@@ -10,7 +10,7 @@ bool IsCharCorrect(char ch)
 {
 	return isalnum(ch) || ch == '_';
 }
-} // namespace
+}
 
 bool CCalculator::CheckVariable(const string& variable)
 {
