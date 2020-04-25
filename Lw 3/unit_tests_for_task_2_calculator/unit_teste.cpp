@@ -44,3 +44,36 @@ TEST_CASE("Initialization of a list of valid commands in the CCalculatorMenu cla
 		}
 	}
 }
+
+TEST_CASE("Declaring Variables and Displaying")
+{
+	GIVEN("class calculator and menu announced")
+	{
+		CCalculator calculator;
+		stringstream input, output;
+		CCalculatorMenu control—alculator(calculator, input, output);
+
+		WHEN("When we initialize a new variable with the correct name")
+		{
+			THEN("Added variable with initial nan value")
+			{
+				input << "var x";
+				control—alculator.SetCommand();
+				auto it = calculator.GetVars();
+
+				REQUIRE(it["x"] != numeric_limits<double>::quiet_NaN());
+			}
+
+			AND_WHEN("")
+			{
+				input << "var x";
+				control—alculator.SetCommand();
+				auto it = calculator.GetVars();
+				map<string, double>::iterator it_2;
+
+				it_2 = it.find("x");
+				REQUIRE(it_2 != it.end());
+			}
+		}
+	}
+}

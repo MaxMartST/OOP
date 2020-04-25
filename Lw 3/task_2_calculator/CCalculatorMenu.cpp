@@ -106,7 +106,7 @@ void CCalculatorMenu::PrintVariables()
 {
 	for (auto it : m_calculator.GetVars())
 	{
-		cout << it.first << ":" << setprecision(2) << fixed << it.second << endl;
+		m_output << it.first << ":" << setprecision(2) << fixed << it.second << endl;
 	}
 }
 
