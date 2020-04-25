@@ -11,8 +11,10 @@ CCalculatorMenu::CCalculatorMenu(CCalculator& calculator, istream& input, ostrea
 	, m_output(output)
 	, m_actionMap({ { "var", bind(&CCalculatorMenu::SetVar, this, _1) },
 		  { "let", bind(&CCalculatorMenu::LetVarValue, this, _1) },
-		  { "printvars", bind(&CCalculatorMenu::PrintVariables, this) }
-	})
+		  { "printvars", bind(&CCalculatorMenu::PrintVariables, this) },
+		  { "fn", bind(&CCalculatorMenu::SetFunction, this, _1) },
+		  { "print", bind(&CCalculatorMenu::PrintIdentifierValue, this, _1) },
+		  { "printfns", bind(&CCalculatorMenu::PrintFunctions, this) } })
 {
 }
 
@@ -41,10 +43,6 @@ void CCalculatorMenu::SetVar(istream& args)
 	string identifier;
 	args >> identifier;
 
-	//if (!m_calculator.SetVar(identifier))
-	//{
-	//	cout << "Invalid name of varible!" << endl;
-	//}
 	try
 	{
 		m_calculator.SetVar(identifier);
@@ -82,6 +80,14 @@ void CCalculatorMenu::LetVarValue(istream& args)
 	}
 }
 
+void CCalculatorMenu::SetFunction(istream& args)
+{
+}
+
+void CCalculatorMenu::PrintIdentifierValue(istream& args)
+{
+}
+
 void CCalculatorMenu::ParseStrToValue(const string& str, string& firstValue, string& secondValue)
 {
 	auto parsePosition = str.find("=");
@@ -101,4 +107,8 @@ void CCalculatorMenu::PrintVariables()
 	{
 		cout << it.first << ":" << setprecision(2) << fixed << it.second << endl;
 	}
+}
+
+void CCalculatorMenu::PrintFunctions()
+{
 }

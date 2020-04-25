@@ -1,6 +1,6 @@
 ﻿#pragma once
+#include <boost/bimap.hpp>
 #include <string>
-
 
 typedef boost::bimap<int, std::string> ChannelStructure;
 typedef ChannelStructure::value_type ChannelAndName;

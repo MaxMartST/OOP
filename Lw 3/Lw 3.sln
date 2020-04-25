@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit_tests_for_task_3_tv", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "task_2_calculator", "task_2_calculator\task_2_calculator.vcxproj", "{53A93078-462E-420C-8ECC-A48481C48E5E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit_tests_for_task_2_calculator", "unit_tests_for_task_2_calculator\unit_tests_for_task_2_calculator.vcxproj", "{1DF58045-44B2-4AEC-A675-1C36F42267DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{53A93078-462E-420C-8ECC-A48481C48E5E}.Release|x64.Build.0 = Release|x64
 		{53A93078-462E-420C-8ECC-A48481C48E5E}.Release|x86.ActiveCfg = Release|Win32
 		{53A93078-462E-420C-8ECC-A48481C48E5E}.Release|x86.Build.0 = Release|Win32
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Debug|x64.ActiveCfg = Debug|x64
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Debug|x64.Build.0 = Debug|x64
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Debug|x86.ActiveCfg = Debug|Win32
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Debug|x86.Build.0 = Debug|Win32
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Release|x64.ActiveCfg = Release|x64
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Release|x64.Build.0 = Release|x64
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Release|x86.ActiveCfg = Release|Win32
+		{1DF58045-44B2-4AEC-A675-1C36F42267DA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
