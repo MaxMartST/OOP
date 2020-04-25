@@ -8,7 +8,7 @@ class CCalculatorMenu
 {
 public:
 	CCalculatorMenu(CCalculator& calculator, std::istream& input, std::ostream& output);
-	bool SetCommand();
+	void SetCommand();
 	
 private:
 	void SetVar(std::istream& args);

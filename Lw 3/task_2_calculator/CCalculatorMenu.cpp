@@ -18,7 +18,7 @@ CCalculatorMenu::CCalculatorMenu(CCalculator& calculator, istream& input, ostrea
 {
 }
 
-bool CCalculatorMenu::SetCommand()
+void CCalculatorMenu::SetCommand()
 {
 	string commandLine;
 	getline(m_input, commandLine);
@@ -32,10 +32,11 @@ bool CCalculatorMenu::SetCommand()
 	if (it != m_actionMap.end())
 	{
 		it->second(strm);
-		return true;
 	}
-
-	return false;
+	else
+	{
+		m_output << "Unknown command!\n";
+	}
 }
 
 void CCalculatorMenu::SetVar(istream& args)

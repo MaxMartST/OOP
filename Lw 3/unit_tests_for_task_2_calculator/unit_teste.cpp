@@ -12,20 +12,32 @@ TEST_CASE("Initialization of a list of valid commands in the CCalculatorMenu cla
 {
 	GIVEN("Correct command names given")
 	{
-		vector<string> validCommandNames{ "var", "lat", "printvars", "fn", "print", "printfns" };
+		vector<string> validCommandNames{ "var", "let", "printvars", "fn", "print", "printfns" };
 
 		WHEN("Calculator and menu classes created")
 		{
 			CCalculator calculator;
-			CCalculatorMenu controlÑalculator(calculator, cin, cout);
 			stringstream input, output;
+			CCalculatorMenu controlÑalculator(calculator, input, output);
 
 			THEN("The list of valid commands is initialized")
 			{
 				for (auto& command : validCommandNames)
 				{
 					input << command;
-					REQUIRE(!controlÑalculator.SetCommand());
+					controlÑalculator.SetCommand();
+					REQUIRE(output.str() != "Unknown command!\n");
+					input.clear();
+				}
+			}
+
+			AND_WHEN("Invalid command name is used")
+			{
+				THEN("Error message is displayed")
+				{
+					input << "begin";
+					controlÑalculator.SetCommand();
+					REQUIRE(output.str() == "Unknown command!\n");
 					input.clear();
 				}
 			}

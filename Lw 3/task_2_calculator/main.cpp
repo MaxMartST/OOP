@@ -17,10 +17,7 @@ int main()
 	while ((!cin.eof()) && (!cin.fail()))
 	{
 		cout << "> ";
-		if (!controlСalculator.SetCommand())
-		{
-			cout << "Unknown command!" << endl;
-		}
+		controlСalculator.SetCommand();
 	}
 
 	return 0;
