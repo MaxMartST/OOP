@@ -59,24 +59,19 @@ void CCalculator::LetVarValue(const string& lhs, const string& rhs)
 		throw CErrorMessage("ERROR: Invalid expression\n");
 	}
 
-	// провер€ем, была ли объ€вленна lhs раннее
-	// если нет, то инициализинуем
 	if (!IsVarExist(lhs))
 	{
 		SetVar(lhs);
 	}
 
-	// если rhs переменна€, объ€вленна€ раннее, то ищем еЄ значение и присваеваем к lhs
 	if (IsVarExist(rhs))
 	{
 		m_variables[lhs] = GetValue(rhs);
 	}
-	// если rhs не переменна€, то число с плавающей зап€той
 	else if (!CheckVariable(rhs))
 	{
 		m_variables[lhs] = stod(rhs);
 	}
-	// иначе необъ€вленна€ ранее переменна€(выводим ошибку)
 	else
 	{
 		throw CErrorMessage("ERROR: Unrecognized variable: " + rhs + "\n");
