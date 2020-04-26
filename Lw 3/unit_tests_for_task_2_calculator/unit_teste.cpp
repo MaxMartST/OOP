@@ -59,20 +59,122 @@ TEST_CASE("Declaring Variables and Displaying")
 			{
 				input << "var x";
 				controlÑalculator.SetCommand();
-				auto it = calculator.GetVars();
 
-				REQUIRE(it["x"] != numeric_limits<double>::quiet_NaN());
+				auto mapVar = calculator.GetVars();
+				map<string, double>::iterator it;
+
+				it = mapVar.find("x");
+				REQUIRE(it != mapVar.end());
+				REQUIRE(isnan(mapVar["x"]));
 			}
 
-			AND_WHEN("")
+			AND_THEN("Underscore in variable name")
 			{
-				input << "var x";
+				input.clear();
+				input << "var x_abs";
 				controlÑalculator.SetCommand();
-				auto it = calculator.GetVars();
-				map<string, double>::iterator it_2;
 
-				it_2 = it.find("x");
-				REQUIRE(it_2 != it.end());
+				auto mapVar = calculator.GetVars();
+				map<string, double>::iterator it;
+
+				it = mapVar.find("x_abs");
+				REQUIRE(it != mapVar.end());
+				REQUIRE(isnan(mapVar["x_abs"]));
+			}
+
+			AND_WHEN("Invalid variable name: first character is a digit")
+			{
+				THEN("Error is displayed: invalid name")
+				{
+					input.clear();
+					input << "var 7abc";
+					controlÑalculator.SetCommand();
+					REQUIRE(output.str() == "ERROR: Invalid name of varible!\n");
+				}
+			}
+
+			AND_WHEN("Invalid variable name: forbidden character")
+			{
+				THEN("Error is displayed: invalid name")
+				{
+					input.clear();
+					input << "var a$c";
+					controlÑalculator.SetCommand();
+					REQUIRE(output.str() == "ERROR: Invalid name of varible!\n");
+				}
+			}
+		}
+	}
+}
+
+TEST_CASE("Assignment to a variable")
+{
+	GIVEN("class calculator, menu announced and initialize a new variable")
+	{
+		CCalculator calculator;
+		stringstream input, output;
+		CCalculatorMenu controlÑalculator(calculator, input, output);
+		input << "var x";
+		controlÑalculator.SetCommand();
+
+		WHEN("Assign a numerical value to the variable")
+		{
+			THEN("The value of this given variable changes")
+			{
+				input.clear();
+				input << "let x=3.14";
+				controlÑalculator.SetCommand();
+
+				auto mapVar = calculator.GetVars();
+				map<string, double>::iterator it;
+
+				it = mapVar.find("x");
+
+				REQUIRE(it != mapVar.end());
+				REQUIRE(!isnan(mapVar["x"]));
+				REQUIRE(mapVar["x"] == 3.14);
+			}
+
+			AND_WHEN("Assign a numeric value to an undeclared variable")
+			{
+				THEN("The value of this given variable changes")
+				{
+					input.clear();
+					input << "let y=2.277";
+					controlÑalculator.SetCommand();
+
+					auto mapVar = calculator.GetVars();
+					map<string, double>::iterator it;
+
+					it = mapVar.find("y");
+
+					REQUIRE(it != mapVar.end());
+					REQUIRE(!isnan(mapVar["y"]));
+					REQUIRE(mapVar["y"] == 2.277);
+				}
+			}
+
+			AND_WHEN("Reassigning a variable to another variable")
+			{
+				THEN("The value of this given variable changes")
+				{
+					input.clear();
+					input << "let x=3.14";
+					controlÑalculator.SetCommand();
+
+					input.clear();
+					input << "let y=x";
+					controlÑalculator.SetCommand();
+
+					auto mapVar = calculator.GetVars();
+					map<string, double>::iterator it;
+
+					it = mapVar.find("y");
+
+					REQUIRE(it != mapVar.end());
+					REQUIRE(!isnan(mapVar["y"]));
+					REQUIRE(mapVar["y"] == 3.14);
+				}
 			}
 		}
 	}

@@ -10,3 +10,4 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <functional>
+#include <cfloat>
