@@ -21,6 +21,8 @@ private:
 	void PrintFunctions();
 
 	void ParseStrToValue(const std::string& str, std::string& firstValue, std::string& secondValue);
+	void ParseStrToAriphOperation(const std::string& str, std::string& firstValue, Operator& operand, std::string& secondValue);
+	double FindIdentifierValue(const std::string& id) const;
 	
 	typedef std::map<std::string, std::function<void(std::istream& args)>> ActionMap;
 	std::istream& m_input;

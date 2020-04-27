@@ -83,10 +83,94 @@ void CCalculatorMenu::LetVarValue(istream& args)
 
 void CCalculatorMenu::SetFunction(istream& args)
 {
+	string expression;
+	args >> expression;
+	string firstValue, secondValue, operand, thirdValue;
+	Operator expressionOperator;
+
+	try
+	{
+		ParseStrToValue(expression, firstValue, secondValue);
+		ParseStrToAriphOperation(secondValue, expression, expressionOperator, thirdValue);
+		
+		if (m_calculator.HasIdentifier(firstValue))
+		{
+			throw CErrorMessage("ERROR: An identifier named [" + firstValue + "] already exists\n");
+		}
+
+		if (!m_calculator.IsNameCorrect(firstValue))
+		{
+			throw CErrorMessage("ERROR: Invalid identifier name [" + firstValue + "]\n");
+		}
+
+		if (thirdValue.empty() && expressionOperator == Operator::None)
+		{
+			m_calculator.SetFunction(firstValue, secondValue);
+		}
+		else
+		{
+			m_calculator.SetFunction(firstValue, expression, expressionOperator, thirdValue);
+		}
+	}
+	catch (const CErrorMessage& em)
+	{
+		m_output << em.GetErrorMessage();
+	}
+}
+
+void CCalculatorMenu::ParseStrToAriphOperation(const string& str, string& firstValue, Operator& operand, string& secondValue)
+{
+	auto operandPos = string::npos;
+	for (auto elem : SYMBOLS_OPERATORS)
+	{
+		operandPos = str.find(elem.first);
+		if (operandPos != string::npos)
+		{
+			operand = elem.second;
+			break;
+		}
+	}
+
+	if (operandPos != string::npos)
+	{
+		firstValue = str.substr(0, operandPos);
+		secondValue = str.substr(operandPos + 1, str.size());
+	}
+	else
+	{
+		operand = Operator::None;
+	}
+}
+
+double CCalculatorMenu::FindIdentifierValue(const string& id) const
+{
+	if (m_calculator.HasIdentifier(id))
+	{
+		return m_calculator.GetValue(id);
+	}
+	else
+	{
+		throw CErrorMessage("ERROR: Identifier [" + id + "] does not exist!\n");
+	}
 }
 
 void CCalculatorMenu::PrintIdentifierValue(istream& args)
 {
+	string identifier;
+	args >> identifier;
+
+	try
+	{
+		double value = FindIdentifierValue(identifier);
+		ostringstream ost;
+
+		ost << setprecision(2) << fixed << value;
+		m_output << identifier + ":" + ost.str() + "\n";
+	}
+	catch (const CErrorMessage& em)
+	{
+		m_output << em.GetErrorMessage();
+	}
 }
 
 void CCalculatorMenu::ParseStrToValue(const string& str, string& firstValue, string& secondValue)
@@ -106,10 +190,18 @@ void CCalculatorMenu::PrintVariables()
 {
 	for (auto it : m_calculator.GetVars())
 	{
-		m_output << it.first << ":" << setprecision(2) << fixed << it.second << endl;
+		ostringstream ost;
+		ost << setprecision(2) << fixed << m_calculator.GetValue(it.first);
+		m_output << it.first + ":" + ost.str() + "\n";
 	}
 }
 
 void CCalculatorMenu::PrintFunctions()
 {
+	for (auto it : m_calculator.GetFunctions())
+	{
+		ostringstream ost;
+		ost << setprecision(2) << fixed << m_calculator.GetValue(it.first);
+		m_output << it.first + ":" + ost.str() + "\n";
+	}
 }
