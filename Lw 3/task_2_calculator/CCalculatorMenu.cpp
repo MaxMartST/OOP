@@ -103,7 +103,7 @@ void CCalculatorMenu::SetFunction(istream& args)
 			throw CErrorMessage("ERROR: Invalid identifier name [" + firstValue + "]\n");
 		}
 
-		if (thirdValue.empty() && expressionOperator == Operator::None)
+		if (thirdValue.empty() && expressionOperator == Operator::NONE)
 		{
 			m_calculator.SetFunction(firstValue, secondValue);
 		}
@@ -138,7 +138,7 @@ void CCalculatorMenu::ParseStrToAriphOperation(const string& str, string& firstV
 	}
 	else
 	{
-		operand = Operator::None;
+		operand = Operator::NONE;
 	}
 }
 
@@ -165,7 +165,7 @@ void CCalculatorMenu::PrintIdentifierValue(istream& args)
 		ostringstream ost;
 
 		ost << setprecision(2) << fixed << value;
-		m_output << identifier + ":" + ost.str() + "\n";
+		m_output << ost.str() + "\n";
 	}
 	catch (const CErrorMessage& em)
 	{

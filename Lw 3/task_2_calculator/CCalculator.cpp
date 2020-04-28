@@ -72,7 +72,7 @@ void CCalculator::LetVarValue(const string& lhs, const string& rhs)
 		SetVar(lhs);
 	}
 
-	if (IsVarExist(rhs))
+	if (HasIdentifier(rhs))
 	{
 		m_variables[lhs] = GetValue(rhs);
 	}
@@ -150,7 +150,7 @@ void CCalculator::SetFunction(const string& varFunction, const string& variable)
 
 void CCalculator::SetFunction(const string& varFunction, const string& firstId, Operator operatorFunction, const string& secondId)
 {
-	if (operatorFunction == Operator::None)
+	if (operatorFunction == Operator::NONE)
 	{
 		throw CErrorMessage("ERROR: Incorrect operation\n");
 	}
@@ -203,13 +203,13 @@ void CCalculator::CalculateFunctionValue(const string & functionName)
 	{
 		auto & function = m_functions.at(functionName);
 
-		if (!(function.operatorType == Operator::None))
+		if (function.operatorType == Operator::NONE)
 		{
-			CalculateTwoOperandsFunction(function);
+			function.value = GetValue(function.firstOperand);
 		}
 		else
 		{
-			function.value = GetValue(function.firstOperand);
+			CalculateTwoOperandsFunction(function);
 		}
 	}
 }
@@ -225,16 +225,16 @@ void CCalculator::CalculateTwoOperandsFunction(SFunctionData& functionInfo)
 
 		switch (functionInfo.operatorType)
 		{
-		case Operator::Plus:
+		case Operator::PLUS:
 			result = firstOperand + secondOperand;
 			break;
-		case Operator::Division:
+		case Operator::DIVISION:
 			result = firstOperand / secondOperand;
 			break;
-		case Operator::Multiplication:
+		case Operator::MULTIPLICATION:
 			result = firstOperand * secondOperand;
 			break;
-		case Operator::Minus:
+		case Operator::MINUS:
 			result = firstOperand - secondOperand;
 			break;
 		}

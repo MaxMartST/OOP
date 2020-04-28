@@ -7,17 +7,17 @@
 
 enum class Operator
 {
-	Plus,
-	Minus,
-	Multiplication,
-	Division,
-	None
+	PLUS,
+	MINUS,
+	MULTIPLICATION,
+	DIVISION,
+	NONE
 };
 
 struct SFunctionData
 {
 	SFunctionData()
-		: operatorType(Operator::None)
+		: operatorType(Operator::NONE)
 	{
 	}
 
@@ -28,10 +28,10 @@ struct SFunctionData
 };
 
 static const std::map<std::string, Operator> SYMBOLS_OPERATORS{
-	{ "+", Operator::Plus },
-	{ "-", Operator::Minus },
-	{ "*", Operator::Multiplication },
-	{ "/", Operator::Division }
+	{ "+", Operator::PLUS },
+	{ "-", Operator::MINUS },
+	{ "*", Operator::MULTIPLICATION },
+	{ "/", Operator::DIVISION }
 };
 
 class CCalculator

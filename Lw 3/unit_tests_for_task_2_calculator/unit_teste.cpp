@@ -20,19 +20,7 @@ TEST_CASE("Initialization of a list of valid commands in the CCalculatorMenu cla
 			stringstream input, output;
 			CCalculatorMenu controlÑalculator(calculator, input, output);
 
-			THEN("The list of valid commands is initialized")
-			{
-				//for (auto& command : validCommandNames)
-				//{
-				//	input << command;
-				//	controlÑalculator.SetCommand();
-
-				//	REQUIRE(output.str() != "Unknown command!\n");
-				//	input.clear();
-				//}
-			}
-
-			AND_WHEN("Invalid command name is used")
+			WHEN("Invalid command name is used")
 			{
 				THEN("Error message is displayed")
 				{
@@ -187,7 +175,7 @@ TEST_CASE("Assignment to a variable")
 					input << "let x=z";
 					controlÑalculator.SetCommand();
 
-					REQUIRE(output.str() == "ERROR: Unrecognized variable: z\n");
+					REQUIRE(output.str() == "ERROR: Unrecognized variable [z]\n");
 				}
 			}
 
@@ -213,14 +201,14 @@ TEST_CASE("Display of variables and their values")
 		CCalculator calculator;
 		stringstream input, output;
 		CCalculatorMenu controlÑalculator(calculator, input, output);
+		vector<string> startingCommand{ "var x", "let y=2.2333" };
 
-		input << "var x";
-		controlÑalculator.SetCommand();
-		input.clear();
-
-		input << "let y=2.2333";
-		controlÑalculator.SetCommand();
-		input.clear();
+		for (auto& command : startingCommand)
+		{
+			input << command;
+			controlÑalculator.SetCommand();
+			input.clear();
+		}
 
 		WHEN("The printvars command will display all declared variables and their values")
 		{
@@ -240,7 +228,7 @@ TEST_CASE("Display of variables and their values")
 				input << "print y";
 				controlÑalculator.SetCommand();
 
-				REQUIRE(output.str() == "y:2.23\n");
+				REQUIRE(output.str() == "2.23\n");
 				input.clear();
 			}
 
@@ -249,8 +237,172 @@ TEST_CASE("Display of variables and their values")
 				input << "print x";
 				controlÑalculator.SetCommand();
 
-				REQUIRE(output.str() == "x:nan\n");
+				REQUIRE(output.str() == "nan\n");
 				input.clear();
+			}
+		}
+	}
+}
+
+TEST_CASE("Function declaration")
+{
+	GIVEN("Calculator class, menu and variables")
+	{
+		CCalculator calculator;
+		stringstream input, output;
+		CCalculatorMenu controlÑalculator(calculator, input, output);
+		vector<string> startingCommand{ "var x", "var y" };
+
+		for (auto& command : startingCommand)
+		{
+			input << command;
+			controlÑalculator.SetCommand();
+			input.clear();
+		}
+
+		WHEN("Declare a function and assign it the result of applying one of the following binary operations")
+		{
+			THEN("The value of the function will be nan")
+			{
+				input << "fn XplusY=x+y";
+				controlÑalculator.SetCommand();
+				input.clear();
+
+				REQUIRE(isnan(calculator.GetValue("XplusY")));
+
+				input << "print XplusY";
+				controlÑalculator.SetCommand();
+
+				REQUIRE(output.str() == "nan\n");
+			}
+
+			AND_WHEN("Variables are initialized")
+			{
+				vector<string> commandLine{ "let x=3", "let y=4", "fn XplusY=x+y", "print XplusY" };
+
+				THEN("In the function, the result of applying binary operations is written.")
+				{
+					for (auto& command : commandLine)
+					{
+						input << command;
+						controlÑalculator.SetCommand();
+						input.clear();
+					}
+
+					REQUIRE(!isnan(calculator.GetValue("XplusY")));
+					REQUIRE(output.str() == "7.00\n");
+				}
+			}
+
+			AND_WHEN("Assign a value to a function")
+			{
+				vector<string> commandLine{ "let x=3.1415", "fn funX=x", "print funX" };
+
+				THEN("The value of the function is equal to the value of the variable")
+				{
+					for (auto& command : commandLine)
+					{
+						input << command;
+						controlÑalculator.SetCommand();
+						input.clear();
+					}
+
+					REQUIRE(output.str() == "3.14\n");
+					REQUIRE(calculator.GetValue("funX") == calculator.GetValue("x"));
+				}
+			}
+
+			AND_WHEN("Variable was not declared")
+			{
+				THEN("Error message is displayed")
+				{
+					input << "fn XplusY=x+Z";
+					controlÑalculator.SetCommand();
+					input.clear();
+
+					REQUIRE(isnan(calculator.GetValue("XplusY")));
+					REQUIRE(output.str() == "ERROR: Identifier [Z] has not been advertised\n");
+				}
+			}
+
+			AND_WHEN("Function name is a variable")
+			{
+				THEN("Error message is displayed")
+				{
+					input << "fn x=y";
+					controlÑalculator.SetCommand();
+					input.clear();
+
+					REQUIRE(output.str() == "ERROR: An identifier named [x] already exists\n");
+				}
+			}
+
+			AND_WHEN("Invalid character encountered in assignment iterator")
+			{
+				THEN("Error message is displayed")
+				{
+					input << "fn XplusY=x%y";
+					controlÑalculator.SetCommand();
+					input.clear();
+
+					REQUIRE(output.str() == "ERROR: Identifier [x%y] has not been advertised\n");
+				}
+			}
+		}
+	}
+}
+
+TEST_CASE("Circle area calculation")
+{
+	GIVEN("Calculator class, menu, and list of commands")
+	{
+		CCalculator calculator;
+		stringstream input, output;
+		CCalculatorMenu controlÑalculator(calculator, input, output);
+		vector<string> commandLine{ "var radius",
+			"let pi=3.14159265",
+			"fn radiusSquared=radius*radius",
+			"fn circleArea=pi*radiusSquared",
+			"let radius=10",
+			"let circle10Area=circleArea",
+			"let radius=20",
+			"let circle20Area=circleArea" };
+
+		WHEN("Stepwise calculation of the area of a circle")
+		{
+			for (size_t i = 0; i < commandLine.size(); ++i)
+			{
+				input << commandLine[i];
+				controlÑalculator.SetCommand();
+				input.clear();
+			}
+
+			THEN("The following statements will be true")
+			{
+				REQUIRE(calculator.GetValue("pi") == 3.14159265);
+				REQUIRE(calculator.GetValue("radius") == 20);
+				REQUIRE(calculator.GetValue("radiusSquared") == 400);
+				REQUIRE(calculator.GetValue("circleArea") == 1256.63706);
+				REQUIRE(calculator.GetValue("circle10Area") == 314.159265);
+				REQUIRE(calculator.GetValue("circle20Area") == calculator.GetValue("circleArea"));
+			}
+
+			AND_THEN("Print all functions")
+			{
+				input << "printfns";
+				controlÑalculator.SetCommand();
+				input.clear();
+
+				REQUIRE(output.str() == "circleArea:1256.64\nradiusSquared:400.00\n");
+			}
+			
+			AND_THEN("Print all variables")
+			{
+				input << "printvars";
+				controlÑalculator.SetCommand();
+				input.clear();
+
+				REQUIRE(output.str() == "circle10Area:314.16\ncircle20Area:1256.64\npi:3.14\nradius:20.00\n");
 			}
 		}
 	}
