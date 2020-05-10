@@ -42,7 +42,7 @@ public:
 	double GetValue(const std::string& identifier) const;
 	void LetVarValue(const std::string& lhs, const std::string& rhs);
 
-	const std::map<std::string, SFunctionData>& GetFunctions();
+	const std::map<std::string, SFunctionData>& GetFunctions() const;
 	void SetFunction(const std::string& varFunction, const std::string& variable);
 	void SetFunction(const std::string& varFunction, const std::string& firstIdentifier, Operator operatorFunction, const std::string& secondIdentifier);
 
@@ -52,7 +52,7 @@ public:
 private:
 	bool IsVarExist(const std::string& variable) const;
 	bool IsFunctionExist(const std::string& nameFunction) const;
-	bool CheckVariable(const std::string& variable);
+	bool CheckVariable(const std::string& variable) const;
 	void CalculateFunctionValue(const std::string& function);
 	void CalculateTwoOperandsFunction(SFunctionData& functionInfo);
 

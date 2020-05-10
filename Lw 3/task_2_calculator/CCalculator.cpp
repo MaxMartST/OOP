@@ -20,7 +20,7 @@ void UnionSets(set<string>& lhs, const set<string>& rhs)
 }
 }
 
-bool CCalculator::CheckVariable(const string& variable)
+bool CCalculator::CheckVariable(const string& variable) const
 {
 	if (!IsNameCorrect(variable) || IsFunctionExist(variable) || IsVarExist(variable))
 	{
@@ -116,7 +116,7 @@ bool CCalculator::HasIdentifier(const std::string & id) const
 	return IsFunctionExist(id) || IsVarExist(id);
 }
 
-const map<string, SFunctionData>& CCalculator::GetFunctions()
+const map<string, SFunctionData>& CCalculator::GetFunctions() const
 {
 	return m_functions;
 }
