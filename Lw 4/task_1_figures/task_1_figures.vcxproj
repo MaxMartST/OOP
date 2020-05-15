@@ -127,11 +127,13 @@
     <ClCompile Include="CCircle.cpp" />
     <ClCompile Include="CCommandHandler.cpp" />
     <ClCompile Include="CErrorMessage.cpp" />
+    <ClCompile Include="CheckArguments.cpp" />
     <ClCompile Include="CLineSegment.cpp" />
     <ClCompile Include="CPoint.cpp" />
     <ClCompile Include="CRectangle.cpp" />
     <ClCompile Include="CTriangle.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="AdditionalFunctions.cpp" />
     <ClCompile Include="SegmentLength.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +144,7 @@
     <ClInclude Include="CCircle.h" />
     <ClInclude Include="CCommandHandler.h" />
     <ClInclude Include="CErrorMessage.h" />
+    <ClInclude Include="CheckArguments.h" />
     <ClInclude Include="CLineSegment.h" />
     <ClInclude Include="CPoint.h" />
     <ClInclude Include="CRectangle.h" />
@@ -151,6 +154,7 @@
     <ClInclude Include="IShape.h" />
     <ClInclude Include="ISolidShape.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="AdditionalFunctions.h" />
     <ClInclude Include="SegmentLength.h" />
   </ItemGroup>
   <ItemGroup>

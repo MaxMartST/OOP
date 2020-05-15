@@ -1,7 +1,9 @@
 #include "pch.h"
-#include "CCommandHandler.h"
-#include "CCircle.h"
+#include "CheckArguments.h"
+#include "AdditionalFunctions.h"
 #include "CCanvas.h"
+#include "CCircle.h"
+#include "CCommandHandler.h"
 #include "CErrorMessage.h"
 #include "CLineSegment.h"
 #include "CRectangle.h"
@@ -53,28 +55,28 @@ void CCommandHandler::CreateLineSegment(istream& args)
 		throw CErrorMessage("ERROR: No arguments!\n");
 	}
 
+	description = RemoveExtraSpacesInLine(description);
 	boost::split(shapeDescription, description, boost::is_any_of(" "));
 
-	if (shapeDescription.size() != 6)
+	if (shapeDescription.size() != 5)
 	{
-		throw CErrorMessage("ERROR: Not all arguments of the [line] are indicated!\n");
+		throw CErrorMessage("ERROR: Not all arguments of the [lineSegment] are indicated!\n");
 	}
 
-	try
+
+	for (size_t arg = 0; arg < 4; ++arg)
 	{
-		for (size_t arg = 1; arg <= 4; ++arg)
+		if (CheckCoordinate(shapeDescription[arg]))
 		{
-			coordinate.push_back(stod(shapeDescription[arg]));
-		}
+			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [lineSegment] command!\n");
+		};
+		coordinate.push_back(stod(shapeDescription[arg]));
 	}
-	catch (const invalid_argument&)
+
+	if (CheckColor(shapeDescription[4]))
 	{
-		throw invalid_argument("ERROR: Line coordinate conversion cannot be performed!\n");
-	}
-	catch (const out_of_range&)
-	{
-		throw out_of_range("ERROR: Line coordinate values go out of range!\n");
-	}
+		throw invalid_argument("ERROR: Invalid color argument detected in [lineSegment] command!\n");
+	};
 
 	CPoint node1 = { coordinate[0], coordinate[1] };
 	CPoint node2 = { coordinate[2], coordinate[3] };
@@ -83,7 +85,7 @@ void CCommandHandler::CreateLineSegment(istream& args)
 	try
 	{
 		char* pEnd;
-		lineColor = strtoul(shapeDescription[5].c_str(), &pEnd, 16);
+		lineColor = strtoul(shapeDescription[4].c_str(), &pEnd, 16);
 	}
 	catch (const invalid_argument&)
 	{
@@ -108,28 +110,27 @@ void CCommandHandler::CreateTriangle(istream& args)
 		throw CErrorMessage("ERROR: No arguments!\n");
 	}
 
+	description = RemoveExtraSpacesInLine(description);
 	boost::split(shapeDescription, description, boost::is_any_of(" "));
 
-	if (shapeDescription.size() != 9)
+	if (shapeDescription.size() != 8)
 	{
 		throw CErrorMessage("ERROR: Not all arguments of the [triangle] are indicated!\n");
 	}
 
-	try
+	for (size_t arg = 0; arg <= 5; ++arg)
 	{
-		for (size_t arg = 1; arg <= 6; ++arg)
+		if (CheckCoordinate(shapeDescription[arg]))
 		{
-			coordinate.push_back(stod(shapeDescription[arg]));
-		}
+			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [triangle] command!\n");
+		};
+		coordinate.push_back(stod(shapeDescription[arg]));
 	}
-	catch (const invalid_argument&)
+
+	if (CheckColor(shapeDescription[6]) || CheckColor(shapeDescription[7]))
 	{
-		throw invalid_argument("ERROR: [triangle] coordinate conversion cannot be performed!\n");
-	}
-	catch (const out_of_range&)
-	{
-		throw out_of_range("ERROR: [triangle] coordinate values go out of range!\n");
-	}
+		throw invalid_argument("ERROR: Invalid color argument detected in [triangle] command!\n");
+	};
 
 	CPoint node1 = { coordinate[0], coordinate[1] };
 	CPoint node2 = { coordinate[2], coordinate[3] };
@@ -141,8 +142,8 @@ void CCommandHandler::CreateTriangle(istream& args)
 	try
 	{
 		char* pEnd;
-		lineColor = strtoul(shapeDescription[7].c_str(), &pEnd, 16);
-		fillColor = strtoul(shapeDescription[8].c_str(), &pEnd, 16);
+		lineColor = strtoul(shapeDescription[6].c_str(), &pEnd, 16);
+		fillColor = strtoul(shapeDescription[7].c_str(), &pEnd, 16);
 	}
 	catch (const invalid_argument&)
 	{
@@ -156,7 +157,7 @@ void CCommandHandler::CreateTriangle(istream& args)
 
 void CCommandHandler::CreateRectangle(istream& args)
 {
-	double x1, y1, width, height;
+	vector<double> arguments;
 	vector<string> shapeDescription;
 	string description;
 
@@ -167,85 +168,29 @@ void CCommandHandler::CreateRectangle(istream& args)
 		throw CErrorMessage("ERROR: No arguments!\n");
 	}
 
-	boost::split(shapeDescription, description, boost::is_any_of(" "));
-
-	if (shapeDescription.size() != 7)
-	{
-		throw CErrorMessage("ERROR: Not all arguments of the [rectangle] are indicated!\n");
-	}
-
-	try
-	{
-		x1 = stod(shapeDescription[1]);
-		y1 = stod(shapeDescription[2]);
-		width = stod(shapeDescription[3]);
-		height = stod(shapeDescription[4]);
-	}
-	catch (const invalid_argument&)
-	{
-		throw invalid_argument("ERROR: [rectangle] coordinate conversion cannot be performed!\n");
-	}
-	catch (const out_of_range&)
-	{
-		throw out_of_range("ERROR: [rectangle] coordinate values go out of range!\n");
-	}
-
-	CPoint leftTopVertex = { x1, y1 };
-	uint32_t lineColor;
-	uint32_t fillColor;
-
-	try
-	{
-		char* pEnd;
-		lineColor = strtoul(shapeDescription[5].c_str(), &pEnd, 16);
-		fillColor = strtoul(shapeDescription[6].c_str(), &pEnd, 16);
-	}
-	catch (const invalid_argument&)
-	{
-		throw invalid_argument("Wrong color format!\n");
-	}
-
-	auto rectangle = make_unique<CRectangle>(leftTopVertex, width, height, lineColor, fillColor);
-	m_shapeList.push_back(move(rectangle));
-	m_output << "Rectangle is created\n";
-}
-
-void CCommandHandler::CreateCircle(istream& args)
-{
-	double x1, y1, radius;
-	vector<string> shapeDescription;
-	string description;
-
-	getline(args, description);
-
-	if (description.empty())
-	{
-		throw CErrorMessage("ERROR: No arguments!\n");
-	}
-
+	description = RemoveExtraSpacesInLine(description);
 	boost::split(shapeDescription, description, boost::is_any_of(" "));
 
 	if (shapeDescription.size() != 6)
 	{
-		throw CErrorMessage("ERROR: Not all arguments of the [circle] are indicated!\n");
+		throw CErrorMessage("ERROR: Not all arguments of the [rectangle] are indicated!\n");
 	}
 
-	try
+	for (size_t arg = 0; arg <= 4; ++arg)
 	{
-		x1 = stod(shapeDescription[1]);
-		y1 = stod(shapeDescription[2]);
-		radius = stod(shapeDescription[3]);
-	}
-	catch (const invalid_argument&)
-	{
-		throw invalid_argument("ERROR: [circle] coordinate conversion cannot be performed!\n");
-	}
-	catch (const out_of_range&)
-	{
-		throw out_of_range("ERROR: [circle] coordinate values go out of range!\n");
+		if (CheckCoordinate(shapeDescription[arg]))
+		{
+			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [rectangle] command!\n");
+		};
+		arguments.push_back(stod(shapeDescription[arg]));
 	}
 
-	CPoint center = { x1, y1 };
+	if (CheckColor(shapeDescription[4]) || CheckColor(shapeDescription[5]))
+	{
+		throw invalid_argument("ERROR: Invalid color argument detected in [rectangle] command!\n");
+	};
+
+	CPoint leftTopVertex = { arguments[0], arguments[1] };
 	uint32_t lineColor;
 	uint32_t fillColor;
 
@@ -260,7 +205,62 @@ void CCommandHandler::CreateCircle(istream& args)
 		throw invalid_argument("Wrong color format!\n");
 	}
 
-	auto circle = make_unique<CCircle>(center, radius, lineColor, fillColor);
+	auto rectangle = make_unique<CRectangle>(leftTopVertex, arguments[2], arguments[3], lineColor, fillColor);
+	m_shapeList.push_back(move(rectangle));
+	m_output << "Rectangle is created\n";
+}
+
+void CCommandHandler::CreateCircle(istream& args)
+{
+	vector<double> arguments;
+	vector<string> shapeDescription;
+	string description;
+
+	getline(args, description);
+
+	if (description.empty())
+	{
+		throw CErrorMessage("ERROR: No arguments!\n");
+	}
+
+	description = RemoveExtraSpacesInLine(description);
+	boost::split(shapeDescription, description, boost::is_any_of(" "));
+
+	if (shapeDescription.size() != 5)
+	{
+		throw CErrorMessage("ERROR: Not all arguments of the [circle] are indicated!\n");
+	}
+
+	for (size_t arg = 0; arg <= 2; ++arg)
+	{
+		if (CheckCoordinate(shapeDescription[arg]))
+		{
+			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [circle] command!\n");
+		};
+		arguments.push_back(stod(shapeDescription[arg]));
+	}
+
+	if (CheckColor(shapeDescription[3]) || CheckColor(shapeDescription[4]))
+	{
+		throw invalid_argument("ERROR: Invalid color argument detected in [circle] command!\n");
+	};
+
+	CPoint center = { arguments[0], arguments[1] };
+	uint32_t lineColor;
+	uint32_t fillColor;
+
+	try
+	{
+		char* pEnd;
+		lineColor = strtoul(shapeDescription[3].c_str(), &pEnd, 16);
+		fillColor = strtoul(shapeDescription[4].c_str(), &pEnd, 16);
+	}
+	catch (const invalid_argument&)
+	{
+		throw invalid_argument("Wrong color format!\n");
+	}
+
+	auto circle = make_unique<CCircle>(center, arguments[2], lineColor, fillColor);
 	m_shapeList.push_back(move(circle));
 	m_output << "Circle is created\n";
 }
