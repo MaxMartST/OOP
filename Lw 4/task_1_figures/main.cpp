@@ -31,5 +31,15 @@ int main(int argc, char argv[])
 	ch.PrintShapeWithMinPerimetr();
 	ch.PrintShapeWithMaxArea();
 
+	try
+	{
+		ch.DrawShapes();
+	}
+	catch (const CErrorMessage& em)
+	{
+		cout << em.GetErrorMessage();
+		return 1;
+	}
+
 	return 0;
 }

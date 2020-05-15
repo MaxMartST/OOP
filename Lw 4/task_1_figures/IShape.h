@@ -1,9 +1,11 @@
 #pragma once
+
+#include "ICanvasDrawable.h"
 #include <cstdint>
 #include <iostream>
 #include <string>
 
-class IShape
+class IShape : public ICanvasDrawable
 {
 public:
 	virtual double GetPerimeter() const = 0;

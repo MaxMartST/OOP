@@ -10,12 +10,15 @@ public:
 
 	double GetPerimeter() const override;
 	double GetArea() const override;
+	
+	std::string GetType() const;
 	std::string ToString() const override;
 	uint32_t GetOutlineColor() const override;
 
 	CPoint GetStartPoint() const;
 	CPoint GetEndPoint() const;
-	std::string GetType() const;
+
+	void Draw(ICanvas& canvas);
 
 private:
 	void AppendProperties(std::ostream& strm) const override;

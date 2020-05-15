@@ -61,3 +61,8 @@ void CLineSegment::AppendProperties(ostream& s) const
 	s << "\tbegins = (" << m_startPoint.GetX() << ", " << m_startPoint.GetY()
 	  << "), ends = (" << m_endPoint.GetX() << ", " << m_endPoint.GetY() << ")" << endl;
 }
+
+void CLineSegment::Draw(ICanvas& canvas)
+{
+	canvas.DrawLine(m_startPoint, m_endPoint, m_color);
+}

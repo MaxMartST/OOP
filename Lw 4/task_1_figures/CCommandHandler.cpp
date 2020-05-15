@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CCommandHandler.h"
 #include "CCircle.h"
+#include "CCanvas.h"
 #include "CErrorMessage.h"
 #include "CLineSegment.h"
 #include "CRectangle.h"
@@ -8,6 +9,7 @@
 #include <boost/algorithm/string.hpp>
 
 using namespace std;
+using namespace sf;
 
 CCommandHandler::CCommandHandler(istream& input, ostream& output)
 	: m_input(input)
@@ -35,13 +37,13 @@ void CCommandHandler::HandleCommand()
 	}
 	else
 	{
-		throw CErrorMessage("ERROR: Unknown command!\n");
+		m_output << "ERROR: Unknown command!\n";
 	}
 }
 
 void CCommandHandler::CreateLineSegment(istream& args)
 {
-	double x1, x2, y1, y2;
+	vector<double> coordinate;
 	vector<string> shapeDescription;
 	string description;
 	getline(args, description);
@@ -60,10 +62,10 @@ void CCommandHandler::CreateLineSegment(istream& args)
 
 	try
 	{
-		x1 = stod(shapeDescription[1]);
-		y1 = stod(shapeDescription[2]);
-		x2 = stod(shapeDescription[3]);
-		y2 = stod(shapeDescription[4]);
+		for (size_t arg = 1; arg <= 4; ++arg)
+		{
+			coordinate.push_back(stod(shapeDescription[arg]));
+		}
 	}
 	catch (const invalid_argument&)
 	{
@@ -74,8 +76,8 @@ void CCommandHandler::CreateLineSegment(istream& args)
 		throw out_of_range("ERROR: Line coordinate values go out of range!\n");
 	}
 
-	CPoint point1 = { x1, y1 };
-	CPoint point2 = { x2, y2 };
+	CPoint node1 = { coordinate[0], coordinate[1] };
+	CPoint node2 = { coordinate[2], coordinate[3] };
 	uint32_t lineColor;
 
 	try
@@ -88,14 +90,14 @@ void CCommandHandler::CreateLineSegment(istream& args)
 		throw invalid_argument("ERROR: Wrong color format!\n");
 	}
 
-	auto lineSegment = make_unique<CLineSegment>(point1, point2, lineColor);
+	auto lineSegment = make_unique<CLineSegment>(node1, node2, lineColor);
 	m_shapeList.push_back(move(lineSegment));
 	m_output << "Line segment is created\n";
 }
 
 void CCommandHandler::CreateTriangle(istream& args)
 {
-	double x1, x2, y1, y2, x3, y3;
+	vector<double> coordinate;
 	vector<string> shapeDescription;
 	string description;
 
@@ -115,12 +117,10 @@ void CCommandHandler::CreateTriangle(istream& args)
 
 	try
 	{
-		x1 = stod(shapeDescription[1]);
-		y1 = stod(shapeDescription[2]);
-		x2 = stod(shapeDescription[3]);
-		y2 = stod(shapeDescription[4]);
-		x3 = stod(shapeDescription[5]);
-		y3 = stod(shapeDescription[6]);
+		for (size_t arg = 1; arg <= 6; ++arg)
+		{
+			coordinate.push_back(stod(shapeDescription[arg]));
+		}
 	}
 	catch (const invalid_argument&)
 	{
@@ -131,9 +131,10 @@ void CCommandHandler::CreateTriangle(istream& args)
 		throw out_of_range("ERROR: [triangle] coordinate values go out of range!\n");
 	}
 
-	CPoint vertex1 = { x1, y1 };
-	CPoint vertex2 = { x2, y2 };
-	CPoint vertex3 = { x3, y3 };
+	CPoint node1 = { coordinate[0], coordinate[1] };
+	CPoint node2 = { coordinate[2], coordinate[3] };
+	CPoint node3 = { coordinate[4], coordinate[5] };
+
 	uint32_t lineColor;
 	uint32_t fillColor;
 
@@ -148,7 +149,7 @@ void CCommandHandler::CreateTriangle(istream& args)
 		throw invalid_argument("Wrong color format!\n");
 	}
 
-	auto triangle = make_unique<CTriangle>(vertex1, vertex2, vertex3, lineColor, fillColor);
+	auto triangle = make_unique<CTriangle>(node1, node2, node3, lineColor, fillColor);
 	m_shapeList.push_back(move(triangle));
 	m_output << "Triangle is created\n";
 }
@@ -178,7 +179,7 @@ void CCommandHandler::CreateRectangle(istream& args)
 		x1 = stod(shapeDescription[1]);
 		y1 = stod(shapeDescription[2]);
 		width = stod(shapeDescription[3]);
-		height = stod(shapeDescription[4]); 
+		height = stod(shapeDescription[4]);
 	}
 	catch (const invalid_argument&)
 	{
@@ -189,7 +190,7 @@ void CCommandHandler::CreateRectangle(istream& args)
 		throw out_of_range("ERROR: [rectangle] coordinate values go out of range!\n");
 	}
 
-	CPoint leftTopVertex = { x1, y1 }; 
+	CPoint leftTopVertex = { x1, y1 };
 	uint32_t lineColor;
 	uint32_t fillColor;
 
@@ -285,5 +286,39 @@ void CCommandHandler::PrintShapeWithMaxArea()
 		});
 
 		m_output << "Max area shape: " << (*shapeMaxArea)->ToString() << endl;
+	}
+}
+
+void CCommandHandler::DrawShapes() const
+{
+	if (m_shapeList.empty())
+	{
+		throw CErrorMessage("ERROR: List of shapes is empty!\n");
+	}
+
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+	sf::RenderWindow window(sf::VideoMode(800, 700), "Shapes", sf::Style::Default, settings);
+	CCanvas canvas(window);
+
+	while (window.isOpen())
+	{
+		sf::Event event{};
+
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+		}
+
+		window.clear(sf::Color(255, 255, 255));
+		for (const auto& shape : m_shapeList)
+		{
+			shape->Draw(canvas);
+		}
+
+		window.display();
 	}
 }

@@ -80,3 +80,20 @@ void CRectangle::AppendProperties(ostream& s) const
 	s << "\tleft top vertex = (" << m_leftTopVertex.GetX() << ", " << m_leftTopVertex.GetY()
 	  << "), width = " << m_width << ", height = " << m_height << endl;
 }
+
+void CRectangle::Draw(ICanvas& canvas)
+{
+	vector<CPoint> coordinate;
+
+	coordinate.push_back(GetLeftTop());
+	coordinate.push_back({ GetLeftTop().GetX(), GetRightBottom().GetY() });
+	coordinate.push_back(GetRightBottom());
+	coordinate.push_back({ GetRightBottom().GetX(), GetLeftTop().GetY() });
+
+	canvas.FillPolygon(coordinate, m_fillColor);
+
+	canvas.DrawLine(coordinate[0], coordinate[1], m_lineColor);
+	canvas.DrawLine(coordinate[1], coordinate[2], m_lineColor);
+	canvas.DrawLine(coordinate[2], coordinate[3], m_lineColor);
+	canvas.DrawLine(coordinate[3], coordinate[0], m_lineColor);
+}

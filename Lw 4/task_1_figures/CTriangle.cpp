@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CTriangle.h"
-#include "SegmentLength.h"
 #include "CPoint.h"
+#include "SegmentLength.h"
 
 using namespace std;
 
@@ -79,4 +79,19 @@ void CTriangle::AppendProperties(ostream& s) const
 	s << "\tfirst vertex = (" << m_vertex1.GetX() << ", " << m_vertex1.GetY()
 	  << "), second vertex = (" << m_vertex2.GetX() << ", " << m_vertex2.GetY()
 	  << "), third vertex = (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")" << endl;
+}
+
+void CTriangle::Draw(ICanvas& canvas)
+{
+	vector<CPoint> coordinate;
+
+	coordinate.push_back(m_vertex1);
+	coordinate.push_back(m_vertex2);
+	coordinate.push_back(m_vertex3);
+
+	canvas.FillPolygon(coordinate, m_fillColor);
+
+	canvas.DrawLine(coordinate[0], coordinate[1], m_lineColor);
+	canvas.DrawLine(coordinate[1], coordinate[2], m_lineColor);
+	canvas.DrawLine(coordinate[2], coordinate[0], m_lineColor);
 }

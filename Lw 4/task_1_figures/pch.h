@@ -2,6 +2,7 @@
 
 #define _USE_MATH_DEFINES
 
+#include <SFML/Graphics.hpp>
 #include "stdint.h"
 #include <cmath>
 #include <functional>

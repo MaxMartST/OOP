@@ -4,6 +4,7 @@ class CPoint
 {
 public:
 	CPoint(const double x, const double y);
+
 	double GetX() const;
 	double GetY() const;
 
