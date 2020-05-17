@@ -80,6 +80,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(TargetPath)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -91,6 +94,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(TargetPath)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -106,6 +112,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(TargetPath)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -121,12 +130,45 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(TargetPath)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\task_1_figures\AdditionalFunctions.cpp" />
+    <ClCompile Include="..\task_1_figures\CCanvas.cpp" />
+    <ClCompile Include="..\task_1_figures\CCircle.cpp" />
+    <ClCompile Include="..\task_1_figures\CCommandHandler.cpp" />
+    <ClCompile Include="..\task_1_figures\CErrorMessage.cpp" />
+    <ClCompile Include="..\task_1_figures\CheckArguments.cpp" />
+    <ClCompile Include="..\task_1_figures\CLineSegment.cpp" />
+    <ClCompile Include="..\task_1_figures\CPoint.cpp" />
+    <ClCompile Include="..\task_1_figures\CRectangle.cpp" />
+    <ClCompile Include="..\task_1_figures\CTriangle.cpp" />
+    <ClCompile Include="..\task_1_figures\SegmentLength.cpp" />
     <ClCompile Include="unit_teste.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\task_1_figures\AdditionalFunctions.h" />
+    <ClInclude Include="..\task_1_figures\CCanvas.h" />
+    <ClInclude Include="..\task_1_figures\CCircle.h" />
+    <ClInclude Include="..\task_1_figures\CCommandHandler.h" />
+    <ClInclude Include="..\task_1_figures\CErrorMessage.h" />
+    <ClInclude Include="..\task_1_figures\CheckArguments.h" />
+    <ClInclude Include="..\task_1_figures\CLineSegment.h" />
+    <ClInclude Include="..\task_1_figures\CPoint.h" />
+    <ClInclude Include="..\task_1_figures\CRectangle.h" />
+    <ClInclude Include="..\task_1_figures\CTriangle.h" />
+    <ClInclude Include="..\task_1_figures\ICanvas.h" />
+    <ClInclude Include="..\task_1_figures\ICanvasDrawable.h" />
+    <ClInclude Include="..\task_1_figures\IShape.h" />
+    <ClInclude Include="..\task_1_figures\ISolidShape.h" />
+    <ClInclude Include="..\task_1_figures\pch.h" />
+    <ClInclude Include="..\task_1_figures\SegmentLength.h" />
+    <ClInclude Include="ConnectedFiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

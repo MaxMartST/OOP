@@ -7,7 +7,8 @@ class CCommandHandler : boost::noncopyable
 {
 public:
 	CCommandHandler(std::istream& input, std::ostream& output);
-	void HandleCommand();
+	size_t GetNumberShapesOfList(); 
+	bool HandleCommand();
 	void PrintShapeWithMinPerimetr();
 	void PrintShapeWithMaxArea();
 	void DrawShapes() const;

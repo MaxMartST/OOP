@@ -28,7 +28,7 @@ string CLineSegment::ToString() const
 
 string CLineSegment::GetType() const
 {
-	return "Line segment";
+	return "\n\tLine segment";
 }
 
 CPoint CLineSegment::GetStartPoint() const
@@ -59,7 +59,7 @@ uint32_t CLineSegment::GetOutlineColor() const
 void CLineSegment::AppendProperties(ostream& s) const
 {
 	s << "\tbegins = (" << m_startPoint.GetX() << ", " << m_startPoint.GetY()
-	  << "), ends = (" << m_endPoint.GetX() << ", " << m_endPoint.GetY() << ")" << endl;
+	  << ")\n\tends = (" << m_endPoint.GetX() << ", " << m_endPoint.GetY() << ")" << endl;
 }
 
 void CLineSegment::Draw(ICanvas& canvas)

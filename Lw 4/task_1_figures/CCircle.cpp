@@ -27,7 +27,7 @@ string CCircle::ToString() const
 
 string CCircle::GetType() const
 {
-	return "Circle";
+	return "\n\tCircle";
 }
 
 CPoint CCircle::GetCenter() const
@@ -62,8 +62,8 @@ uint32_t CCircle::GetFillColor() const
 
 void CCircle::AppendProperties(ostream& s) const
 {
-	s << "\tcenter = ( " << m_center.GetX() << " , " << m_center.GetY()
-	  << " ), radius = " << m_radius << endl;
+	s << "\tcenter = (" << m_center.GetX() << ", " << m_center.GetY()
+	  << ")\n\tradius = " << m_radius << endl;
 }
 
 void CCircle::Draw(ICanvas& canvas)

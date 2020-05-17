@@ -32,7 +32,7 @@ string CTriangle::ToString() const
 
 string CTriangle::GetType() const
 {
-	return "Triangle";
+	return "\n\tTriangle";
 }
 
 CPoint CTriangle::GetVertex1() const
@@ -77,8 +77,8 @@ uint32_t CTriangle::GetFillColor() const
 void CTriangle::AppendProperties(ostream& s) const
 {
 	s << "\tfirst vertex = (" << m_vertex1.GetX() << ", " << m_vertex1.GetY()
-	  << "), second vertex = (" << m_vertex2.GetX() << ", " << m_vertex2.GetY()
-	  << "), third vertex = (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")" << endl;
+	  << ")\n\tsecond vertex = (" << m_vertex2.GetX() << ", " << m_vertex2.GetY()
+	  << ")\n\tthird vertex = (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")" << endl;
 }
 
 void CTriangle::Draw(ICanvas& canvas)

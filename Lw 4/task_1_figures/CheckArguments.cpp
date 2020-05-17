@@ -1,21 +1,35 @@
 #include "CheckArguments.h"
 
-bool CheckCoordinate(std::string& coordinate)
-{
-	if (all_of(coordinate.begin(), coordinate.end(), [](char ch){return isdigit(ch);}))
-	{
-		return false;
-	}
+using namespace std;
 
-	return true;
+bool IsCharCorrect(char ch)
+{
+	return isdigit(ch) || ch == '.';
 }
 
-bool CheckColor(std::string& color)
+bool CheckCoordinate(string& coordinate)
 {
-	if (all_of(color.begin(), color.end(), [](char ch) { return isalnum(ch); }))
+	string::iterator it = coordinate.begin();
+
+	if (isdigit(*it) || *it == '-')
 	{
-		return false;
+		it++;
 	}
 
-	return true;
+	if (all_of(it, coordinate.end(), [](char ch) { return IsCharCorrect(ch); }))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool CheckColor(string& color)
+{
+	if (all_of(color.begin(), color.end(), [](char ch) { return isalnum(ch); }) && color.size() == 6)
+	{
+		return true;
+	}
+
+	return false;
 }

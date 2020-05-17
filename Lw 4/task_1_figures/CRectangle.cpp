@@ -31,7 +31,7 @@ string CRectangle::ToString() const
 
 string CRectangle::GetType() const
 {
-	return "Rectangle";
+	return "\n\tRectangle";
 }
 
 CPoint CRectangle::GetLeftTop() const
@@ -78,7 +78,7 @@ uint32_t CRectangle::GetFillColor() const
 void CRectangle::AppendProperties(ostream& s) const
 {
 	s << "\tleft top vertex = (" << m_leftTopVertex.GetX() << ", " << m_leftTopVertex.GetY()
-	  << "), width = " << m_width << ", height = " << m_height << endl;
+	  << ")" << "\n\twidth = " << m_width << "\n\theight = " << m_height << endl;
 }
 
 void CRectangle::Draw(ICanvas& canvas)

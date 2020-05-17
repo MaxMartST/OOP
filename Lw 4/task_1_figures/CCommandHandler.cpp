@@ -1,13 +1,13 @@
 #include "pch.h"
-#include "CheckArguments.h"
+#include "CCommandHandler.h"
 #include "AdditionalFunctions.h"
 #include "CCanvas.h"
 #include "CCircle.h"
-#include "CCommandHandler.h"
 #include "CErrorMessage.h"
 #include "CLineSegment.h"
 #include "CRectangle.h"
 #include "CTriangle.h"
+#include "CheckArguments.h"
 #include <boost/algorithm/string.hpp>
 
 using namespace std;
@@ -23,7 +23,7 @@ CCommandHandler::CCommandHandler(istream& input, ostream& output)
 {
 }
 
-void CCommandHandler::HandleCommand()
+bool CCommandHandler::HandleCommand()
 {
 	string commandLine;
 	getline(m_input, commandLine);
@@ -35,12 +35,32 @@ void CCommandHandler::HandleCommand()
 	auto it = m_actionMap.find(action);
 	if (it != m_actionMap.end())
 	{
-		it->second(strm);
+		try
+		{
+			it->second(strm);
+		}
+		catch (const exception& e)
+		{
+			m_output << e.what();
+			return true;
+		}
+		catch (const CErrorMessage& em)
+		{
+			m_output << em.GetErrorMessage();
+			return false;
+		}
 	}
 	else
 	{
 		m_output << "ERROR: Unknown command!\n";
 	}
+
+	return true;
+}
+
+size_t CCommandHandler::GetNumberShapesOfList()
+{
+	return m_shapeList.size();
 }
 
 void CCommandHandler::CreateLineSegment(istream& args)
@@ -52,7 +72,7 @@ void CCommandHandler::CreateLineSegment(istream& args)
 
 	if (description.empty())
 	{
-		throw CErrorMessage("ERROR: No arguments!\n");
+		throw CErrorMessage("ERROR: Shape [lineSegment] no arguments!\n");
 	}
 
 	description = RemoveExtraSpacesInLine(description);
@@ -63,17 +83,16 @@ void CCommandHandler::CreateLineSegment(istream& args)
 		throw CErrorMessage("ERROR: Not all arguments of the [lineSegment] are indicated!\n");
 	}
 
-
 	for (size_t arg = 0; arg < 4; ++arg)
 	{
-		if (CheckCoordinate(shapeDescription[arg]))
+		if (!CheckCoordinate(shapeDescription[arg]))
 		{
 			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [lineSegment] command!\n");
 		};
 		coordinate.push_back(stod(shapeDescription[arg]));
 	}
 
-	if (CheckColor(shapeDescription[4]))
+	if (!CheckColor(shapeDescription[4]))
 	{
 		throw invalid_argument("ERROR: Invalid color argument detected in [lineSegment] command!\n");
 	};
@@ -89,12 +108,11 @@ void CCommandHandler::CreateLineSegment(istream& args)
 	}
 	catch (const invalid_argument&)
 	{
-		throw invalid_argument("ERROR: Wrong color format!\n");
+		throw invalid_argument("ERROR: Wrong [lineSegment] color format!\n");
 	}
 
 	auto lineSegment = make_unique<CLineSegment>(node1, node2, lineColor);
 	m_shapeList.push_back(move(lineSegment));
-	m_output << "Line segment is created\n";
 }
 
 void CCommandHandler::CreateTriangle(istream& args)
@@ -107,7 +125,7 @@ void CCommandHandler::CreateTriangle(istream& args)
 
 	if (description.empty())
 	{
-		throw CErrorMessage("ERROR: No arguments!\n");
+		throw CErrorMessage("ERROR: Shape [triangle] no arguments!\n");
 	}
 
 	description = RemoveExtraSpacesInLine(description);
@@ -118,16 +136,16 @@ void CCommandHandler::CreateTriangle(istream& args)
 		throw CErrorMessage("ERROR: Not all arguments of the [triangle] are indicated!\n");
 	}
 
-	for (size_t arg = 0; arg <= 5; ++arg)
+	for (size_t arg = 0; arg < 6; ++arg)
 	{
-		if (CheckCoordinate(shapeDescription[arg]))
+		if (!CheckCoordinate(shapeDescription[arg]))
 		{
 			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [triangle] command!\n");
 		};
 		coordinate.push_back(stod(shapeDescription[arg]));
 	}
 
-	if (CheckColor(shapeDescription[6]) || CheckColor(shapeDescription[7]))
+	if (!CheckColor(shapeDescription[6]) || !CheckColor(shapeDescription[7]))
 	{
 		throw invalid_argument("ERROR: Invalid color argument detected in [triangle] command!\n");
 	};
@@ -147,12 +165,11 @@ void CCommandHandler::CreateTriangle(istream& args)
 	}
 	catch (const invalid_argument&)
 	{
-		throw invalid_argument("Wrong color format!\n");
+		throw invalid_argument("ERROR: Wrong [triangle] color format!\n");
 	}
 
 	auto triangle = make_unique<CTriangle>(node1, node2, node3, lineColor, fillColor);
 	m_shapeList.push_back(move(triangle));
-	m_output << "Triangle is created\n";
 }
 
 void CCommandHandler::CreateRectangle(istream& args)
@@ -165,7 +182,7 @@ void CCommandHandler::CreateRectangle(istream& args)
 
 	if (description.empty())
 	{
-		throw CErrorMessage("ERROR: No arguments!\n");
+		throw CErrorMessage("ERROR: Shape [rectangle] no arguments!\n");
 	}
 
 	description = RemoveExtraSpacesInLine(description);
@@ -176,16 +193,16 @@ void CCommandHandler::CreateRectangle(istream& args)
 		throw CErrorMessage("ERROR: Not all arguments of the [rectangle] are indicated!\n");
 	}
 
-	for (size_t arg = 0; arg <= 4; ++arg)
+	for (size_t arg = 0; arg < 4; ++arg)
 	{
-		if (CheckCoordinate(shapeDescription[arg]))
+		if (!CheckCoordinate(shapeDescription[arg]))
 		{
 			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [rectangle] command!\n");
 		};
 		arguments.push_back(stod(shapeDescription[arg]));
 	}
 
-	if (CheckColor(shapeDescription[4]) || CheckColor(shapeDescription[5]))
+	if (!CheckColor(shapeDescription[4]) || !CheckColor(shapeDescription[5]))
 	{
 		throw invalid_argument("ERROR: Invalid color argument detected in [rectangle] command!\n");
 	};
@@ -202,12 +219,16 @@ void CCommandHandler::CreateRectangle(istream& args)
 	}
 	catch (const invalid_argument&)
 	{
-		throw invalid_argument("Wrong color format!\n");
+		throw invalid_argument("ERROR: Wrong [rectangle] color format!\n");
+	}
+
+	if (arguments[2] < 0 || arguments[3] < 0)
+	{
+		throw invalid_argument("ERROR: The height and width of the [rectangle] cannot be less than zero!\n");
 	}
 
 	auto rectangle = make_unique<CRectangle>(leftTopVertex, arguments[2], arguments[3], lineColor, fillColor);
 	m_shapeList.push_back(move(rectangle));
-	m_output << "Rectangle is created\n";
 }
 
 void CCommandHandler::CreateCircle(istream& args)
@@ -220,7 +241,7 @@ void CCommandHandler::CreateCircle(istream& args)
 
 	if (description.empty())
 	{
-		throw CErrorMessage("ERROR: No arguments!\n");
+		throw CErrorMessage("ERROR: Shape [circle] no arguments!\n");
 	}
 
 	description = RemoveExtraSpacesInLine(description);
@@ -231,16 +252,16 @@ void CCommandHandler::CreateCircle(istream& args)
 		throw CErrorMessage("ERROR: Not all arguments of the [circle] are indicated!\n");
 	}
 
-	for (size_t arg = 0; arg <= 2; ++arg)
+	for (size_t arg = 0; arg < 3; ++arg)
 	{
-		if (CheckCoordinate(shapeDescription[arg]))
+		if (!CheckCoordinate(shapeDescription[arg]))
 		{
 			throw invalid_argument("ERROR: Invalid coordinate argument encountered in [circle] command!\n");
 		};
 		arguments.push_back(stod(shapeDescription[arg]));
 	}
 
-	if (CheckColor(shapeDescription[3]) || CheckColor(shapeDescription[4]))
+	if (!CheckColor(shapeDescription[3]) || !CheckColor(shapeDescription[4]))
 	{
 		throw invalid_argument("ERROR: Invalid color argument detected in [circle] command!\n");
 	};
@@ -257,12 +278,16 @@ void CCommandHandler::CreateCircle(istream& args)
 	}
 	catch (const invalid_argument&)
 	{
-		throw invalid_argument("Wrong color format!\n");
+		throw invalid_argument("ERROR: Wrong [circle] color format!\n");
+	}
+
+	if (arguments[2] < 0)
+	{
+		throw invalid_argument("ERROR: The radius of the [circle] cannot be less than zero!\n");
 	}
 
 	auto circle = make_unique<CCircle>(center, arguments[2], lineColor, fillColor);
 	m_shapeList.push_back(move(circle));
-	m_output << "Circle is created\n";
 }
 
 void CCommandHandler::PrintShapeWithMinPerimetr()
@@ -291,34 +316,32 @@ void CCommandHandler::PrintShapeWithMaxArea()
 
 void CCommandHandler::DrawShapes() const
 {
-	if (m_shapeList.empty())
+	if (!m_shapeList.empty())
 	{
-		throw CErrorMessage("ERROR: List of shapes is empty!\n");
-	}
+		sf::ContextSettings settings;
+		settings.antialiasingLevel = 8;
+		sf::RenderWindow window(sf::VideoMode(800, 700), "Shapes", sf::Style::Default, settings);
+		CCanvas canvas(window);
 
-	sf::ContextSettings settings;
-	settings.antialiasingLevel = 8;
-	sf::RenderWindow window(sf::VideoMode(800, 700), "Shapes", sf::Style::Default, settings);
-	CCanvas canvas(window);
-
-	while (window.isOpen())
-	{
-		sf::Event event{};
-
-		while (window.pollEvent(event))
+		while (window.isOpen())
 		{
-			if (event.type == sf::Event::Closed)
+			sf::Event event{};
+
+			while (window.pollEvent(event))
 			{
-				window.close();
+				if (event.type == sf::Event::Closed)
+				{
+					window.close();
+				}
 			}
-		}
 
-		window.clear(sf::Color(255, 255, 255));
-		for (const auto& shape : m_shapeList)
-		{
-			shape->Draw(canvas);
-		}
+			window.clear(sf::Color(255, 255, 255));
+			for (const auto& shape : m_shapeList)
+			{
+				shape->Draw(canvas);
+			}
 
-		window.display();
+			window.display();
+		}
 	}
 }
