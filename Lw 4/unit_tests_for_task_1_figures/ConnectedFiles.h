@@ -1,0 +1,18 @@
+#pragma once
+
+#include "../task_1_figures/pch.h"
+#include "../task_1_figures/AdditionalFunctions.h"
+#include "../task_1_figures/CCanvas.h"
+#include "../task_1_figures/CCircle.h"
+#include "../task_1_figures/CCommandHandler.h"
+#include "../task_1_figures/CErrorMessage.h"
+#include "../task_1_figures/CheckArguments.h"
+#include "../task_1_figures/CLineSegment.h"
+#include "../task_1_figures/CPoint.h"
+#include "../task_1_figures/CRectangle.h"
+#include "../task_1_figures/CTriangle.h"
+#include "../task_1_figures/ICanvas.h"
+#include "../task_1_figures/ICanvasDrawable.h"
+#include "../task_1_figures/IShape.h"
+#include "../task_1_figures/ISolidShape.h"
+#include "../task_1_figures/SegmentLength.h"
