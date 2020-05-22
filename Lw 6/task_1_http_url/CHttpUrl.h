@@ -1,8 +1,9 @@
 #pragma once
 
+#include <iterator>
+#include <boost/regex.hpp>
 #include <sstream>
 #include <string>
-#include <boost/regex.hpp>
 
 enum class Protocol
 {
@@ -16,7 +17,6 @@ public:
 	CHttpUrl(std::string const& url);
 	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol = Protocol::HTTP);
 	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol, int port);
-
 
 	std::string GetUrl() const;
 	std::string GetDomain() const;
@@ -33,8 +33,9 @@ private:
 	unsigned short m_port;
 };
 
-Protocol StringToProtocol(std::string& inpString);
+Protocol ConvertStringToProtocol(std::string& inpString);
 unsigned short StringToUnsignedShort(std::string& port, Protocol protocol);
 unsigned short CheckPortRange(const int port);
 std::string ConvertProtocolToString(const Protocol protocol);
 std::string ConvertPortToString(unsigned short port);
+std::string TransformDocumentString(std::string const& document);

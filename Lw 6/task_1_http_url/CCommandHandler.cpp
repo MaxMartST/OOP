@@ -28,26 +28,28 @@ bool CCommandHandler::HandleCommand()
 			throw invalid_argument("ERROR: Empty input!\n");
 		}
 
-		boost::split(argsUrl, inputUrl, boost::is_any_of(" "));
-		unique_ptr<CHttpUrl> lineSegment;
+		argsUrl = ConvertStringToVector(inputUrl);
 
 		if (argsUrl.size() == 1)
 		{
-			lineSegment = make_unique<CHttpUrl>(argsUrl[0]);
-			m_output << "URL: " << lineSegment->GetUrl() << endl;
+			CHttpUrl url(argsUrl[0]);
+			m_output << "URL: " << url.GetUrl() << endl;
 		}
 
-		//if (argsUrl.size() == 2)
-		//{
-		//}
+		if (argsUrl.size() == 3)
+		{
+			Protocol protocol = ConvertStringToProtocol(argsUrl[2]);
+			CHttpUrl url(argsUrl[0], argsUrl[1], protocol);
+			m_output << "URL: " << url.GetUrl() << endl;
+		}
 
-		//if (argsUrl.size() == 3)
-		//{
-		//}
-
-		//if (argsUrl.size() == 4)
-		//{
-		//}
+		if (argsUrl.size() == 4)
+		{
+			Protocol protocol = ConvertStringToProtocol(argsUrl[2]);
+			int port = static_cast<int>(strtoul(argsUrl[3].c_str(), NULL, 10));
+			CHttpUrl url(argsUrl[0], argsUrl[1], protocol, port);
+			m_output << "URL: " << url.GetUrl() << endl;
+		}
 	}
 	catch (invalid_argument const& ia)
 	{
@@ -80,4 +82,16 @@ string RemoveExtraSpacesInLine(string stringToTrim)
 	}
 
 	return stringToTrim;
+}
+
+vector<string> ConvertStringToVector(string inputStr)
+{
+	vector<string> argsUrl;
+
+	if (!inputStr.empty())
+	{
+		boost::split(argsUrl, inputStr, boost::is_any_of(" "));
+	}
+	
+	return argsUrl;
 }

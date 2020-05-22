@@ -19,3 +19,4 @@ private:
 };
 
 std::string RemoveExtraSpacesInLine(std::string stringToTrim);
+std::vector<std::string> ConvertStringToVector(std::string inputStr);

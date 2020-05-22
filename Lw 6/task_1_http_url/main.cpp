@@ -11,9 +11,9 @@ int main()
 	while (!cin.eof() && !cin.fail())
 	{
 		cout << "> ";
-		if (ch.HandleCommand())
+		if (!ch.HandleCommand())
 		{
-			break;
+			return 1;
 		}
 	}
 

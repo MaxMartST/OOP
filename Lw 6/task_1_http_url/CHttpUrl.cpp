@@ -19,7 +19,7 @@ CHttpUrl::CHttpUrl(string const& url)
 		m_document = string(what[4]);
 		port = string(what[3]);
 
-		m_protocol = StringToProtocol(protocol);
+		m_protocol = ConvertStringToProtocol(protocol);
 		m_port = StringToUnsignedShort(port, m_protocol);
 	}
 	else
@@ -28,31 +28,45 @@ CHttpUrl::CHttpUrl(string const& url)
 	}
 }
 
-//CHttpUrl::CHttpUrl(string const& domain, string const& document, Protocol protocol = Protocol::HTTP)
-//{}
-//
-//CHttpUrl::CHttpUrl(string const& domain, string const& document, Protocol protocol, int port)
-//{}
-
-Protocol StringToProtocol(string& inpString)
+CHttpUrl::CHttpUrl(string const& domain, string const& document, Protocol protocol)
+	: m_protocol(protocol)
 {
-	transform(inpString.begin(), inpString.end(), inpString.begin(), ::tolower);
-	Protocol protocol;
-
-	if (inpString == "https")
+	if (domain.empty() || document.empty())
 	{
-		protocol = Protocol::HTTPS;
+		throw CUrlParsingError("ERROR: wrong url! URL must consist of [domain], [/documen], [protocol]\n");
 	}
-	else if (inpString == "http")
+	m_document = TransformDocumentString(document);
+	m_domain = domain;
+
+	if (protocol == Protocol::HTTPS)
 	{
-		protocol = Protocol::HTTP;
+		m_port = 443;
 	}
 	else
 	{
-		throw CUrlParsingError("ERROR: wrong protocol value! Use http or https protocol\n");
+		m_port = 80;
+	}
+}
+
+CHttpUrl::CHttpUrl(string const& domain, string const& document, Protocol protocol, int port)
+	: m_protocol(protocol)
+{
+	if (domain.empty() || document.empty())
+	{
+		throw CUrlParsingError("ERROR: wrong url! URL must consist of [domain], [/documen], [protocol]\n");
 	}
 
-	return protocol;
+	m_port = CheckPortRange(port);
+	m_document = TransformDocumentString(document);
+	m_domain = domain;
+}
+
+string TransformDocumentString(std::string const& document)
+{
+	string::const_iterator it = document.begin();
+	string transform;
+
+	return (*it != '/') ? transform = '/' + document : transform = document;
 }
 
 unsigned short StringToUnsignedShort(string& port, Protocol protocol)
@@ -66,7 +80,6 @@ unsigned short StringToUnsignedShort(string& port, Protocol protocol)
 		try
 		{
 			int p = static_cast<int>(strtoul(port.c_str(), NULL, 10));
-
 			return CheckPortRange(p);
 		}
 		catch (CUrlParsingError error)
@@ -80,7 +93,7 @@ unsigned short CheckPortRange(const int port)
 {
 	if (port < 1 || port > USHRT_MAX)
 	{
-		throw CUrlParsingError("ERROR: wrong port\nPort must be in the range of 1 to 65535\n");
+		throw CUrlParsingError("ERROR: wrong port! Port must be in the range of 1 to 65535\n");
 	}
 
 	return (unsigned short)port;
@@ -121,6 +134,27 @@ string CHttpUrl::GetUrl() const
 	AppendProperties(strm);
 
 	return strm.str();
+}
+
+Protocol ConvertStringToProtocol(string& inpString)
+{
+	transform(inpString.begin(), inpString.end(), inpString.begin(), ::tolower);
+	Protocol protocol;
+
+	if (inpString == "https" || inpString == "https://")
+	{
+		protocol = Protocol::HTTPS;
+	}
+	else if (inpString == "http" || inpString == "http://")
+	{
+		protocol = Protocol::HTTP;
+	}
+	else
+	{
+		throw CUrlParsingError("ERROR: wrong protocol value! Use http or https protocol\n");
+	}
+
+	return protocol;
 }
 
 string ConvertProtocolToString(const Protocol protocol)
