@@ -8,24 +8,23 @@ using namespace std;
 
 CHttpUrl::CHttpUrl(string const& url)
 {
-	regex ex("([\\w]*)://([^/ :]+)(:([0-9]{1,5}))?(/[\\S]*)?");
+	regex ex("([\\w]*)://([^/ :]+):?([^/ ]*)(/?[^ #?]*)\\x3f?([^ #]*)#?([^ ]*)");
 	cmatch what;
 	string protocol, domain, port;
 
 	if (regex_match(url.c_str(), what, ex))
 	{
 		protocol = string(what[1]);
-		domain = string(what[2]);
-		m_document = string(what[5]);
-		port = string(what[4]);
+		m_domain = string(what[2]);
+		m_document = string(what[4]);
+		port = string(what[3]);
 
 		m_protocol = StringToProtocol(protocol);
-		m_domain = !domain.empty() ? domain : throw CUrlParsingError("ERROR: wrong url\nURL must consist of protocol://domain:port/documen\n");
 		m_port = StringToUnsignedShort(port, m_protocol);
 	}
 	else
 	{
-		throw CUrlParsingError("ERROR: wrong url\nURL must consist of protocol://domain:port/documen\n");
+		throw CUrlParsingError("ERROR: wrong url! URL must consist of protocol://domain:port/documen\n");
 	}
 }
 
@@ -50,7 +49,7 @@ Protocol StringToProtocol(string& inpString)
 	}
 	else
 	{
-		throw CUrlParsingError("ERROR: wrong protocol value: use http or https protocol\n");
+		throw CUrlParsingError("ERROR: wrong protocol value! Use http or https protocol\n");
 	}
 
 	return protocol;

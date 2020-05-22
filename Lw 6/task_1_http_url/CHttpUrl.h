@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <string>
+#include <boost/regex.hpp>
 
 enum class Protocol
 {

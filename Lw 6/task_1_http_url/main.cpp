@@ -10,18 +10,12 @@ int main()
 
 	while (!cin.eof() && !cin.fail())
 	{
-		try
+		cout << "> ";
+		if (ch.HandleCommand())
 		{
-			cout << "> ";
-			ch.HandleCommand();
-		}
-		catch (invalid_argument const& ia)
-		{
-			cout << ia.what() << endl;
+			break;
 		}
 	}
-
-	//ch.PrintUrlHistory();
 
 	return 0;
 }
