@@ -25,24 +25,12 @@ void CVector3D::Normalize()
 
 CVector3D const CVector3D::operator+(CVector3D const& vector3d) const
 {
-	double x, y, z;
-
-	x = round((m_x + vector3d.m_x) * 10) / 10;
-	y = round((m_y + vector3d.m_y) * 10) / 10;
-	z = round((m_z + vector3d.m_z) * 10) / 10;
-
-	return CVector3D(x, y, z);
+	return CVector3D(m_x + vector3d.m_x, m_y + vector3d.m_y, m_z + vector3d.m_z);
 }
 
 CVector3D const CVector3D::operator-(CVector3D const& vector3d) const
 {
-	double x, y, z;
-
-	x = round((m_x - vector3d.m_x) * 10) / 10;
-	y = round((m_y - vector3d.m_y) * 10) / 10;
-	z = round((m_z - vector3d.m_z) * 10) / 10;
-
-	return CVector3D(x, y, z);
+	return CVector3D(m_x - vector3d.m_x, m_y - vector3d.m_y, m_z - vector3d.m_z);
 }
 
 CVector3D const CVector3D::operator*(double scalar) const
@@ -158,10 +146,6 @@ CVector3D const CrossProduct(CVector3D const& vector3d1, CVector3D const& vector
 	double x = GetVectorValue(vector3d1.m_y, vector3d2.m_z, vector3d1.m_z, vector3d2.m_y);
 	double y = GetVectorValue(vector3d1.m_z, vector3d2.m_x, vector3d1.m_x, vector3d2.m_z);
 	double z = GetVectorValue(vector3d1.m_x, vector3d2.m_y, vector3d1.m_y, vector3d2.m_x);
-	
-	x = round(x * 100) / 100;
-	y = round(y * 100) / 100;
-	z = round(z * 100) / 100;
 
 	return CVector3D(x, y, z);
 }

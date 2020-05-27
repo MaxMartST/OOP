@@ -76,9 +76,9 @@ TEST_CASE("Implementation of vector operators")
 
 			THEN("The result is the sum of the vectors")
 			{
-				REQUIRE(result.m_x == 7.7);
-				REQUIRE(result.m_y == 8.8);
-				REQUIRE(result.m_z == 9.9);
+				REQUIRE(IsEqual(result.m_x, 7.7));
+				REQUIRE(IsEqual(result.m_y, 8.8));
+				REQUIRE(IsEqual(result.m_z, 9.9));
 			}
 		}
 
@@ -88,9 +88,9 @@ TEST_CASE("Implementation of vector operators")
 
 			THEN("The result is the difference of vectors")
 			{
-				REQUIRE(result.m_x == -1.3);
-				REQUIRE(result.m_y == -4.6);
-				REQUIRE(result.m_z == -7.9);
+				REQUIRE(IsEqual(result.m_x, -1.3));
+				REQUIRE(IsEqual(result.m_y, -4.6));
+				REQUIRE(IsEqual(result.m_z, -7.9));
 			}
 		}
 
@@ -131,6 +131,11 @@ TEST_CASE("Implementation of vector operators")
 
 			(result /= 3) *= 2;
 			REQUIRE(result == CVector3D(2, 4, 6));
+
+			result = vector1 * 1.5;
+			REQUIRE(IsEqual(result.m_x, 4.8));
+			REQUIRE(IsEqual(result.m_y, 3.15));
+			REQUIRE(IsEqual(result.m_z, 1.5));
 		}
 
 		WHEN("Vector comparison")
