@@ -2,156 +2,202 @@
 #include "../../catch2/catch.hpp"
 
 #include "../task_1.2/CVector3D.h"
+#include "../task_1.2/CompareTwoDouble.h"
 #include "../task_1.2/pch.h"
 
 using namespace std;
 
 TEST_CASE("Implementation of vector operators")
 {
-	GIVEN("Two vectors 3D and scalar")
+	GIVEN("3D initialized vectors available")
 	{
-		CVector3D vector1(6, 9, 27);
-		CVector3D vector2(28, 34, 75);
-		CVector3D vector3;
+		CVector3D vector1(3.2, 2.1, 1);
+		CVector3D vector2(4.5, 6.7, 8.9);
+		CVector3D result;
 
-		double scalar = 2.6;
-
-		WHEN("Sum and subtraction of vectors")
+		WHEN("Normalization of a vector using a method")
 		{
-			THEN("Get the total sum vector")
+			vector1.Normalize();
+
+			THEN("This 3d vector is normalized")
 			{
-				CVector3D vector4 = vector1 + vector3;
-				REQUIRE(vector4.m_x == 6);
-				REQUIRE(vector4.m_y == 9);
-				REQUIRE(vector4.m_z == 27);
-
-				vector3 = vector1 + vector2;
-				REQUIRE(vector3.m_x == 34);
-				REQUIRE(vector3.m_y == 43);
-				REQUIRE(vector3.m_z == 102);
-
-				vector1 += vector2;
-				REQUIRE(vector1.m_x == 34);
-				REQUIRE(vector1.m_y == 43);
-				REQUIRE(vector1.m_z == 102);
+				REQUIRE(IsEqual(vector1.m_x, 0.80889622266489380));
+				REQUIRE(IsEqual(vector1.m_y, 0.53083814612383662));
+				REQUIRE(IsEqual(vector1.m_z, 0.25278006958277932));
 			}
 
-			AND_THEN("Get the total difference vector")
+			AND_THEN("Vector normalization")
 			{
-				CVector3D vector4 = vector3 - vector1;
-				REQUIRE(vector4.m_x == -6);
-				REQUIRE(vector4.m_y == -9);
-				REQUIRE(vector4.m_z == -27);
-
-				vector1 -= vector2;
-				REQUIRE(vector1.m_x == -22);
-				REQUIRE(vector1.m_y == -25);
-				REQUIRE(vector1.m_z == -48);
+				CVector3D vector3(0, 5, 0);
+				vector3.Normalize();
+				REQUIRE(vector3 == CVector3D(0, 1, 0));
 			}
 		}
 
-		AND_WHEN("Multiplying and dividing a scalar by a vector")
+		AND_WHEN("Normalizing a vector with a function")
 		{
-			THEN("Multiplication result")
+			result = Normalize(vector1);
+
+			THEN("This 3d vector is normalized")
 			{
-				CVector3D vector4 = vector1 * scalar;
-				REQUIRE(vector4.m_x == Approx(15.6).epsilon(0.001));
-				REQUIRE(vector4.m_y == Approx(23.4).epsilon(0.001));
-				REQUIRE(vector4.m_z == Approx(70.2).epsilon(0.001));
-
-				vector4 = scalar * vector2;
-				REQUIRE(vector4.m_x == Approx(72.8).epsilon(0.001));
-				REQUIRE(vector4.m_y == Approx(88.4).epsilon(0.001));
-				REQUIRE(vector4.m_z == Approx(195).epsilon(0.001));
-
-				vector2 *= scalar;
-				REQUIRE(vector2.m_x == Approx(72.8).epsilon(0.001));
-				REQUIRE(vector2.m_y == Approx(88.4).epsilon(0.001));
-				REQUIRE(vector2.m_z == Approx(195).epsilon(0.001));
-			}
-
-			AND_THEN("Division result")
-			{
-				CVector3D vector4 = vector1 / scalar;
-				REQUIRE(vector4.m_x == Approx(2.3076923077).epsilon(0.001));
-				REQUIRE(vector4.m_y == Approx(3.4615384615).epsilon(0.001));
-				REQUIRE(vector4.m_z == Approx(10.3846153846).epsilon(0.001));
-
-				vector2 /= scalar;
-				REQUIRE(vector2.m_x == Approx(10.7692300769).epsilon(0.001));
-				REQUIRE(vector2.m_y == Approx(13.0769230769).epsilon(0.001));
-				REQUIRE(vector2.m_z == Approx(28.8461538461).epsilon(0.001));
-
-				scalar = 0;
-				vector4 = vector1 / scalar;
-				REQUIRE(vector4.m_x == 6);
-				REQUIRE(vector4.m_y == 9);
-				REQUIRE(vector4.m_z == 27);
+				REQUIRE(IsEqual(result.m_x, 0.80889622266489380));
+				REQUIRE(IsEqual(result.m_y, 0.53083814612383662));
+				REQUIRE(IsEqual(result.m_z, 0.25278006958277932));
 			}
 		}
 
-		AND_WHEN("Unary plus and minus")
+		WHEN("Use unary minus")
 		{
-			CVector3D vector4 = -vector1;
-			REQUIRE(vector4.m_x == -6);
-			REQUIRE(vector4.m_y == -9);
-			REQUIRE(vector4.m_z == -27);
-		}
+			result = -vector1;
 
-		AND_WHEN("Execute an output statement")
-		{
-			THEN("Output vector coordinates to the output stream")
+			THEN("Return a vector with the opposite direction")
 			{
-				stringstream output;
-
-				output << vector1;
-				REQUIRE(output.str() == "6 9 27\n");
+				REQUIRE(result.m_x == -3.2);
+				REQUIRE(result.m_y == -2.1);
+				REQUIRE(result.m_z == -1);
 			}
 		}
 
-		AND_WHEN("Execute input statement")
+		AND_WHEN("Use unary plus")
 		{
-			THEN("Created vector with specified coordinates")
-			{
-				stringstream input;
-				input << "27.1 5 88.6";
-				input >> vector3;
+			result = +vector2;
 
-				REQUIRE(vector3.m_x == 27.1);
-				REQUIRE(vector3.m_y == 5);
-				REQUIRE(vector3.m_z == 88.6);
+			THEN("Return a vector with the opposite direction")
+			{
+				REQUIRE(result.m_x == 4.5);
+				REQUIRE(result.m_y == 6.7);
+				REQUIRE(result.m_z == 8.9);
 			}
 		}
 
-		AND_WHEN("Find the result of the scalar product of two three-dimensional vectors")
+		WHEN("Use binary plus")
 		{
-			THEN("Get scalar product")
+			result = vector1 + vector2;
+
+			THEN("The result is the sum of the vectors")
 			{
-				REQUIRE(DotProduct(vector1, vector2) == 2499);
+				REQUIRE(result.m_x == 7.7);
+				REQUIRE(result.m_y == 8.8);
+				REQUIRE(result.m_z == 9.9);
 			}
 		}
 
-		AND_WHEN("Required to find the vector product of two three-dimensional vectors")
+		AND_WHEN("Use binary minus")
 		{
-			THEN("Get the vector product of two three-dimensional vectors")
-			{
-				CVector3D resultVector = CrossProduct(vector1, vector2);
+			result = vector1 - vector2;
 
-				REQUIRE(resultVector.m_x == -243);
-				REQUIRE(resultVector.m_y == 306);
-				REQUIRE(resultVector.m_z == -48);
+			THEN("The result is the difference of vectors")
+			{
+				REQUIRE(result.m_x == -1.3);
+				REQUIRE(result.m_y == -4.6);
+				REQUIRE(result.m_z == -7.9);
 			}
 		}
 
-		AND_WHEN("Search for a unit vector")
+		WHEN("Increase vector length by second vector length")
 		{
-			THEN("Get unit vector")
+			THEN("Increased vector result")
 			{
-				CVector3D resultVector = Normalize(vector1);
+				CVector3D vector3(1, 0, 0);
+				CVector3D vector4(1, 0, 0);
 
-				REQUIRE(resultVector.m_x == Approx(0.9486832981).epsilon(0.001));
-				REQUIRE(resultVector.m_y == Approx(1.4230249471).epsilon(0.001));
-				REQUIRE(resultVector.m_z == Approx(4.2690748412).epsilon(0.001));
+				(vector3 += vector4) += vector4;
+				REQUIRE(vector3 == CVector3D(3, 0, 0));
+			}
+		}
+
+		AND_WHEN("Reduce vector length by second vector length")
+		{
+			THEN("Reduced vector result")
+			{
+				CVector3D vector3(5, 0, 0);
+				CVector3D vector4(2, 0, 0);
+
+				(vector3 -= vector4) -= vector4;
+				REQUIRE(vector3 == CVector3D(1, 0, 0));
+			}
+		}
+
+		WHEN("Operations with a scalar")
+		{
+			CVector3D vector3(2, 4, 6);
+
+			result = (vector3 * 2) / 4;
+			REQUIRE(result == CVector3D(1, 2, 3));
+			REQUIRE((3 * result) == CVector3D(3, 6, 9));
+
+			result *= 3;
+			REQUIRE(result == CVector3D(3, 6, 9));
+
+			(result /= 3) *= 2;
+			REQUIRE(result == CVector3D(2, 4, 6));
+		}
+
+		WHEN("Vector comparison")
+		{
+			CVector3D vector3(2, 4, 6);
+			CVector3D vector4(1, 2, 3);
+
+			REQUIRE(vector3 != vector4);
+
+			vector4 *= 2;
+			REQUIRE(vector3 == vector4);
+		}
+
+		WHEN("Correct data input into the vector")
+		{
+			stringstream input;
+			input << "9.1 8.2 7.3";
+			input >> result;
+
+			THEN("Get 3D vector")
+			{
+				REQUIRE(IsEqual(result.m_x, 9.1));
+				REQUIRE(IsEqual(result.m_y, 8.2));
+				REQUIRE(IsEqual(result.m_z, 7.3));
+			}
+		}
+
+		AND_WHEN("Incorrect data input into the vector")
+		{
+			stringstream input;
+			ios_base::iostate oldState = input.rdstate();
+			input << "9.1 8.2";
+			input >> result;
+
+			THEN("Change thread state to failbit")
+			{
+				REQUIRE_FALSE(oldState == input.rdstate());
+			}
+		}
+
+		AND_WHEN("3d vector content output")
+		{
+			stringstream output;
+			output << vector1;
+
+			REQUIRE(output.str() == "3.2 2.1 1\n");
+		}
+
+		WHEN("Computes the result of the scalar product of two 3d vectors")
+		{
+			double resultProd = DotProduct(vector1, vector2);
+
+			THEN("Get the scalar product of two 3d vectors")
+			{
+				REQUIRE(resultProd == 37.37);
+			}
+		}
+
+		WHEN("Calculate the result of a vector product of two 3d vectors")
+		{
+			result = CrossProduct(vector1, vector2);
+
+			THEN("Get the result of a vector product of two 3d vectors")
+			{
+				REQUIRE(IsEqual(result.m_x, 11.99));
+				REQUIRE(IsEqual(result.m_y, -23.98));
+				REQUIRE(IsEqual(result.m_z, 11.99));
 			}
 		}
 	}

@@ -123,10 +123,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CompareTwoDouble.cpp" />
     <ClCompile Include="CVector3D.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CompareTwoDouble.h" />
     <ClInclude Include="CVector3D.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

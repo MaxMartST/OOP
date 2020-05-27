@@ -21,12 +21,18 @@
     <ClCompile Include="..\task_1.2\CVector3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\task_1.2\CompareTwoDouble.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\task_1.2\CVector3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\task_1.2\pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\task_1.2\CompareTwoDouble.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

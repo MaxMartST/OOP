@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "CVector3D.h"
 
 using namespace std;
@@ -12,26 +11,38 @@ CVector3D::CVector3D(const double x, const double y, const double z)
 
 double CVector3D::GetLength() const
 {
-	return sqrt(pow(m_x, 2) + (m_y, 2) + (m_z, 2));
+	return sqrt(pow(m_x, 2) + pow(m_y, 2) + pow(m_z, 2));
 }
 
 void CVector3D::Normalize()
 {
-	double invLength = 1 / GetLength();
+	double invLength = GetLength();
 
-	m_x *= invLength;
-	m_y *= invLength;
-	m_z *= invLength;
+	m_x /= invLength;
+	m_y /= invLength;
+	m_z /= invLength;
 }
 
 CVector3D const CVector3D::operator+(CVector3D const& vector3d) const
 {
-	return CVector3D(m_x + vector3d.m_x, m_y + vector3d.m_y, m_z + vector3d.m_z);
+	double x, y, z;
+
+	x = round((m_x + vector3d.m_x) * 10) / 10;
+	y = round((m_y + vector3d.m_y) * 10) / 10;
+	z = round((m_z + vector3d.m_z) * 10) / 10;
+
+	return CVector3D(x, y, z);
 }
 
 CVector3D const CVector3D::operator-(CVector3D const& vector3d) const
 {
-	return CVector3D(m_x - vector3d.m_x, m_y - vector3d.m_y, m_z - vector3d.m_z);
+	double x, y, z;
+
+	x = round((m_x - vector3d.m_x) * 10) / 10;
+	y = round((m_y - vector3d.m_y) * 10) / 10;
+	z = round((m_z - vector3d.m_z) * 10) / 10;
+
+	return CVector3D(x, y, z);
 }
 
 CVector3D const CVector3D::operator*(double scalar) const
@@ -64,7 +75,7 @@ CVector3D const CVector3D::operator+() const
 	return *this;
 }
 
-CVector3D CVector3D::operator+=(CVector3D const& vector3d)
+CVector3D& CVector3D::operator+=(CVector3D const& vector3d)
 {
 	m_x += vector3d.m_x;
 	m_y += vector3d.m_y;
@@ -73,11 +84,29 @@ CVector3D CVector3D::operator+=(CVector3D const& vector3d)
 	return *this;
 }
 
-CVector3D CVector3D::operator-=(CVector3D const& vector3d)
+CVector3D& CVector3D::operator-=(CVector3D const& vector3d)
 {
 	m_x -= vector3d.m_x;
 	m_y -= vector3d.m_y;
 	m_z -= vector3d.m_z;
+
+	return *this;
+}
+
+CVector3D& CVector3D::operator*=(double scalar)
+{
+	m_x *= scalar;
+	m_y *= scalar;
+	m_z *= scalar;
+
+	return *this;
+}
+
+CVector3D& CVector3D::operator/=(double scalar)
+{
+	m_x /= scalar;
+	m_y /= scalar;
+	m_z /= scalar;
 
 	return *this;
 }
@@ -90,24 +119,6 @@ bool CVector3D::operator==(CVector3D const& vector3d) const
 bool CVector3D::operator!=(CVector3D const& vector3d) const
 {
 	return !(*this == vector3d);
-}
-
-CVector3D CVector3D::operator*=(double scalar)
-{
-	m_x *= scalar;
-	m_y *= scalar;
-	m_z *= scalar;
-
-	return *this;
-}
-
-CVector3D CVector3D::operator/=(double scalar)
-{
-	m_x /= scalar;
-	m_y /= scalar;
-	m_z /= scalar;
-
-	return *this;
 }
 
 ostream& operator<<(ostream& stream, CVector3D const& vector3d)
@@ -137,12 +148,27 @@ double const DotProduct(CVector3D const& vector3d1, CVector3D const& vector3d2)
 	return vector3d1.m_x * vector3d2.m_x + vector3d1.m_y * vector3d2.m_y + vector3d1.m_z * vector3d2.m_z;
 }
 
+double const GetVectorValue(double arg1, double arg2, double arg3, double arg4)
+{
+	return (arg1 * arg2 - arg3 * arg4);
+}
+
 CVector3D const CrossProduct(CVector3D const& vector3d1, CVector3D const& vector3d2)
 {
-	return CVector3D(vector3d1.m_y * vector3d2.m_z - vector3d1.m_z * vector3d2.m_y, vector3d1.m_z * vector3d2.m_x - vector3d1.m_x * vector3d2.m_z, vector3d1.m_x * vector3d2.m_y - vector3d1.m_y * vector3d2.m_x);
+	double x = GetVectorValue(vector3d1.m_y, vector3d2.m_z, vector3d1.m_z, vector3d2.m_y);
+	double y = GetVectorValue(vector3d1.m_z, vector3d2.m_x, vector3d1.m_x, vector3d2.m_z);
+	double z = GetVectorValue(vector3d1.m_x, vector3d2.m_y, vector3d1.m_y, vector3d2.m_x);
+	
+	x = round(x * 100) / 100;
+	y = round(y * 100) / 100;
+	z = round(z * 100) / 100;
+
+	return CVector3D(x, y, z);
 }
 
 CVector3D Normalize(CVector3D const& vector3d)
 {
-	return CVector3D(vector3d.m_x / vector3d.GetLength(), vector3d.m_y / vector3d.GetLength(), vector3d.m_z / vector3d.GetLength());
+	double length = vector3d.GetLength();
+
+	return CVector3D(vector3d.m_x / length, vector3d.m_y / length, vector3d.m_z / length);
 }
