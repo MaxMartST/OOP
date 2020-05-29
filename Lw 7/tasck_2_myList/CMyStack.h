@@ -1,16 +1,28 @@
 #pragma once
+
 #include <cstddef>
+#include <memory>
 
 template <typename T>
 class CMyStack
 {
+	struct MyNode
+	{
+		MyNode(const T& value, const std::shared_ptr<MyNode>& next = nullptr)
+			: value(value)
+			, next(next){};
+
+		T value;
+		std::shared_ptr<MyNode> next;
+	};
+
 public:
 	CMyStack() = default;
-	
+
 	CMyStack(const CMyStack& other)
 	{
 		*this = other;
-	};
+	}
 
 	CMyStack(CMyStack&& other)
 		: m_top(other.m_top)
@@ -18,13 +30,13 @@ public:
 	{
 		other.m_top = nullptr;
 		other.m_size = 0;
-	};
+	}
 
 	void Push(const T& element)
 	{
-		m_top = std::make_shared<Node>(element, m_top);
+		m_top = std::make_shared<MyNode>(element, m_top);
 		++m_size;
-	};
+	}
 
 	void Pop()
 	{
@@ -35,12 +47,7 @@ public:
 
 		m_top = m_top->next;
 		--m_size;
-	};
-
-	bool IsEmpty() const
-	{
-		return !m_top;
-	};
+	}
 
 	T GetElement() const
 	{
@@ -48,12 +55,13 @@ public:
 		{
 			throw std::logic_error("Stack is empty");
 		}
-		return m_top->value;
-	};
 
-	std::size_t GetSize() const
+		return m_top->value;
+	}
+
+	bool IsEmpty() const
 	{
-		return m_size;
+		return !m_top;
 	}
 
 	void Clear()
@@ -62,7 +70,47 @@ public:
 		{
 			m_top = m_top->next;
 		}
-	};
+
+		m_size = 0;
+	}
+
+	std::size_t GetSize() const
+	{
+		return m_size;
+	}
+
+	CMyStack& operator=(const CMyStack& right)
+	{
+		if (std::addressof(right) != this && !right.IsEmpty())
+		{
+			std::shared_ptr<MyNode> tmp = right.m_top;
+			std::shared_ptr<MyNode> currentElement = std::make_shared<MyNode>(tmp->value);
+			m_top = currentElement;
+
+			tmp = tmp->next;
+			++m_size;
+
+			while (tmp != nullptr)
+			{
+				currentElement->next = std::make_shared<MyNode>(tmp->value);
+				currentElement = currentElement->next;
+
+				tmp = tmp->next;
+				++m_size;
+			}
+		}
+
+		return *this;
+	}
+
+	CMyStack& operator=(CMyStack&& right)
+	{
+		m_top = right.m_top;
+		right.m_top = nullptr;
+		right.m_size = 0;
+
+		return *this;
+	}
 
 	~CMyStack()
 	{
@@ -70,17 +118,6 @@ public:
 	};
 
 private:
-	struct MyNode
-	{
-		Node(const T& value, const std::shared_ptr<Node>& next = nullptr)
-			: value(value)
-			, next(next)
-		{};
-
-		T value;
-		std::shared_ptr<Node> next;
-	};
-
 	std::shared_ptr<MyNode> m_top = nullptr;
 	std::size_t m_size = 0;
 };
