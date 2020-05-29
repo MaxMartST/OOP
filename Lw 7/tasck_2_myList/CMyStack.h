@@ -106,6 +106,8 @@ public:
 	CMyStack& operator=(CMyStack&& right)
 	{
 		m_top = right.m_top;
+		m_size = right.m_size;
+
 		right.m_top = nullptr;
 		right.m_size = 0;
 

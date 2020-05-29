@@ -202,8 +202,8 @@ BOOST_AUTO_TEST_SUITE(testing_class_muStask)
 			stackOfString_2 = stackOfString;
 			stackOfString.Clear();
 
-			BOOST_CHECK_EQUAL(stackOfString_2.IsEmpty(), false);
 			BOOST_CHECK_EQUAL(stackOfString_2.GetSize(), 2);
+			BOOST_CHECK_EQUAL(stackOfString_2.IsEmpty(), false);
 			BOOST_REQUIRE_EQUAL(stackOfString_2.GetElement(), "asd");
 		}
 
@@ -224,11 +224,18 @@ BOOST_AUTO_TEST_SUITE(testing_class_muStask)
 
 		BOOST_AUTO_TEST_CASE(independent_copying_empty_stack)
 		{
-			CMyStack<std::string> stackOfString_2;
-			stackOfString_2 = CMyStack<std::string>();
+			stackOfString.Push("qwe");
+			stackOfString.Push("asd");
 
-			BOOST_CHECK_EQUAL(stackOfString_2.GetSize(), 0);
-			BOOST_CHECK(stackOfString_2.IsEmpty());
+			CMyStack<std::string> stackOfString_2;
+			stackOfString_2 = move(stackOfString);
+
+			BOOST_CHECK_EQUAL(stackOfString_2.GetSize(), 2);
+			BOOST_CHECK_EQUAL(stackOfString_2.IsEmpty(), false);
+			BOOST_CHECK_EQUAL(stackOfString_2.GetElement(), "asd");
+
+			BOOST_CHECK_EQUAL(stackOfString.GetSize(), 0);
+			BOOST_CHECK(stackOfString.IsEmpty());
 		}
 
 	BOOST_AUTO_TEST_SUITE_END()
