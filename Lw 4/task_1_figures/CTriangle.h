@@ -1,7 +1,9 @@
 #pragma once
-#include "pch.h"
 #include "CPoint.h"
 #include "ISolidShape.h"
+#include <string>
+#include <cstdint>
+#include <iostream>
 
 class CTriangle : public ISolidShape
 {
@@ -20,7 +22,7 @@ public:
 	CPoint GetVertex2() const;
 	CPoint GetVertex3() const;
 
-	void Draw(ICanvas& canvas);
+	void Draw(ICanvas& canvas) override;
 
 private:
 	void AppendProperties(std::ostream& strm) const override;

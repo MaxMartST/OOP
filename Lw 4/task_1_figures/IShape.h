@@ -13,7 +13,7 @@ public:
 	virtual std::string ToString() const = 0;
 	virtual uint32_t GetOutlineColor() const = 0;
 
-	virtual ~IShape() = default;
+	~IShape() = default;
 
 private:
 	virtual void AppendProperties(std::ostream& strm) const = 0;

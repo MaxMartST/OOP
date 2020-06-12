@@ -1,7 +1,10 @@
 #pragma once
-#include "pch.h"
 #include "CPoint.h"
 #include "IShape.h"
+#include <SFML/Graphics.hpp>
+#include <string>
+#include <cstdint>
+#include <iostream>
 
 class CLineSegment final : public IShape
 {

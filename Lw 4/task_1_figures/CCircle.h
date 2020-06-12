@@ -1,7 +1,9 @@
 #pragma once
-#include "pch.h"
 #include "CPoint.h"
 #include "ISolidShape.h"
+#include <cstdint>
+#include <iostream>
+#include <string>
 
 class CCircle : public ISolidShape
 {
@@ -18,7 +20,7 @@ public:
 	CPoint GetCenter() const;
 	std::string GetType() const;
 
-	void Draw(ICanvas& canvas);
+	void Draw(ICanvas& canvas) override;
 
 private:
 	void AppendProperties(std::ostream& strm) const override;

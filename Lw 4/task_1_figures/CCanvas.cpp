@@ -3,7 +3,7 @@
 using namespace std;
 using namespace sf;
 
-CCanvas::CCanvas(RenderWindow& window)
+CCanvas::CCanvas(RenderTarget& window)
 	: m_window(window)
 {
 }
@@ -24,7 +24,7 @@ void CCanvas::DrawLine(CPoint from, CPoint to, uint32_t lineColor)
 	line[1].color = ConvertColor(lineColor);
 
 	m_window.draw(line, 2, Lines);
-	m_drawingHistory.push_back("DrawLine");
+	//m_drawingHistory.push_back("DrawLine");
 }
 
 void CCanvas::FillPolygon(vector<CPoint> points, uint32_t fillColor)
@@ -40,7 +40,7 @@ void CCanvas::FillPolygon(vector<CPoint> points, uint32_t fillColor)
 	convexShape.setFillColor(ConvertColor(fillColor));
 
 	m_window.draw(convexShape);
-	m_drawingHistory.push_back("FillPolygon");
+	//m_drawingHistory.push_back("FillPolygon");
 }
 
 void CCanvas::DrawCircle(CPoint center, double radius, uint32_t lineColor)
@@ -53,7 +53,7 @@ void CCanvas::DrawCircle(CPoint center, double radius, uint32_t lineColor)
 	circle.move((float)center.GetX(), (float)m_window.getSize().y - (float)center.GetY());
 
 	m_window.draw(circle);
-	m_drawingHistory.push_back("DrawCircle");
+	//m_drawingHistory.push_back("DrawCircle");
 }
 
 void CCanvas::FillCircle(CPoint center, double radius, uint32_t fillColor)
@@ -65,10 +65,10 @@ void CCanvas::FillCircle(CPoint center, double radius, uint32_t fillColor)
 	circle.move((float)center.GetX(), (float)m_window.getSize().y - (float)center.GetY());
 
 	m_window.draw(circle);
-	m_drawingHistory.push_back("FillCircle");
+	//m_drawingHistory.push_back("FillCircle");
 }
 
-vector<string> CCanvas::GetDrawingHistory()
-{
-	return m_drawingHistory;
-}
+//vector<string> CCanvas::GetDrawingHistory()
+//{
+//	return m_drawingHistory;
+//}

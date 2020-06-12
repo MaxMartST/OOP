@@ -2,6 +2,7 @@
 #include "IShape.h"
 #include "ISolidShape.h"
 #include <boost/noncopyable.hpp>
+#include <SFML/Graphics.hpp>
 
 class CCommandHandler : boost::noncopyable
 {

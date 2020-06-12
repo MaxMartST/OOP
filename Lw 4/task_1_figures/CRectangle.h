@@ -1,7 +1,10 @@
 #pragma once
-#include "pch.h"
 #include "CPoint.h"
 #include "ISolidShape.h"
+#include <cstdint>
+#include <string>
+#include <iostream>
+#include <cstddef>
 
 class CRectangle : public ISolidShape
 {
@@ -21,7 +24,7 @@ public:
 	CPoint GetLeftTop() const;
 	CPoint GetRightBottom() const;
 
-	void Draw(ICanvas& canvas);
+	void Draw(ICanvas& canvas) override;
 
 private:
 	void AppendProperties(std::ostream& strm) const override;

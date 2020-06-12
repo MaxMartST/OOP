@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "CPoint.h"
 
 CPoint::CPoint(const double x, const double y)

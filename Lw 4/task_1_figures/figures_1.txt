@@ -1,4 +1,0 @@
-rectangle 60 100 40 40 ffff00 ffff00
-triangle 60 100 80 110 100 100 ff00000 ff00000
-circle 80 80 30 0000ff 0000ff
-lineSegment 80 110 80 50 008000

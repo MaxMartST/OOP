@@ -1,7 +1,5 @@
 #include "CErrorMessage.h"
 
-#include <iostream>
-
 using namespace std;
 
 string CErrorMessage::GetErrorMessage() const
