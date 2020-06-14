@@ -64,5 +64,17 @@ BOOST_AUTO_TEST_SUITE(rectangle_initialization_check)
 			BOOST_REQUIRE_EQUAL(rectangle.GetHeight(), height);
 		}
 
+		BOOST_AUTO_TEST_CASE(check_color_line_and_fill)
+		{
+			BOOST_REQUIRE_EQUAL(rectangle.GetOutlineColor(), lineColor);
+			BOOST_REQUIRE_EQUAL(rectangle.GetFillColor(), fillColor);
+		}
+
+		BOOST_AUTO_TEST_CASE(check_area_and_perimeter)
+		{
+			BOOST_REQUIRE_EQUAL(rectangle.GetArea(), width * height);
+			BOOST_REQUIRE_EQUAL(rectangle.GetPerimeter(), width * 2 + height * 2);
+		}
+
 	BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
