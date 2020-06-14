@@ -4,7 +4,6 @@
 #include "../task_1_figures/CRectangle.h"
 #include "../task_1_figures/CPoint.h"
 
-//rectangle 240 340 160 30 000000 fcd5b5
 struct Rectangle_
 {
 	const double x = 240;
@@ -74,6 +73,23 @@ BOOST_AUTO_TEST_SUITE(rectangle_initialization_check)
 		{
 			BOOST_REQUIRE_EQUAL(rectangle.GetArea(), width * height);
 			BOOST_REQUIRE_EQUAL(rectangle.GetPerimeter(), width * 2 + height * 2);
+		}
+
+		BOOST_AUTO_TEST_CASE(checking_figure_data_output)
+		{
+			std::stringstream out;
+			const double perimetr = width * 2 + height * 2;
+			const double area = width * height;
+
+			out << "\n\tRectangle:\n"
+				<< "\tleft top vertex = (" << std::to_string(x) << ", " << std::to_string(y) << ")"
+				<< "\n\twidth = " << std::to_string(width) << "\n\theight = " << std::to_string(height) << "\n"
+				<< "\tperimeter = " << std::to_string(perimetr) << "\n"
+				<< "\tarea = " << std::to_string(area) << "\n"
+				<< "\tline color = " << std::to_string(lineColor) << "\n"
+				<< "\tfill color = " << std::to_string(fillColor) << "\n";
+
+			BOOST_REQUIRE_EQUAL(rectangle.ToString(), out.str());
 		}
 
 	BOOST_AUTO_TEST_SUITE_END()

@@ -21,10 +21,10 @@ string CRectangle::ToString() const
 	AppendProperties(s);
 
 	s << setprecision(4)
-	  << "\tperimeter = " << GetPerimeter() << endl
-	  << "\tarea = " << GetArea() << endl
-	  << "\tline color = " << m_lineColor << endl
-	  << "\tfill color = " << m_fillColor << endl;
+	  << "\tperimeter = " << to_string(GetPerimeter()) << endl
+	  << "\tarea = " << to_string(GetArea()) << endl
+	  << "\tline color = " << to_string(m_lineColor) << endl
+	  << "\tfill color = " << to_string(m_fillColor) << endl;
 
 	return s.str();
 }
@@ -77,8 +77,9 @@ uint32_t CRectangle::GetFillColor() const
 
 void CRectangle::AppendProperties(ostream& s) const
 {
-	s << "\tleft top vertex = (" << m_leftTopVertex.GetX() << ", " << m_leftTopVertex.GetY()
-	  << ")" << "\n\twidth = " << m_width << "\n\theight = " << m_height << endl;
+	s << "\tleft top vertex = (" << to_string(m_leftTopVertex.GetX()) << ", " << to_string(m_leftTopVertex.GetY())
+	  << ")"
+	  << "\n\twidth = " << to_string(m_width) << "\n\theight = " << to_string(m_height) << "\n";
 }
 
 void CRectangle::Draw(ICanvas& canvas)
