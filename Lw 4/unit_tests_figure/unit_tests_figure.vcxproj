@@ -131,7 +131,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\task_1_figures\AdditionalFunctions.h" />
+    <ClInclude Include="..\task_1_figures\CCanvas.h" />
     <ClInclude Include="..\task_1_figures\CCircle.h" />
+    <ClInclude Include="..\task_1_figures\CCommandHandler.h" />
+    <ClInclude Include="..\task_1_figures\CErrorMessage.h" />
+    <ClInclude Include="..\task_1_figures\CheckArguments.h" />
     <ClInclude Include="..\task_1_figures\CLineSegment.h" />
     <ClInclude Include="..\task_1_figures\CPoint.h" />
     <ClInclude Include="..\task_1_figures\CRectangle.h" />
@@ -144,7 +149,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\task_1_figures\AdditionalFunctions.cpp" />
+    <ClCompile Include="..\task_1_figures\CCanvas.cpp" />
     <ClCompile Include="..\task_1_figures\CCircle.cpp" />
+    <ClCompile Include="..\task_1_figures\CCommandHandler.cpp" />
+    <ClCompile Include="..\task_1_figures\CErrorMessage.cpp" />
+    <ClCompile Include="..\task_1_figures\CheckArguments.cpp" />
     <ClCompile Include="..\task_1_figures\CLineSegment.cpp" />
     <ClCompile Include="..\task_1_figures\CPoint.cpp" />
     <ClCompile Include="..\task_1_figures\CRectangle.cpp" />
@@ -152,6 +162,7 @@
     <ClCompile Include="..\task_1_figures\SegmentLength.cpp" />
     <ClCompile Include="CircleTests.cpp" />
     <ClCompile Include="CMockedCanvas.cpp" />
+    <ClCompile Include="CommandHandlerTests.cpp" />
     <ClCompile Include="LineSegmentTests.cpp" />
     <ClCompile Include="PointTests.cpp" />
     <ClCompile Include="RectangleTests.cpp" />

@@ -42,7 +42,7 @@ bool CCommandHandler::HandleCommand()
 		catch (const exception& e)
 		{
 			m_output << e.what();
-			return true;
+			return false;
 		}
 		catch (const CErrorMessage& em)
 		{
