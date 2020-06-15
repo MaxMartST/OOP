@@ -3,6 +3,7 @@
 #define _USE_MATH_DEFINES
 #include "../task_1_figures/CRectangle.h"
 #include "../task_1_figures/CPoint.h"
+#include "CMockedCanvas.h"
 
 struct Rectangle_
 {
@@ -90,6 +91,20 @@ BOOST_AUTO_TEST_SUITE(rectangle_initialization_check)
 				<< "\tfill color = " << std::to_string(fillColor) << "\n";
 
 			BOOST_REQUIRE_EQUAL(rectangle.ToString(), out.str());
+		}
+
+		BOOST_AUTO_TEST_CASE(figure_drawing)
+		{
+			CMockedCanvas canvas;
+			rectangle.Draw(canvas);
+
+			std::vector<std::string> result = canvas.GetFigureElements();
+			BOOST_REQUIRE_EQUAL(result.size(), 5);
+			BOOST_REQUIRE_EQUAL(result.at(0), "FillPolygon");
+			BOOST_REQUIRE_EQUAL(result.at(1), "DrawLine");
+			BOOST_REQUIRE_EQUAL(result.at(2), "DrawLine");
+			BOOST_REQUIRE_EQUAL(result.at(3), "DrawLine");
+			BOOST_REQUIRE_EQUAL(result.at(4), "DrawLine");
 		}
 
 	BOOST_AUTO_TEST_SUITE_END()
