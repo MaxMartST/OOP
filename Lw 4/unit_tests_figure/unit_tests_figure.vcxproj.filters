@@ -39,6 +39,12 @@
     <ClInclude Include="CMockedCanvas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\task_1_figures\CTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\task_1_figures\SegmentLength.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +66,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CMockedCanvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\task_1_figures\CTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleTesets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\task_1_figures\SegmentLength.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
