@@ -3,16 +3,17 @@
 #define _USE_MATH_DEFINES
 #include "../task_1_figures/CPoint.h"
 #include "../task_1_figures/CTriangle.h"
+#include "../task_1_figures/SegmentLength.h"
 #include "CMockedCanvas.h"
 
 struct Triangle_
 {
-	const double x1 = 320;
-	const double y1 = 380;
-	const double x2 = 250;
-	const double y2 = 200;
-	const double x3 = 390;
-	const double y3 = 200;
+	const double x1 = 0;
+	const double y1 = 0;
+	const double x2 = 4;
+	const double y2 = 0;
+	const double x3 = 0;
+	const double y3 = 3;
 
 	const uint32_t lineColor = 0;
 	const uint32_t fillColor = 45296;
@@ -70,6 +71,73 @@ BOOST_AUTO_TEST_SUITE(triangle_initialization_check)
 		{
 			BOOST_REQUIRE_EQUAL(triangle.GetOutlineColor(), lineColor);
 			BOOST_REQUIRE_EQUAL(triangle.GetFillColor(), fillColor);
+		}
+
+		BOOST_AUTO_TEST_CASE(check_perimeter)
+		{
+			double edge1 = GetSegmentLength(point1, point2);
+			double edge2 = GetSegmentLength(point2, point3);
+			double edge3 = GetSegmentLength(point3, point1);
+
+			BOOST_REQUIRE_EQUAL(edge1, 4);
+			BOOST_REQUIRE_EQUAL(edge2, 5);
+			BOOST_REQUIRE_EQUAL(edge3, 3);
+
+			double perimeter = edge1 + edge2 + edge3;
+
+			BOOST_REQUIRE_EQUAL(perimeter, 12);
+			BOOST_REQUIRE_EQUAL(triangle.GetPerimeter(), perimeter);
+		}
+
+		BOOST_AUTO_TEST_CASE(check_area)
+		{
+			double edge1 = GetSegmentLength(point1, point2);
+			double edge2 = GetSegmentLength(point2, point3);
+			double edge3 = GetSegmentLength(point3, point1);
+
+			double perimeter = edge1 + edge2 + edge3;
+			double p = perimeter / 2;
+			BOOST_REQUIRE_EQUAL(p, 6);
+
+			double area = sqrt(p * (p - edge1) * (p - edge2) * (p - edge3));
+			BOOST_REQUIRE_EQUAL(area, 6);
+			BOOST_REQUIRE_EQUAL(triangle.GetArea(), area);
+		}
+
+		BOOST_AUTO_TEST_CASE(checking_figure_data_output)
+		{
+			std::stringstream out;
+			double edge1 = GetSegmentLength(point1, point2);
+			double edge2 = GetSegmentLength(point2, point3);
+			double edge3 = GetSegmentLength(point3, point1);
+
+			double perimeter = edge1 + edge2 + edge3;
+			double p = perimeter / 2;
+			double area = sqrt(p * (p - edge1) * (p - edge2) * (p - edge3));
+
+			out << "\n\tTriangle:\n"
+				<< "\tfirst vertex = (" << std::to_string(triangle.GetVertex1().GetX()) << ", " << std::to_string(triangle.GetVertex1().GetY())
+				<< ")\n\tsecond vertex = (" << std::to_string(triangle.GetVertex2().GetX()) << ", " << std::to_string(triangle.GetVertex2().GetY())
+				<< ")\n\tthird vertex = (" << std::to_string(triangle.GetVertex3().GetX()) << ", " << std::to_string(triangle.GetVertex3().GetY()) << ")\n"
+				<< "\tperimeter = " << std::to_string(perimeter) << "\n"
+				<< "\tarea = " << std::to_string(area) << "\n"
+				<< "\tline color = " << std::to_string(lineColor) << "\n"
+				<< "\tfill color = " << std::to_string(fillColor) << "\n";
+
+			BOOST_REQUIRE_EQUAL(triangle.ToString(), out.str());
+		}
+
+		BOOST_AUTO_TEST_CASE(figure_drawing)
+		{
+			CMockedCanvas canvas;
+			triangle.Draw(canvas);
+
+			std::vector<std::string> result = canvas.GetFigureElements();
+			BOOST_REQUIRE_EQUAL(result.size(), 4);
+			BOOST_REQUIRE_EQUAL(result.at(0), "FillPolygon");
+			BOOST_REQUIRE_EQUAL(result.at(1), "DrawLine");
+			BOOST_REQUIRE_EQUAL(result.at(2), "DrawLine");
+			BOOST_REQUIRE_EQUAL(result.at(3), "DrawLine");
 		}
 
 	BOOST_AUTO_TEST_SUITE_END()

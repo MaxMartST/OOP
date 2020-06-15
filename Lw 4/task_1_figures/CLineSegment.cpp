@@ -20,8 +20,8 @@ string CLineSegment::ToString() const
 	AppendProperties(s);
 
 	s << setprecision(3)
-	  << "\tlength = " << GetPerimeter() << endl
-	  << "\tcolor = " << m_color << endl;
+	  << "\tlength = " << to_string(GetPerimeter()) << "\n"
+	  << "\tcolor = " << to_string(m_color) << "\n";
 
 	return s.str();
 }
@@ -58,8 +58,8 @@ uint32_t CLineSegment::GetOutlineColor() const
 
 void CLineSegment::AppendProperties(ostream& s) const
 {
-	s << "\tbegins = (" << m_startPoint.GetX() << ", " << m_startPoint.GetY()
-	  << ")\n\tends = (" << m_endPoint.GetX() << ", " << m_endPoint.GetY() << ")" << endl;
+	s << "\tbegins = (" << to_string(m_startPoint.GetX()) << ", " << to_string(m_startPoint.GetY())
+	  << ")\n\tends = (" << to_string(m_endPoint.GetX()) << ", " << to_string(m_endPoint.GetY()) << ")\n";
 }
 
 void CLineSegment::Draw(ICanvas& canvas)

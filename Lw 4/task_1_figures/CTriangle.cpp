@@ -22,10 +22,10 @@ string CTriangle::ToString() const
 	AppendProperties(s);
 
 	s << setprecision(4)
-	  << "\tperimeter = " << GetPerimeter() << endl
-	  << "\tarea = " << GetArea() << endl
-	  << "\tline color = " << m_lineColor << endl
-	  << "\tfill color = " << m_fillColor << endl;
+	  << "\tperimeter = " << to_string(GetPerimeter()) << "\n"
+	  << "\tarea = " << to_string(GetArea()) << "\n"
+	  << "\tline color = " << to_string(m_lineColor) << "\n"
+	  << "\tfill color = " << to_string(m_fillColor) << "\n";
 
 	return s.str();
 }
@@ -76,9 +76,9 @@ uint32_t CTriangle::GetFillColor() const
 
 void CTriangle::AppendProperties(ostream& s) const
 {
-	s << "\tfirst vertex = (" << m_vertex1.GetX() << ", " << m_vertex1.GetY()
-	  << ")\n\tsecond vertex = (" << m_vertex2.GetX() << ", " << m_vertex2.GetY()
-	  << ")\n\tthird vertex = (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")" << endl;
+	s << "\tfirst vertex = (" << to_string(m_vertex1.GetX()) << ", " << to_string(m_vertex1.GetY())
+	  << ")\n\tsecond vertex = (" << to_string(m_vertex2.GetX()) << ", " << to_string(m_vertex2.GetY())
+	  << ")\n\tthird vertex = (" << to_string(m_vertex3.GetX()) << ", " << to_string(m_vertex3.GetY()) << ")\n";
 }
 
 void CTriangle::Draw(ICanvas& canvas)

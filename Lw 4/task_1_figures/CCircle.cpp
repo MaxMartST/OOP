@@ -15,12 +15,14 @@ string CCircle::ToString() const
 {
 	ostringstream s;
 	s << GetType() << ":" << endl;
+
 	AppendProperties(s);
+
 	s << setprecision(4)
-	  << "\tperimeter = " << GetPerimeter() << endl
-	  << "\tarea = " << GetArea() << endl
-	  << "\tline color = " << m_lineColor << endl
-	  << "\tfill color = " << m_fillColor << endl;
+	  << "\tperimeter = " << to_string(GetPerimeter()) << "\n"
+	  << "\tarea = " << to_string(GetArea()) << "\n"
+	  << "\tline color = " << to_string(m_lineColor) << "\n"
+	  << "\tfill color = " << to_string(m_fillColor) << "\n";
 
 	return s.str();
 }
@@ -62,8 +64,8 @@ uint32_t CCircle::GetFillColor() const
 
 void CCircle::AppendProperties(ostream& s) const
 {
-	s << "\tcenter = (" << m_center.GetX() << ", " << m_center.GetY()
-	  << ")\n\tradius = " << m_radius << endl;
+	s << "\tcenter = (" << to_string(m_center.GetX()) << ", " << to_string(m_center.GetY())
+	  << ")\n\tradius = " << to_string(m_radius) << "\n";
 }
 
 void CCircle::Draw(ICanvas& canvas)

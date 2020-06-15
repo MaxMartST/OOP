@@ -45,6 +45,12 @@
     <ClInclude Include="..\task_1_figures\SegmentLength.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\task_1_figures\CLineSegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\task_1_figures\CCircle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -75,6 +81,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\task_1_figures\SegmentLength.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\task_1_figures\CLineSegment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\task_1_figures\CCircle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineSegmentTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
