@@ -16,7 +16,7 @@ class CHttpUrl
 public:
 	CHttpUrl(std::string const& url);
 	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol = Protocol::HTTP);
-	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol, int port);
+	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol, unsigned short port);
 
 	std::string GetUrl() const;
 	std::string GetDomain() const;
@@ -33,7 +33,9 @@ private:
 	unsigned short m_port;
 };
 
+
 Protocol ConvertStringToProtocol(std::string& inpString);
+unsigned short ConvertStringToPort(std::string& portString);
 unsigned short StringToUnsignedShort(std::string& port, Protocol protocol);
 unsigned short CheckPortRange(const int port);
 std::string ConvertProtocolToString(const Protocol protocol);

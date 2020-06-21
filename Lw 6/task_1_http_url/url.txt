@@ -1,1 +1,3 @@
 http://www.example.com:80/path/to/myfile.html
+www.example.com path/to/myfile.html https 443
+www.example.com path/to/myfile.html http

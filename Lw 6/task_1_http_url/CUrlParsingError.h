@@ -1,6 +1,5 @@
 #pragma once
-
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 class CUrlParsingError : public std::invalid_argument

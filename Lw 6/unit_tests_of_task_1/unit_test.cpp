@@ -40,11 +40,23 @@ BOOST_AUTO_TEST_SUITE(test_validity_of_url_requests)
 		BOOST_CHECK_EQUAL("ERROR: Empty input!\n", output.str());
 	}
 
-	BOOST_AUTO_TEST_CASE(parsing_correct_url)
+	BOOST_AUTO_TEST_CASE(parsing_correct_url_with_a_min_range_1)
 	{
-		CHttpUrl url("http://www.example.com:80/path/to/myfile.html");
+		CHttpUrl url("http://www.example.com:1/path/to/myfile.html");
 		string protocol = (ConvertProtocolToString(url.GetProtocol()));
-		unsigned short port = 80;
+		unsigned short port = 1;
+
+		BOOST_CHECK_EQUAL(protocol, "http");
+		BOOST_CHECK_EQUAL(url.GetDomain(), "www.example.com");
+		BOOST_CHECK_EQUAL(url.GetPort(), port);
+		BOOST_CHECK_EQUAL(url.GetDocument(), "/path/to/myfile.html");
+	}
+
+	BOOST_AUTO_TEST_CASE(parsing_correct_url_with_a_max_range_65535)
+	{
+		CHttpUrl url("http://www.example.com:65535/path/to/myfile.html");
+		string protocol = (ConvertProtocolToString(url.GetProtocol()));
+		unsigned short port = 65535;
 
 		BOOST_CHECK_EQUAL(protocol, "http");
 		BOOST_CHECK_EQUAL(url.GetDomain(), "www.example.com");

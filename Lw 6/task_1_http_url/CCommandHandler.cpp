@@ -46,7 +46,8 @@ bool CCommandHandler::HandleCommand()
 		if (argsUrl.size() == 4)
 		{
 			Protocol protocol = ConvertStringToProtocol(argsUrl[2]);
-			int port = static_cast<int>(strtoul(argsUrl[3].c_str(), NULL, 10));
+			unsigned short port = ConvertStringToPort(argsUrl[3]);
+			//int port = static_cast<int>(strtoul(argsUrl[3].c_str(), NULL, 10));
 			CHttpUrl url(argsUrl[0], argsUrl[1], protocol, port);
 			m_output << "URL: " << url.GetUrl() << endl;
 		}

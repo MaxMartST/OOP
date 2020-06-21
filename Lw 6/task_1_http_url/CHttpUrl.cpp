@@ -48,15 +48,16 @@ CHttpUrl::CHttpUrl(string const& domain, string const& document, Protocol protoc
 	}
 }
 
-CHttpUrl::CHttpUrl(string const& domain, string const& document, Protocol protocol, int port)
+CHttpUrl::CHttpUrl(string const& domain, string const& document, Protocol protocol, unsigned short port)
 	: m_protocol(protocol)
+	, m_port(port)
 {
 	if (domain.empty() || document.empty())
 	{
 		throw CUrlParsingError("ERROR: wrong url! URL must consist of [domain], [/documen], [protocol]\n");
 	}
 
-	m_port = CheckPortRange(port);
+	//m_port = CheckPortRange(port);
 	m_document = TransformDocumentString(document);
 	m_domain = domain;
 }
@@ -79,14 +80,19 @@ unsigned short StringToUnsignedShort(string& port, Protocol protocol)
 	{
 		try
 		{
-			int p = static_cast<int>(strtoul(port.c_str(), NULL, 10));
-			return CheckPortRange(p);
+			return ConvertStringToPort(port);
 		}
-		catch (CUrlParsingError error)
+		catch (CUrlParsingError const&)
 		{
-			throw error;
+			throw;
 		}
 	}
+}
+
+unsigned short ConvertStringToPort(std::string& portString)
+{
+	int p = static_cast<int>(strtoul(portString.c_str(), NULL, 10));
+	return CheckPortRange(p);
 }
 
 unsigned short CheckPortRange(const int port)
