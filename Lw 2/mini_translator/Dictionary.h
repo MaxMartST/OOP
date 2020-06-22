@@ -1,5 +1,13 @@
 #pragma once
-#include "pch.h"
+#include <map>
+#include <string>
+#include <vector>
+
+enum class Status
+{
+	NEW,
+	OLD
+};
 
 struct Word
 {

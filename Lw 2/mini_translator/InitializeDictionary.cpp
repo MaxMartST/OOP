@@ -1,4 +1,6 @@
 #include "InitializeDictionary.h"
+#include "pch.h"
+#include <regex>
 
 using namespace std;
 
@@ -57,8 +59,31 @@ void DictionaryInitialization(Dictionary& dictionary)
 	ifstream input(dictionary.dictionaryFileName, ios::in);
 	if (!input.is_open())
 	{
-		cout << "Failed to open file: " << dictionary.dictionaryFileName << endl;
+		//cout << "Failed to open file: " << dictionary.dictionaryFileName << endl;
+		//указанный файл не найден. Значит проверить корректность указанного
+		if (CheckFileName(dictionary.dictionaryFileName))
+		{
+			cout << "correct file name" << endl;
+		}
+		else
+		{
+			cout << "invalid file name" << endl;
+		}
 	}
 
 	ReadDictionaryFromStream(dictionary, input);
+}
+
+bool CheckFileName(const std::string& nameFile)
+{
+	const std::regex regular("([\\w-]*[^\+\|\?\\\"><]+)\\.txt");
+	std::cmatch base_match;
+
+	if (std::regex_match(nameFile.c_str(), base_match, regular))
+	{
+		return true;
+	}
+
+	return false;
+	//return (std::regex_match(nameFile, base_match, regular));
 }

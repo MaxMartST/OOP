@@ -1,6 +1,6 @@
 #pragma once
-#include "pch.h"
 #include "Dictionary.h"
+#include <iostream>
 
 bool FlushStreamBuffer(std::ostream& output);
 void SendPairStream(const std::string& word, const std::vector<std::string>& transfer, std::ostream& file);

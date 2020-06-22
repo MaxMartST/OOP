@@ -1,4 +1,5 @@
 #include "SaveDictionary.h"
+#include "pch.h"
 
 bool FlushStreamBuffer(std::ostream& output)
 {

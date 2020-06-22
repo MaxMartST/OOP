@@ -1,6 +1,7 @@
 #pragma once
-#include "pch.h"
 #include "Dictionary.h"
+#include <string>
+#include <vector>
 
 const std::string TRANSLATE = ": ";
 
@@ -10,3 +11,4 @@ std::pair<Word, std::vector<std::string>> ParseLine(const std::string& str);
 void ReadDictionaryFromStream(Dictionary& dictionary, std::istream& input);
 void DictionaryInitialization(Dictionary& dictionary);
 bool ParseDictionaryFileName(int argc, char* argv[], std::string& fileName);
+bool CheckFileName(const std::string& nameFile);

@@ -1,6 +1,6 @@
 #pragma once
-#include "pch.h"
 #include "Dictionary.h"
+#include <optional>
 
 const std::string CLOSE = "...";
 const std::string SKIP_WORD = " ";
