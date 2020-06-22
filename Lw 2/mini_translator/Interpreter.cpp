@@ -36,6 +36,7 @@ void NotFoundWord(const string& word, Dictionary& dictionary)
 {
 	cout << "Неизвестное слово \"" << word << "\". Введите перевод или пустую строку для отказа." << endl;
 
+	std::cout << ">";
 	string translationWord;
 	getline(cin, translationWord);
 
