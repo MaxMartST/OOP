@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	setlocale(LC_ALL, "");
+	//setlocale(LC_ALL, "");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
@@ -19,15 +19,15 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	Dictionary dictionary(fileName);
+	Dictionary dictionary;
 
-	if (!dictionary.dictionaryFileName.empty())
+	if (!fileName.empty())
 	{
-		DictionaryInitialization(dictionary);
+		DictionaryInitialization(dictionary, fileName);
 	}
 
 	Interpreter(dictionary);
-	SaveDictionary(dictionary);
+	SaveDictionary(dictionary, fileName);
 
 	return 0;
 }

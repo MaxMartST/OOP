@@ -38,9 +38,9 @@ bool IterateOverDictionary(const Dictionary& dictionary, std::ostream& file)
 	return FlushStreamBuffer(file);
 }
 
-void SaveDictionaryExistingFile(const Dictionary& dictionary)
+void SaveDictionaryExistingFile(const Dictionary& dictionary, const std::string fileName)
 {
-	std::ofstream file(dictionary.dictionaryFileName, std::ios::app);
+	std::ofstream file(fileName, std::ios::app);
 
 	if (file.is_open())
 	{
@@ -51,7 +51,7 @@ void SaveDictionaryExistingFile(const Dictionary& dictionary)
 	}
 	else
 	{
-		std::cout << "Не удалось открыть файл \"" << dictionary.dictionaryFileName << "\" для записи" << std::endl;
+		std::cout << "Не удалось открыть файл \"" << fileName << "\" для записи" << std::endl;
 	}
 }
 
@@ -76,36 +76,67 @@ bool WriteToSpecifiedFile(const Dictionary& dictionary, std::ostream& file)
 
 void SaveDictionaryToSpecifiedFile(const Dictionary& dictionary)
 {
-	std::cout << "Введите имя файла, в котором будет сохранен словарь: ";
-	std::string fileName;
-	getline(std::cin, fileName);
-
-	std::ofstream file(fileName, std::ios::out | std::ios::trunc);
-
-	if (file.is_open())
+	do
 	{
+		std::string fileName;
+		std::cout << "Введите имя файла или пропустите этот шаг для отмены" << std::endl;
+		std::cout << "Имя файла: ";
+		getline(std::cin, fileName);
+
+		if (fileName.empty())
+		{
+			std::cout << "Отмена!" << std::endl;
+			break;
+		}
+
+		std::ofstream file(fileName, std::ios::out | std::ios::trunc);
+
+		if (!file.is_open())
+		{
+			std::cout << "Не удалось открыть фаил! " << std::endl;
+			continue;
+		}
+
 		if (!WriteToSpecifiedFile(dictionary, file))
 		{
 			std::cout << "Не удалось записать данные в выходной файл" << std::endl;
 		}
-	}
-	else
-	{
-		std::cout << "Не удалось открыть файл \"" << fileName << "\" для записи" << std::endl;
-	}
+		
+		break;
+	} while (true);
+
+
+	//std::cout << "Введите имя файла, в котором будет сохранен словарь: ";
+	//getline(std::cin, fileName);
+
+	//std::ofstream file(fileName, std::ios::out | std::ios::trunc);
+
+	//if (file.is_open())
+	//{
+	//	if (!WriteToSpecifiedFile(dictionary, file))
+	//	{
+	//		std::cout << "Не удалось записать данные в выходной файл" << std::endl;
+	//	}
+	//}
+	//else
+	//{
+	//	std::cout << "Не удалось открыть файл \"" << fileName << "\" для записи" << std::endl;
+	//}
 }
 
-void SaveDictionary(const Dictionary& dictionary)
+void SaveDictionary(const Dictionary& dictionary, std::string fileName)
 {
-	if (!(dictionary.dictionaryFileName.empty()) && dictionary.statusDictionary == Status::NEW)
+	if (!(fileName.empty()) && dictionary.statusDictionary == Status::NEW)
 	{
-		std::cout << "Добавленны новые слова, записываем их в указанный файл: " << dictionary.dictionaryFileName << std::endl;
-		SaveDictionaryExistingFile(dictionary);
+		std::cout << "Добавленны новые слова, записываем их в указанный файл: " << fileName << std::endl;
+		SaveDictionaryExistingFile(dictionary, fileName);
 	}
 
-	if (dictionary.dictionaryFileName.empty() && dictionary.statusDictionary == Status::NEW)
+	if (fileName.empty() && dictionary.statusDictionary == Status::NEW)
 	{
-		std::cout << "Добавленны новые слова, но не указан файл словаря. Создаём файл и записываем в него словарь" << std::endl;
+		std::cout << "Добавленны новые слова, но не указан файл словаря." << std::endl;
 		SaveDictionaryToSpecifiedFile(dictionary);
 	}
+
+	std::cout << "Выход" << std::endl;
 }

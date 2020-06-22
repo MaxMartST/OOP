@@ -23,12 +23,8 @@ struct Word
 struct Dictionary
 {
 	Dictionary() = default;
-	Dictionary(std::string& str)
-	{
-		dictionaryFileName = str;
-	}
 
-	std::string dictionaryFileName;
+	//std::string dictionaryFileName;
 	std::map<Word, std::vector<std::string>> dictionaryWords;
 	Status statusDictionary = Status::OLD;
 };

@@ -96,6 +96,7 @@ void Interpreter(Dictionary& dictionary)
 
 	do
 	{
+		std::cout << ">";
 		getline(cin, inputString);
 		requestWord = inputString;
 		transform(requestWord.begin(), requestWord.end(), requestWord.begin(), tolower);

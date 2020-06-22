@@ -54,36 +54,41 @@ void ReadDictionaryFromStream(Dictionary& dictionary, istream& input)
 	}
 }
 
-void DictionaryInitialization(Dictionary& dictionary)
+void DictionaryInitialization(Dictionary& dictionary, std::string& fileName)
 {
-	ifstream input(dictionary.dictionaryFileName, ios::in);
-	if (!input.is_open())
+	ifstream input(fileName, ios::in);
+
+	if (input.is_open())
 	{
-		//cout << "Failed to open file: " << dictionary.dictionaryFileName << endl;
+		ReadDictionaryFromStream(dictionary, input);
+		std::cout << "Словарь проинициализирован" << std::endl;
+	}
+	else
+	{
+		std::cout << "Не удалось проинициализировать словарь!" << endl;
+		//fileName.clear();
 		//указанный файл не найден. Значит проверить корректность указанного
-		if (CheckFileName(dictionary.dictionaryFileName))
-		{
-			cout << "correct file name" << endl;
-		}
-		else
-		{
-			cout << "invalid file name" << endl;
-		}
+		//if (CheckFileName(fileName))
+		//{
+		//	cout << "correct file name" << endl;
+		//}
+		//else
+		//{
+		//	cout << "invalid file name" << endl;
+		//}
 	}
-
-	ReadDictionaryFromStream(dictionary, input);
 }
 
-bool CheckFileName(const std::string& nameFile)
-{
-	const std::regex regular("([\\w-]*[^\+\|\?\\\"><]+)\\.txt");
-	std::cmatch base_match;
-
-	if (std::regex_match(nameFile.c_str(), base_match, regular))
-	{
-		return true;
-	}
-
-	return false;
-	//return (std::regex_match(nameFile, base_match, regular));
-}
+//bool CheckFileName(const std::string& nameFile)
+//{
+//	const std::regex regular("([\\w-]*[^\+\|\?\\\"><]+)\\.txt");
+//	std::cmatch base_match;
+//
+//	if (std::regex_match(nameFile.c_str(), base_match, regular))
+//	{
+//		return true;
+//	}
+//
+//	return false;
+//	//return (std::regex_match(nameFile, base_match, regular));
+//}

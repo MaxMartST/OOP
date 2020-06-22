@@ -3,7 +3,7 @@
 #include <optional>
 
 const std::string CLOSE = "...";
-const std::string SKIP_WORD = " ";
+const std::string SKIP_WORD;
 
 void PrintRussianTranslation(const std::vector<std::string>& translation);
 void PrintEnglishTranslation(const std::string& translation);
