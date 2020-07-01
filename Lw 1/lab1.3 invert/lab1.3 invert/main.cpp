@@ -19,12 +19,12 @@ std::optional<std::string> ParseMatrixFileName(int argc, char* argv[])
 		std::cout << "Use the name of the input file" << std::endl;
 		return std::nullopt;
 	}
+
 	return argv[1];
 }
 
 bool ReadStream(std::ifstream& input, Matrix& matrix)
 {
-	bool error = false;
 	std::string line;
 	int row = 0;
 	int col;
@@ -36,7 +36,7 @@ bool ReadStream(std::ifstream& input, Matrix& matrix)
 		{
 			std::stringstream stringIterator(line);
 
-			while (!stringIterator.eof() && !error)
+			while (!stringIterator.eof())
 			{
 				if (col == MATRIX_SIZE)
 				{
@@ -50,13 +50,13 @@ bool ReadStream(std::ifstream& input, Matrix& matrix)
 
 			if (col != MATRIX_SIZE)
 			{
-				//error = true;
 				std::cout << "invalid number of matrix columns!" << std::endl;
 				return false;
 			}
 		}
 		row++;
 	}
+
 	if (line == "" && row != MATRIX_SIZE)
 	{
 		std::cout << "file is empty!" << std::endl;

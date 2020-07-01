@@ -1,0 +1,14 @@
+﻿'lab1.4 rle.exe' (Win32): Loaded 'C:\IPS\My repos\OOP\Lw 1\lab1.4 rle\x64\Debug\lab1.4 rle.exe'. Symbols loaded.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\ntdll.dll'. Cannot find or open the PDB file.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\kernel32.dll'. Cannot find or open the PDB file.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\KernelBase.dll'. Cannot find or open the PDB file.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\msvcp140d.dll'. Cannot find or open the PDB file.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\vcruntime140d.dll'. Cannot find or open the PDB file.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\ucrtbased.dll'. Cannot find or open the PDB file.
+The thread 0x2098 has exited with code 0 (0x0).
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\kernel.appcore.dll'. Cannot find or open the PDB file.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\msvcrt.dll'. Cannot find or open the PDB file.
+'lab1.4 rle.exe' (Win32): Loaded 'C:\Windows\System32\rpcrt4.dll'. Cannot find or open the PDB file.
+The thread 0x25ec has exited with code 0 (0x0).
+The thread 0x4250 has exited with code 0 (0x0).
+The program '[5660] lab1.4 rle.exe' has exited with code 0 (0x0).

@@ -1,135 +1,134 @@
-#include "pch.h"
-#include "ArchiverBinaryFile.h"
+﻿#include "ArchiverBinaryFile.h"
 #include "ParseArgument.h"
 
-bool CorrectFileReading(std::istream& input)
+using namespace std;
+using namespace fs;
+
+bool CorrectFileReading(istream& input)
 {
 	if (input.bad())
 	{
-		std::cout << "Filed to read date from input file" << std::endl;
+		cout << "ERROR: Filed to read date from input file!" << endl;
 		return false;
 	}
 
 	return true;
 }
 
-bool FlushStreamBuffer(std::ostream& output)
+bool FlushStreamBuffer(ostream& output)
 {
 	if (!output.flush())
 	{
-		std::cout << "Failed to write data to output file" << std::endl;
+		cout << "ERROR: Failed to write data to output file!" << endl;
 		return false;
 	}
 
 	return true;
 }
 
-bool FlushChunk(RLEChunk& chunk, std::ostream& output)
+bool FlushChunk(RLEChunk& chunk, char ch, ostream& output)// записать упаковку в файл из потока output
 {
 	if (!output.write((char*)&chunk, sizeof chunk))
 	{
 		return false;
 	}
-	chunk.counter = 0;
+
+	chunk.currentChar = static_cast<uint8_t>(ch);
+	chunk.counter = 1;
 
 	return true;
 }
 
-/*void FlushChunk(RLEChunk& chunk, std::ostream& output)
+/*void FlushChunk(RLEChunk& chunk, ostream& output)
 {
 	output.write((char*)&chunk, sizeof chunk);
 	chunk.counter = 0;
 }*/
 
-bool PackNextChar(RLEChunk& chunk, char ch, std::ostream& output)
-{
-	if (chunk.counter == 0)
-	{
-		chunk.currentChar = static_cast<uint8_t>(ch);
-	}
+//bool PackNextChar(RLEChunk& chunk, char ch, ostream& output)
+//{
+//	if (chunk.counter == 0)
+//	{
+//		chunk.currentChar = static_cast<uint8_t>(ch);
+//	}
+//
+//	if ((chunk.currentChar == static_cast<uint8_t>(ch)) && (chunk.counter < numeric_limits<uint8_t>::max()))
+//	{
+//		chunk.counter++;
+//	}
+//	else
+//	{
+//		return FlushChunk(chunk, output);
+//	}
+//
+//	return false;
+//}
 
-	if ((chunk.currentChar == static_cast<uint8_t>(ch)) && (chunk.counter < std::numeric_limits<uint8_t>::max()))
-	{
-		chunk.counter++;
-	}
-	else
-	{
-		return FlushChunk(chunk, output);
-	}
-
-	return false;
-}
-
-bool Pack(std::istream& input, std::ostream& output)
+bool Pack(istream& input, ostream& output)
 {
 	RLEChunk chunk;
 	char ch;
 
-	/*while (input.get(ch))
+	while (input.get(ch))
 	{
 		if (chunk.counter == 0 || chunk.currentChar == static_cast<uint8_t>(ch))
 		{
 			chunk.currentChar = static_cast<uint8_t>(ch);
-			chunk.counter++;
+			++chunk.counter;
+		}
+		else
+		{
+			FlushChunk(chunk, ch, output);
 		}
 
-		while (chunk.counter < std::numeric_limits<uint8_t>::max() && input.get(ch))
+		while (input.get(ch))
 		{
+			if (!(chunk.counter < std::numeric_limits<uint8_t>::max()))
+			{
+				break;		
+			}
+
 			if (chunk.currentChar == static_cast<uint8_t>(ch))
 			{
-				chunk.counter++;
+				++chunk.counter;
+				continue;
 			}
-			else 
-			{
-				break;
-			}
+
+			break;
 		}
-		FlushChunk(chunk, output);
 
-		chunk.currentChar = static_cast<uint8_t>(ch);
-		chunk.counter = 1;
-	}*/
+		FlushChunk(chunk, ch, output);
 
-	while (input.get(ch))
-	{
-		if (PackNextChar(chunk, ch, output))
+		if (input.eof())
 		{
-			chunk.currentChar = static_cast<uint8_t>(ch);
-			chunk.counter++;
+			chunk.counter = 0;
 		}
 	}
 
-	if (input.eof() && (chunk.counter > 0))
+	//while (input.get(ch))
+	//{
+	//	if (PackNextChar(chunk, ch, output))
+	//	{
+	//		chunk.currentChar = static_cast<uint8_t>(ch);
+	//		chunk.counter++;
+	//	}
+	//}
+
+	if (input.eof() && (chunk.counter == 1))
 	{
-		return FlushChunk(chunk, output);
+		return FlushChunk(chunk, ch, output);
 	}
-
-	/*while (!input.eof())
-	{
-		input.read((char*)&ch, sizeof ch);
-
-		if (PackNextChar(chunk, ch, output))
-		{
-			chunk.currentChar = static_cast<uint8_t>(ch);
-			chunk.counter++;
-		}
-
-		if (input.eof() && (chunk.counter > 0))
-		{
-			return FlushChunk(chunk, output);
-		}
-	}*/
 
 	return (FlushStreamBuffer(output) && CorrectFileReading(input));
 }
 
-bool UnpackChunk(const RLEChunk& chunk, std::ostream& output)
+bool UnpackChunk(const RLEChunk& chunk, ostream& output)
 {
-	for (std::uint8_t i = 0; i < static_cast<uint8_t>(chunk.counter); i++)
+	for (uint8_t i = 0; i < static_cast<uint8_t>(chunk.counter); i++)
 	{
 		if (!output.write((char*)&chunk.currentChar, sizeof chunk.currentChar))
 		{
-			std::cout << "Unpacking error" << std::endl;
+			cout << "Unpacking error" << endl;
 			return false;
 		}
 	}
@@ -141,14 +140,14 @@ bool ReadChunk(RLEChunk& chunk)
 {
 	if (chunk.counter == 0)
 	{
-		std::cout << "Zero character repetition" << std::endl;
+		cout << "Zero character repetition" << endl;
 		return false;
 	}
 
 	return true;
 }
 
-bool Unpack(std::istream& input, std::ostream& output)
+bool Unpack(istream& input, ostream& output)
 {
 	RLEChunk chunk;
 
@@ -168,41 +167,43 @@ bool Unpack(std::istream& input, std::ostream& output)
 	return (FlushStreamBuffer(output) && CorrectFileReading(input));
 }
 
-bool TransformFile(const std::string& inputFileName, const std::string& outputFileName, const std::function<bool(std::istream&, std::ostream&)> Transformer)
+bool TransformFile(const string& inputFileName, const string& outputFileName, const function<bool(istream&, ostream&)> Transformer)
 {
-	std::ifstream input(inputFileName, std::ios::binary | std::ios::in);
-	std::ofstream output(outputFileName, std::ios::binary | std::ios::out | std::ios::trunc);
+	ifstream input(inputFileName, ios::binary | ios::in);
+	ofstream output(outputFileName, ios::binary | ios::out | ios::trunc);
 
 	if (!input.is_open())
 	{
-		std::cout << "Faile to open '" << inputFileName << "' for reading" << std::endl;
+		cout << "ERROR: Faile to open '" << inputFileName << "' for reading!" << endl;
 		return false;
 	}
 
 	if (!output.is_open())
 	{
-		std::cout << "Faile to open '" << outputFileName << "' for writing" << std::endl;
+		cout << "ERROR: Faile to open '" << outputFileName << "' for writing!" << endl;
 		return false;
 	}
 
 	return Transformer(input, output);
 }
 
-bool EvenPackedFileLength(const std::string& fileName)
+bool EvenPackedFileLength(const string& fileName)
 {
 	try
 	{
-		uintmax_t size = fs::file_size(fileName);
+		uintmax_t size = file_size(fileName);
+
 		if (!((size % 2) == 0))
 		{
-			std::cout << "Odd packed file length" << std::endl;
+			cout << "ERROR: Odd packed file length!" << endl;
 			return false;
 		}
+
 		return true;
 	}
-	catch (const fs::filesystem_error& e)
+	catch (const filesystem_error& e)
 	{
-		std::cout << e.what() << std::endl;
+		cout << e.what() << endl;
 		return false;
 	}
 }

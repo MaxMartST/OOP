@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "ParseArgument.h"
 
 std::optional<Mode> GetMode(const std::string& command)
@@ -11,6 +10,7 @@ std::optional<Mode> GetMode(const std::string& command)
 	{
 		return Mode::UNPACK;
 	}
+
 	return std::nullopt;
 }
 
@@ -18,7 +18,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 {
 	if (argc != NUMBER_ARGS)
 	{
-		std::cout << "Use: command, <input.txt>, <outfile.txt>" << std::endl;
+		std::cout << "ERROR: Invalid name file! \nUse command: <input.txt>, <outfile.txt>" << std::endl;
 		return std::nullopt;
 	}
 	
@@ -28,7 +28,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	auto mode = GetMode(str);
 	if (!mode)
 	{
-		std::cout << "Use command: pack or unpack" << std::endl;
+		std::cout << "ERROR: Invalid command! \nUse command: pack or unpack" << std::endl;
 		return std::nullopt;
 	}
 

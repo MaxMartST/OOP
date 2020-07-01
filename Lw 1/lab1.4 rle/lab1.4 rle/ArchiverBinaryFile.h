@@ -1,5 +1,4 @@
 #pragma once
-
 #include "ParseArgument.h"
 #include <string>
 #include <iostream>
@@ -20,7 +19,5 @@ struct RLEChunk
 };
 
 bool Pack(std::istream& input, std::ostream& output);
-
 bool Unpack(std::istream& input, std::ostream& output);
-
 bool FileArchiver(const Args& args);

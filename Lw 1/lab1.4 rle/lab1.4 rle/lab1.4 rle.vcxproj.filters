@@ -33,6 +33,7 @@
     <Text Include="coding_repetition_example.txt" />
     <Text Include="empty.txt" />
     <Text Include="test_example_encode.txt" />
+    <Text Include="coding_result.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParseArgument.h">
