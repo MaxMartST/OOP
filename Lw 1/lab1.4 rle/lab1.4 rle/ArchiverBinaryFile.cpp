@@ -8,7 +8,7 @@ bool CorrectFileReading(istream& input)
 {
 	if (input.bad())
 	{
-		cout << "ERROR: Filed to read date from input file!" << endl;
+		cout << "ERROR: Filed to read date from input file!\n";
 		return false;
 	}
 
@@ -19,7 +19,7 @@ bool FlushStreamBuffer(ostream& output)
 {
 	if (!output.flush())
 	{
-		cout << "ERROR: Failed to write data to output file!" << endl;
+		cout << "ERROR: Failed to write data to output file!\n";
 		return false;
 	}
 
@@ -105,15 +105,6 @@ bool Pack(istream& input, ostream& output)
 		}
 	}
 
-	//while (input.get(ch))
-	//{
-	//	if (PackNextChar(chunk, ch, output))
-	//	{
-	//		chunk.currentChar = static_cast<uint8_t>(ch);
-	//		chunk.counter++;
-	//	}
-	//}
-
 	if (input.eof() && (chunk.counter == 1))
 	{
 		return FlushChunk(chunk, ch, output);
@@ -128,7 +119,7 @@ bool UnpackChunk(const RLEChunk& chunk, ostream& output)
 	{
 		if (!output.write((char*)&chunk.currentChar, sizeof chunk.currentChar))
 		{
-			cout << "Unpacking error" << endl;
+			cout << "ERROR: Unpacking error!\n";
 			return false;
 		}
 	}
@@ -140,31 +131,54 @@ bool ReadChunk(RLEChunk& chunk)
 {
 	if (chunk.counter == 0)
 	{
-		cout << "Zero character repetition" << endl;
+		cout << "ERROR: Zero character repetition!\n";
 		return false;
 	}
 
 	return true;
 }
 
+bool ChackSizeFile(istream& input)
+{
+	streamoff sizeFile = 0;
+	input.seekg(0, ios::end);
+	sizeFile = input.tellg();
+
+	if (sizeFile)
+	{
+		if ((sizeFile % 2) != 0)
+		{
+			cout << "ERROR: Odd packed file length\n";
+			return false;
+		}
+	}
+
+	input.seekg(ios::beg);
+	return true;
+}
+
 bool Unpack(istream& input, ostream& output)
 {
 	RLEChunk chunk;
+	bool result = true;
 
 	while (input.read((char*)&chunk, sizeof chunk))
 	{
 		if (!ReadChunk(chunk))
 		{
-			return false;
+			result = false;
+			break;
 		}
 
 		if (!UnpackChunk(chunk, output))
 		{
-			return false;
+			result = false;
+			break;
 		}
 	}
 
-	return (FlushStreamBuffer(output) && CorrectFileReading(input));
+	result = (FlushStreamBuffer(output) && CorrectFileReading(input));
+	return result;
 }
 
 bool TransformFile(const string& inputFileName, const string& outputFileName, const function<bool(istream&, ostream&)> Transformer)
@@ -174,13 +188,13 @@ bool TransformFile(const string& inputFileName, const string& outputFileName, co
 
 	if (!input.is_open())
 	{
-		cout << "ERROR: Faile to open '" << inputFileName << "' for reading!" << endl;
+		cout << "ERROR: Faile to open '" << inputFileName << "' for reading!\n";
 		return false;
 	}
 
 	if (!output.is_open())
 	{
-		cout << "ERROR: Faile to open '" << outputFileName << "' for writing!" << endl;
+		cout << "ERROR: Faile to open '" << outputFileName << "' for writing!\n";
 		return false;
 	}
 
@@ -193,10 +207,13 @@ bool EvenPackedFileLength(const string& fileName)
 	{
 		uintmax_t size = file_size(fileName);
 
-		if (!((size % 2) == 0))
+		if (size)
 		{
-			cout << "ERROR: Odd packed file length!" << endl;
-			return false;
+			if (!((size % 2) == 0))
+			{
+				cout << "ERROR: Odd packed file length!\n";
+				return false;
+			}
 		}
 
 		return true;

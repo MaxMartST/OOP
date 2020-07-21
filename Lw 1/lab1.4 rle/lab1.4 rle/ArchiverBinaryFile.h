@@ -19,5 +19,7 @@ struct RLEChunk
 };
 
 bool Pack(std::istream& input, std::ostream& output);
+//bool UnpackChunk(std::istream& input, std::ostream& output);
 bool Unpack(std::istream& input, std::ostream& output);
 bool FileArchiver(const Args& args);
+bool ChackSizeFile(std::istream& input);
