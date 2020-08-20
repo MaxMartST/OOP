@@ -88,7 +88,7 @@ public:
 			m_top = currentElement;
 
 			tmp = tmp->next;
-			++m_size;
+			//++m_size;
 
 			while (tmp != nullptr)
 			{
@@ -96,8 +96,15 @@ public:
 				currentElement = currentElement->next;
 
 				tmp = tmp->next;
-				++m_size;
+				//++m_size;
 			}
+
+			m_size = right.m_size;
+		}
+
+		if (right.IsEmpty())
+		{
+			Clear();
 		}
 
 		return *this;

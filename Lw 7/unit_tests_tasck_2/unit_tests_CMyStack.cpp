@@ -87,6 +87,36 @@ BOOST_AUTO_TEST_SUITE(testing_class_muStask)
 			BOOST_REQUIRE_EQUAL(stackOfInt_2.GetElement(), 2);
 		}
 
+		BOOST_AUTO_TEST_CASE(copy_between_nonEmpty_stack)
+		{
+			stackOfInt.Push(1);
+			stackOfInt.Push(2);
+			stackOfInt.Push(3);
+			stackOfInt.Push(4);
+
+			CMyStack<int> stackOfInt_2;
+			stackOfInt_2.Push(5);
+
+			stackOfInt = stackOfInt_2;
+			BOOST_REQUIRE_EQUAL(stackOfInt.GetSize(), 1);
+			BOOST_REQUIRE_EQUAL(stackOfInt.GetElement(), 5);
+		}
+
+		BOOST_AUTO_TEST_CASE(copy_empty_stack)
+		{
+			stackOfInt.Push(1);
+			stackOfInt.Push(2);
+
+			CMyStack<int> stackOfInt_2;
+			stackOfInt = stackOfInt_2;
+
+			BOOST_REQUIRE_EQUAL(stackOfInt_2.GetSize(), 0);
+			BOOST_REQUIRE_EQUAL(stackOfInt_2.IsEmpty(), true);
+
+			BOOST_REQUIRE_EQUAL(stackOfInt.GetSize(), 0);
+			BOOST_REQUIRE_EQUAL(stackOfInt.IsEmpty(), true);
+		}
+
 		BOOST_AUTO_TEST_CASE(independent_copying)
 		{
 			stackOfInt.Push(1);
