@@ -49,7 +49,7 @@ public:
 		--m_size;
 	}
 
-	T GetElement() const
+	const T& GetElement() const
 	{
 		if (IsEmpty())
 		{
@@ -88,7 +88,6 @@ public:
 			m_top = currentElement;
 
 			tmp = tmp->next;
-			//++m_size;
 
 			while (tmp != nullptr)
 			{
@@ -96,7 +95,6 @@ public:
 				currentElement = currentElement->next;
 
 				tmp = tmp->next;
-				//++m_size;
 			}
 
 			m_size = right.m_size;
